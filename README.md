@@ -6,7 +6,7 @@
 Live site: <https://esannikov.github.io/hematoboard/>
 
 Актуальний кандидатний синтез CASE-02:
-<https://esannikov.github.io/hematoboard/?case=case02&view=agent&release=20260804case02r11>
+<https://esannikov.github.io/hematoboard/?case=case02&view=agent&release=20260804case02r12>
 
 Поточний публічний release-покажчик: [`release.json`](./release.json). Він
 фіксує хеш активного CASE-02 та окремо позначає агентний синтез як кандидат,

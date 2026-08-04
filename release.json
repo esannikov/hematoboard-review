@@ -1,6 +1,7 @@
 {
   "schema_version": "hematoboard.public-release/1.0.0",
-  "released_at": "2026-08-04T19:04:36Z",
+  "released_at": "2026-08-04T19:19:37Z",
+  "release_tag": "20260804case02r12",
   "default_case": "case02",
   "case_scope": {
     "case_key": "case02",
