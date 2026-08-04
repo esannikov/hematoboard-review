@@ -18,9 +18,8 @@
       "bundle": "./case02/data/case_bundle.json",
       "latest": "./case02/runs/latest.json",
       "replay": "./case02/data/replay.json",
-      "status": "active",
-      "review": true,
-      "default": true
+      "status": "archived",
+      "review": true
     },
     {
       "key": "case05",
@@ -29,7 +28,8 @@
       "bundle": "./case05/data/case_bundle.json",
       "latest": "./case05/runs/latest.json",
       "status": "active",
-      "review": false
+      "review": false,
+      "default": true
     }
   ]
 }
