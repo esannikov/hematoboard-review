@@ -618,7 +618,7 @@
         "C-GUIDE-KDIGO-GN-2021",
         "C-GUIDE-KDIGO-IGAN-2025"
       ],
-      "short_label": "AL-амілоїдоз"
+      "short_label": "IgA-нефропатія"
     },
     {
       "id": "H5",
@@ -649,7 +649,7 @@
         "C-PMID-30510265",
         "C-PMID-40280412"
       ],
-      "short_label": "Діабетичний гломерулосклероз"
+      "short_label": "Амілоїдоз"
     },
     {
       "id": "H6",
@@ -682,7 +682,7 @@
         "C-PMID-30510265",
         "C-PMC-8856072"
       ],
-      "short_label": "Мембранозна нефропатія"
+      "short_label": "Мієлома / cast nephropathy"
     }
   ],
   "relations": [

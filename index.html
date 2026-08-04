@@ -19,7 +19,7 @@
     />
     <meta name="theme-color" content="#f4f4f4" id="theme-color" />
     <script src="hematoboard-ui.js?v=20260803public"></script>
-    <link rel="stylesheet" href="methodology.css?v=20260803evidenceindex" />
+    <link rel="stylesheet" href="methodology.css?v=20260804projection" />
     <link rel="stylesheet" href="hematoboard-shell.css?v=20260803public" />
   </head>
   <body class="hb-shell min-h-screen bg-canvas p-0 font-sans text-ink antialiased">
@@ -77,6 +77,7 @@
       <p id="footer-contract"></p>
     </footer>
 
-    <script type="module" src="methodology.js?v=20260803datefmt"></script>
+    <script>if(location.protocol==="file:")location.replace("http://127.0.0.1:8899/methodology/"+location.search+location.hash);</script>
+    <script type="module" src="methodology.js?v=20260804projection"></script>
   </body>
 </html>

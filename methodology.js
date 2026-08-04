@@ -1,3 +1,11 @@
+import {
+  leadingHypothesis,
+  hypothesisChallenge,
+  relationCountsForHypothesis,
+  sourceDocumentBreakdown,
+  workupPlan as projectedWorkupPlan,
+} from "./shared/case_projection.js";
+
 // The case registry is data, not code: methodology/active_cases.json is the
 // validated routing manifest. Adding a case never requires editing this file.
 const CASE_MANIFEST_URL = "active_cases.json";
@@ -78,48 +86,6 @@ const timelineCursorByCase = new Map();
 const timelineZoomByCase = new Map();
 const timelineEventByCase = new Map();
 let activeViewCleanup = null;
-
-const DISPLAY_REPLACEMENTS = [
-  [/знеособлену ручну розшифровку/gi, "знеособлену агентну розшифровку"],
-  [/ручну розшифровку/gi, "агентну розшифровку"],
-  [/working_deidentified/gi, "робоче знеособлення підтверджено"],
-  [/важливий понижений диференціал/gi, "можливий варіант, але з меншою ймовірністю"],
-  [/пониженим диференціалом для порівняння/gi, "можливим варіантом із меншою ймовірністю"],
-  [/понижений диференціал для порівняння/gi, "можливий варіант із меншою ймовірністю"],
-  [/понижений диференціал/gi, "можливий варіант із меншою ймовірністю"],
-  [/понижена, але видима/gi, "можлива, але менш імовірна"],
-  [/\bclinician\/source QA\b/gi, "перевірку лікарем і джерела"],
-  [/\bcandidate\/decision support\b/gi, "попередню оцінку / підтримку рішень"],
-  [/\bcandidate local provenance\b/gi, "локальний попередній слід джерела"],
-  [/\bguideline[- ]candidate traces?\b/gi, "попередні сліди настанов"],
-  [/\bcandidate traces?\b/gi, "попередні сліди"],
-  [/\bsource QA\b/gi, "перевірку джерела"],
-  [/\btissue QA\b/gi, "морфологічну верифікацію"],
-  [/\bcentral QA\b/gi, "центральну морфологічну верифікацію"],
-  [/\bred team\b/gi, "рецензент з безпеки"],
-  [/\bworkup\b/gi, "діагностичний алгоритм"],
-  [/\bcomparator\b/gi, "диференціал для порівняння"],
-  [/\bovercall\b/gi, "переоцінка впевненості"],
-  [/\bconfidence\b/gi, "рівень впевненості"],
-  [/\bproof of subtype\b/gi, "доказ підтипу"],
-  [/\bTFH-oriented IHC\b/gi, "ІГХ, орієнтована на TFH"],
-  [/\btissue signal\b/gi, "тканинний сигнал"],
-  [/\btherapy language\b/gi, "мови лікувальних рекомендацій"],
-  [/\bno treatment\b/gi, "без лікувальних рекомендацій"],
-  [/\bside-by-side\b/gi, "порівняльному"],
-  [/\breactive-only\b/gi, "суто реактивному"],
-  [/\bcompetitors\b/gi, "конкурентні гіпотези"],
-  [/\bimaging\b/gi, "візуалізація"],
-  [/\bstaging\b/gi, "стадіювання"],
-  [/\bdashboard\b/gi, "панель"],
-  [/\braw NCCN PDF\b/gi, "оригінальний PDF NCCN"],
-  [/source[- ]reported морфологічний диференціал/gi, "Морфологічний диференціал за документом"],
-  [/source[- ]reported КТ-висновок/gi, "Висновок КТ за документом"],
-  [/\bsource[- ]reported\b/gi, "За висновком документа"],
-  [/\bsource note\b/gi, "примітці документа"],
-  [/\bsource document\b/gi, "джерельний документ"],
-  [/\bQA\b/g, "перевірка якості"],
-];
 
 const PANEL_TEXT_UA = new Map([
   ["Hgb", "Гемоглобін (Hb)"],
@@ -204,11 +170,9 @@ function meaningfulText(value) {
 }
 
 function displayText(value) {
-  let text = meaningfulText(value);
-  DISPLAY_REPLACEMENTS.forEach(([pattern, replacement]) => {
-    text = text.replace(pattern, replacement);
-  });
-  return text;
+  // Clinical and source text is rendered verbatim. Localisation belongs in
+  // typed UI-label maps, never in a global replacement pass over evidence.
+  return meaningfulText(value);
 }
 
 function panelText(value) {
@@ -925,18 +889,8 @@ function guidelineList(limit = Infinity) {
 function recommendationPlanForCase(bundle) {
   // Canonical source: the validated case bundle. The renderer never authors
   // case-specific clinical content — it only maps contract fields to view props.
-  const canonical = bundle.methodology?.workup;
-  if (Array.isArray(canonical) && canonical.length) {
-    return canonical.map((item) => ({
-      title: item.title,
-      action: item.action,
-      why: item.why,
-      refs: item.evidence_refs || [],
-      status: item.status,
-      tone: item.tone,
-      phase: item.phase,
-    }));
-  }
+  const canonical = projectedWorkupPlan(bundle);
+  if (canonical.length) return canonical;
   const missing = (bundle.clinical_state?.panel || []).flatMap((group) =>
     (group.items || []).filter((item) => item.present === false).map((item) => ({ ...item, group: group.group })),
   );
@@ -1012,11 +966,7 @@ function overviewSourceBreakdown(bundle) {
     other: "Інша клінічна документація",
   };
   const order = ["consultation", "laboratory", "imaging", "pathology", "procedure", "other"];
-  const counts = (bundle.source_documents || []).reduce((result, documentItem) => {
-    const type = documentItem.document_type || "other";
-    result[type] = (result[type] || 0) + 1;
-    return result;
-  }, {});
+  const counts = sourceDocumentBreakdown(bundle);
   const breakdown = element("span", { className: "overview-source-breakdown", attrs: { "aria-label": "Склад первинної документації" } });
   order.filter((type) => counts[type]).forEach((type) => {
     breakdown.append(element("span", { className: "overview-source-type" }, [
@@ -1062,7 +1012,7 @@ function overviewLeadNarrative(lead, bundle) {
 function renderOverview() {
   const bundle = state.bundle;
   const hypotheses = [...bundle.hypotheses].sort((a, b) => a.rank - b.rank);
-  const lead = hypotheses[0];
+  const lead = leadingHypothesis(bundle) || hypotheses[0];
   const timeline = [...(bundle.timeline || [])];
   const firstDate = timeline[0]?.date || "—";
   const lastDate = timeline.at(-1)?.date || bundle.case.generated || "—";
@@ -1125,6 +1075,19 @@ function renderOverview() {
     ]),
   ]);
   assessmentCopy.append(rationale);
+  const challenge = hypothesisChallenge(lead);
+  if (challenge.length) {
+    assessmentCopy.append(element("div", {
+      className: "overview-argument-grid",
+      attrs: { "aria-label": "Клінічна аргументація провідної гіпотези" },
+    }, challenge.map((item) => element("section", {
+      className: "overview-argument-card",
+      attrs: { "data-argument": item.key },
+    }, [
+      element("h4", { text: item.label }),
+      element("p", { text: item.text }),
+    ]))));
+  }
   const signals = element("div", { className: "overview-signal-row", attrs: { "aria-label": "Опорні сигнали" } });
   signals.append(element("strong", { className: "overview-signal-label", text: "Опорні дані" }));
   const leadRefs = lead?.data_refs?.length ? lead.data_refs : bundle.facts.slice(-4).map((fact) => fact.id);
@@ -3819,10 +3782,12 @@ function renderGraph() {
     );
     const relOrder = { support: 0, neutral: 1, refute: 2 };
     const relWord = { support: "підтримує", refute: "суперечить", neutral: "нейтрально" };
-    const relationCounts = connections.reduce((counts, relation) => {
-      counts[relation.relation] = (counts[relation.relation] || 0) + 1;
-      return counts;
-    }, { support: 0, refute: 0, neutral: 0 });
+    const relationCounts = kind === "hypothesis"
+      ? relationCountsForHypothesis(state.bundle, item.id)
+      : connections.reduce((counts, relation) => {
+        counts[relation.relation] = (counts[relation.relation] || 0) + 1;
+        return counts;
+      }, { support: 0, refute: 0, neutral: 0 });
     const metrics = element("dl", { className: "graph-detail-metrics" });
     [
       ["support", "Підтримують"],
