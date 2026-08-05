@@ -4221,22 +4221,24 @@ async function renderAgent() {
   const controller = new AbortController();
   activeViewCleanup = () => controller.abort();
   let health = null;
-  try {
-    let probeAgentApi = true;
-    const runtime = await fetch("/health/ready", { cache: "no-store", signal: controller.signal });
-    if (runtime.ok) {
-      const runtimeStatus = await runtime.json();
-      probeAgentApi = runtimeStatus?.agent_api !== false;
+  if (!IS_PUBLIC_STATIC_DEMO) {
+    try {
+      let probeAgentApi = true;
+      const runtime = await fetch("/health/ready", { cache: "no-store", signal: controller.signal });
+      if (runtime.ok) {
+        const runtimeStatus = await runtime.json();
+        probeAgentApi = runtimeStatus?.agent_api !== false;
+      }
+      if (probeAgentApi) {
+        const response = await fetch(`/api/agent/health?caseKey=${encodeURIComponent(state.caseKey)}`, {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        if (response.ok) health = await response.json();
+      }
+    } catch (error) {
+      if (error?.name === "AbortError") throw error;
     }
-    if (probeAgentApi) {
-      const response = await fetch(`/api/agent/health?caseKey=${encodeURIComponent(state.caseKey)}`, {
-        cache: "no-store",
-        signal: controller.signal,
-      });
-      if (response.ok) health = await response.json();
-    }
-  } catch (error) {
-    if (error?.name === "AbortError") throw error;
   }
 
   const workspace = element("section", { className: "agent-workspace", attrs: { "data-connected": String(Boolean(health)) } });
