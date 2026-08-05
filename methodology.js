@@ -4,7 +4,7 @@ import {
   relationCountsForHypothesis,
   sourceDocumentBreakdown,
   workupPlan as projectedWorkupPlan,
-} from "./shared/case_projection.js";
+} from "./shared/case_projection.js?v=20260805workupclarity1";
 import { projectClinicalState } from "./shared/clinical_state_projection.js?v=20260805imagingdetail1";
 
 // The case registry is data, not code: methodology/active_cases.json is the
@@ -432,6 +432,23 @@ function sourceDisplayTitle(source) {
     local: "Локальний клінічний документ",
   };
   return `${labels[source.type]}${date ? ` · ${date}` : ""}`;
+}
+
+function evidencePublicationKind(source) {
+  const citation = displayText(source?.citation || source?.ref || "");
+  if (/clinical practice guideline|\bguidelines?\b/iu.test(citation)) return "Настанова";
+  if (/classification/iu.test(citation)) return "Класифікація";
+  if (/consensus|diagnostic criteria/iu.test(citation)) return "Консенсус";
+  if (/recommendations?/iu.test(citation)) return "Рекомендації";
+  return source?.type === "pmid" ? "Стаття" : sourceTypeLabel(source || {});
+}
+
+function evidencePublicationTitle(source) {
+  const citation = displayText(source?.citation || source?.ref || "Джерело доказу").trim();
+  const journalBoundary = citation.match(/^(.+?)(?:[.?]\s+(?:Ann(?:als)?\b|Blood\b|Leukemia\b|J\s+Clin\b|Br\s+J\b|Cytometry\b|Semin\b|Cancer\b|Hum\s+Pathol\b))/iu);
+  const title = (journalBoundary?.[1] || citation).replace(/[.;]+$/u, "").trim();
+  const year = citation.match(/\b(?:19|20)\d{2}\b/u)?.[0];
+  return `${title}${year ? ` (${year})` : ""}`;
 }
 
 // Evidence chip: source type is carried by text and a restrained semantic tone.
@@ -939,19 +956,52 @@ function overviewPlanPhases(bundle) {
     const timing = firstPriority ? "Першочергово" : parallel ? "Паралельно" : deferred ? "Після підтвердження" : "Наступний етап";
     const details = element("div", { className: "overview-plan-items" });
     items.forEach((item) => {
-      const action = sentenceFragments(item.action || item.why || "")[0] || "Спосіб виконання не записано в пакеті.";
+      const action = displayText(item.action || "Спосіб виконання не записано в пакеті.");
+      const why = displayText(item.why || "Клінічне обґрунтування не записано в пакеті.");
       const sourceRefs = [...new Set(item.refs || [])].filter((ref) => sourceById(ref));
       const children = [
-        element("strong", { text: item.title }),
-        element("p", { text: action }),
+        element("div", { className: "overview-plan-item-head" }, [
+          element("strong", { text: item.title }),
+          element("div", {
+            className: "overview-plan-scope",
+            attrs: { "aria-label": "Діагностичне охоплення кроку" },
+          }, (item.scope || []).map((scope) => element("span", {
+            className: "overview-plan-scope-chip",
+            text: scope.id === "STAGING" ? `${scope.label} · ${scope.role}` : `${scope.id} · ${scope.role}`,
+            attrs: { "data-role": scope.role, title: scope.label },
+          }))),
+        ]),
+        element("div", { className: "overview-plan-field" }, [
+          element("span", { text: "Що зробити" }),
+          element("p", { text: action }),
+        ]),
+        element("div", { className: "overview-plan-field overview-plan-why" }, [
+          element("span", { text: "Навіщо" }),
+          element("p", { text: why }),
+        ]),
       ];
       if (sourceRefs.length) {
-        children.push(element("div", {
-          className: "overview-plan-sources",
-          attrs: { "aria-label": "Доказові джерела цього кроку" },
-        }, [
-          element("span", { text: "Джерела" }),
-          ...sourceRefs.map((ref) => evidenceIndex(ref)),
+        children.push(element("div", { className: "overview-plan-source-block" }, [
+          element("span", { className: "overview-plan-source-label", text: "Підстава" }),
+          element("div", {
+            className: "overview-plan-sources",
+            attrs: { "aria-label": "Настанови та статті для цього кроку" },
+          }, sourceRefs.map((ref) => {
+            const source = sourceById(ref);
+            const title = evidencePublicationTitle(source);
+            const content = [
+              evidenceIndex(ref, { link: false }),
+              element("span", { className: "overview-plan-source-kind", text: evidencePublicationKind(source) }),
+              element("span", { className: "overview-plan-source-title", text: title }),
+            ];
+            const attrs = source?.source_uri?.startsWith("http")
+              ? { href: source.source_uri, target: "_blank", rel: "noopener", title: source.citation || title }
+              : { title: source?.citation || title };
+            return element(source?.source_uri?.startsWith("http") ? "a" : "div", {
+              className: "overview-plan-source focus-ring",
+              attrs,
+            }, content);
+          })),
         ]));
       }
       details.append(element("div", { className: "overview-plan-item" }, children));
@@ -1205,7 +1255,7 @@ function renderOverview() {
   decision.append(
     element("div", { className: "overview-decision-heading" }, [
       element("h3", { text: "План діагностичної верифікації" }),
-      element("p", { text: "Пріоритетність і послідовність досліджень для морфологічного підтвердження, паралельного виключення критичних диференціалів і подальшого стадіювання." }),
+      element("p", { text: "Перші кроки перевіряють провідну гіпотезу та прямий морфологічний диференціал; паралельні — критичні альтернативи. Стадіювання починається лише після тканинного підтвердження. Чіпи біля кожного кроку показують його діагностичну роль." }),
     ]),
     overviewPlanPhases(bundle),
   );

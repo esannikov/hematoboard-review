@@ -1,7 +1,7 @@
 {
   "schema_version": "hematoboard.public-release/1.0.0",
-  "released_at": "2026-08-05T20:42:36Z",
-  "release_tag": "20260805sourceactions1",
+  "released_at": "2026-08-05T20:55:58Z",
+  "release_tag": "20260805workupclarity1",
   "default_case": "case02",
   "case_scope": {
     "case_key": "case02",
@@ -23,7 +23,7 @@
   },
   "presentation": {
     "ui_system": "IBM Carbon",
-    "browser_matrix": "24 public routes plus mobile and graph passed; desktop graph-panel scroll, split marker dates, source actions, imaging detail and replay distillation verified",
+    "browser_matrix": "24 public routes plus mobile and graph passed; verification-plan hypothesis chips, full rationale and direct publication links verified without horizontal overflow",
     "packet_pdf_pages": 3,
     "clinical_truth_changed": false
   },

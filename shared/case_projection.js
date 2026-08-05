@@ -40,6 +40,57 @@ export function hypothesisChallenge(hypothesis) {
   ].filter((item) => typeof item.text === "string" && item.text.trim());
 }
 
+function normalizedClinicalText(value) {
+  return String(value || "")
+    .toLocaleLowerCase("uk-UA")
+    .replace(/[’']/gu, "'")
+    .replace(/[^\p{L}\p{N}+-]+/gu, " ")
+    .trim();
+}
+
+const HYPOTHESIS_CONCEPTS = [
+  [/(?:\btfh\b|\bпткл\b|т[- ]?клітин)/iu, ["tfh", "пткл", "т клітин"]],
+  [/(?:ходжк|hodgkin)/iu, ["ходжк", "hodgkin"]],
+  [/(?:каслман|castleman)/iu, ["каслман", "castleman"]],
+  [/(?:саркоїд|sarcoid)/iu, ["саркоїд", "sarcoid"]],
+  [/(?:\bebv\b|\bhhv[- ]?8\b|вірус)/iu, ["ebv", "hhv 8", "hhv-8", "вірус"]],
+  [/(?:реактив|доброякіс)/iu, ["реактив", "доброякіс"]],
+  [/(?:карцином|carcinoma)/iu, ["карцином", "carcinoma"]],
+  [/(?:туберкул|інфекц|tuberc)/iu, ["туберкул", "інфекц", "tuberc"]],
+];
+
+function workupScope(bundle, item) {
+  const hypotheses = Array.isArray(bundle?.hypotheses) ? bundle.hypotheses : [];
+  const primary = leadingHypothesis(bundle);
+  const phase = normalizedClinicalText(item?.phase);
+  if (/після.*підтвердж/iu.test(phase)) {
+    return [{ id: "STAGING", label: "Після підтвердження", role: "стадіювання" }];
+  }
+
+  const workupText = normalizedClinicalText([item?.title, item?.action, item?.why].filter(Boolean).join(" "));
+  const scopeIds = new Set();
+  if (/верифікац/iu.test(phase) && primary?.id) scopeIds.add(primary.id);
+
+  for (const hypothesis of hypotheses) {
+    const hypothesisText = normalizedClinicalText([hypothesis?.label, hypothesis?.short_label].filter(Boolean).join(" "));
+    const aliases = HYPOTHESIS_CONCEPTS
+      .filter(([pattern]) => pattern.test(hypothesisText))
+      .flatMap(([, values]) => values);
+    if (aliases.some((alias) => workupText.includes(alias))) scopeIds.add(hypothesis.id);
+  }
+
+  return hypotheses
+    .filter((hypothesis) => scopeIds.has(hypothesis.id))
+    .sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99))
+    .map((hypothesis) => ({
+      id: hypothesis.id,
+      label: hypothesis.short_label || hypothesis.label || hypothesis.id,
+      role: hypothesis.id === primary?.id
+        ? "провідна"
+        : /паралель/iu.test(phase) ? "критичний диференціал" : "прямий диференціал",
+    }));
+}
+
 export function workupPlan(bundle) {
   const workup = bundle?.methodology?.workup;
   if (!Array.isArray(workup)) return [];
@@ -52,6 +103,7 @@ export function workupPlan(bundle) {
     status: item.status,
     tone: item.tone,
     phase: item.phase,
+    scope: workupScope(bundle, item),
   }));
 }
 
