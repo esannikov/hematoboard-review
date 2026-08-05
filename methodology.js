@@ -3899,6 +3899,7 @@ function renderGraph() {
     attrs: { "aria-label": "Зв’язки вибраної гіпотези" },
   });
   if (!state.bundle.relations.length) {
+    graphSection.classList.add("is-empty");
     graphSection.append(emptyState("Для цього bundle немає типізованих зв’язків графа."));
     fragment.append(graphSection);
     return fragment;

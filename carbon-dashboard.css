@@ -8,6 +8,8 @@
  */
 
 :root[data-ui="carbon"] {
+  --hb-font-sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
   --cds-background: #f4f4f4;
   --cds-layer-01: #ffffff;
   --cds-layer-02: #f4f4f4;
@@ -806,14 +808,26 @@ html[data-ui="carbon"] {
 }
 
 [data-ui="carbon"] .overview-plan-phases > li[data-state="priority-one"] {
-  border-left: 4px solid var(--critical);
+  border-left: 0;
 }
 
 [data-ui="carbon"] .overview-plan-phases > li[data-state="parallel"] {
-  border-left: 4px solid var(--cds-support-warning);
+  border-left: 0;
 }
 
 [data-ui="carbon"] .overview-plan-phases > li[data-state="deferred"] {
+  border-left: 0;
+}
+
+[data-ui="carbon"] .overview-plan-phases > li[data-state="priority-one"] .overview-plan-step {
+  border-left: 4px solid var(--critical);
+}
+
+[data-ui="carbon"] .overview-plan-phases > li[data-state="parallel"] .overview-plan-step {
+  border-left: 4px solid var(--cds-support-warning);
+}
+
+[data-ui="carbon"] .overview-plan-phases > li[data-state="deferred"] .overview-plan-step {
   border-left: 4px solid var(--cds-border-strong-01);
 }
 
@@ -1987,6 +2001,13 @@ html[data-ui="carbon"] {
   min-height: 640px;
   margin: 0;
   padding: 0;
+}
+
+[data-ui="carbon"] .graph-section.is-empty {
+  min-height: 0;
+  padding: 20px;
+  border: 1px solid var(--cds-border-subtle-00);
+  background: var(--cds-layer-01);
 }
 
 [data-ui="carbon"] .graph-layout {
@@ -3203,10 +3224,48 @@ html[data-ui="carbon"] {
   [data-ui="carbon"] .packet-nav-action { padding: 0 13px; font-size: .8125rem; }
   :root[data-ui="carbon"] .hb-shell .route-menu > summary,
   :root[data-ui="carbon"] .hb-shell .packet-nav-action {
+    min-height: 44px;
     padding-inline: 8px;
     line-height: 1.15;
     white-space: normal;
   }
+  :root[data-ui="carbon"] .hb-shell .brand-block,
+  :root[data-ui="carbon"] .hb-shell .route-button,
+  :root[data-ui="carbon"] .hb-shell .overview-text-link,
+  :root[data-ui="carbon"] .hb-shell .agent-submit,
+  :root[data-ui="carbon"] .hb-shell .packet-print-action,
+  :root[data-ui="carbon"] .hb-shell .source-filter-button,
+  :root[data-ui="carbon"] .hb-shell .observation-filter,
+  :root[data-ui="carbon"] .hb-shell .observation-search,
+  :root[data-ui="carbon"] .hb-shell select,
+  :root[data-ui="carbon"] .hb-shell .agent-question button,
+  :root[data-ui="carbon"] .hb-shell .packet-gap-group > summary {
+    min-height: 44px;
+  }
+  [data-ui="carbon"] .clinical-spine-monitor {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    min-height: 0;
+  }
+  [data-ui="carbon"] .clinical-spine-visual {
+    min-height: 240px;
+    padding: 12px 16px;
+    border-inline-end: 0;
+    border-bottom: 1px solid var(--cds-border-subtle-00);
+  }
+  [data-ui="carbon"] .clinical-spine-anatomy {
+    height: 220px;
+    max-height: 220px;
+  }
+  [data-ui="carbon"] .clinical-spine-readout {
+    min-height: 0;
+    padding: 18px 16px 20px;
+    overflow: visible;
+  }
+  [data-ui="carbon"] .clinical-spine-event-shell,
+  [data-ui="carbon"] .clinical-spine-event-shell.has-details { display: block; }
+  [data-ui="carbon"] .clinical-spine-event { overflow: visible; }
+  [data-ui="carbon"] .clinical-spine-event-scroll-range { display: none; }
   [data-ui="carbon"] .overview-brief-title { grid-template-columns: 1fr; }
   [data-ui="carbon"] .overview-brief-facts { grid-template-columns: 1fr; border-left: 0; }
   [data-ui="carbon"] .overview-brief-facts > div { grid-column: 1 / -1; }
