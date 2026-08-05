@@ -2811,6 +2811,122 @@ function renderProvenance() {
   return fragment;
 }
 
+function sourceRegistryKind(source) {
+  if (["case", "patient", "local"].includes(source?.type)) return "primary";
+  if (["guideline", "pmid", "gap"].includes(source?.type)) return source.type;
+  return "other";
+}
+
+function sourceRegistryType(source) {
+  const labels = {
+    primary: "Первинне",
+    guideline: "Настанова",
+    pmid: "PubMed",
+    gap: "Прогалина",
+    other: "Інше",
+  };
+  return labels[sourceRegistryKind(source)] || sourceTypeLabel(source);
+}
+
+function sourceRegistryStatus(source) {
+  const claim = (source.supports || []).map((id) => claimById(id)).find(Boolean);
+  const level = claim?.verification?.level;
+  if (level && LABELS.verification[level]) {
+    const [label, tone] = verificationLabel(level);
+    return statusTag(label, tone);
+  }
+  const status = String(source.status || "").toLowerCase();
+  if (source.type === "gap" || /gap|unverified/.test(status)) return statusTag("потребує джерела", "critical");
+  if (/reviewed_for_deidentification/.test(status)) return statusTag("знеособлення звірено", "evidence");
+  if (/source_verified/.test(status)) return statusTag("джерело звірено", "evidence");
+  if (/traced/.test(status)) return statusTag("простежено", "evidence");
+  if (/context_only/.test(status)) return statusTag("лише контекст", "candidate");
+  if (/candidate/.test(status)) return statusTag("кандидат на перевірку", "candidate");
+  if (/local_source/.test(status)) return statusTag("локальне джерело", "");
+  return statusTag("статус не уточнено", "candidate");
+}
+
+function sourceRegistryId(source) {
+  return String(source?.id || "—").replace(/^SRC-T\d+-/u, "SRC-LOCAL-");
+}
+
+function sourceRegistry() {
+  const sources = state.bundle.sources || [];
+  const registry = section(
+    "Каталог",
+    `Реєстр джерел · ${sources.length}`,
+    "Фільтр змінює лише видимий тип джерел. Ідентифікатор, статус, повне цитування та кількість пов’язаних тверджень залишаються в одному рядку.",
+  );
+  registry.classList.add("source-registry-section");
+
+  const filters = [
+    ["all", "Усі"],
+    ["primary", "Первинні"],
+    ["guideline", "Настанови"],
+    ["pmid", "PubMed"],
+    ["gap", "Прогалини"],
+  ];
+  const counts = new Map(filters.map(([key]) => [key, key === "all" ? sources.length : sources.filter((source) => sourceRegistryKind(source) === key).length]));
+  const toolbar = element("div", { className: "source-registry-toolbar", attrs: { role: "toolbar", "aria-label": "Фільтр джерел за типом" } });
+  filters.forEach(([key, label], index) => toolbar.append(element("button", {
+    className: "source-filter-button focus-ring",
+    text: `${label} · ${counts.get(key)}`,
+    attrs: { type: "button", "data-source-filter": key, "aria-pressed": index === 0 ? "true" : "false" },
+  })));
+  const resultCount = element("span", {
+    className: "source-registry-count",
+    text: `Показано ${sources.length} із ${sources.length}`,
+    attrs: { "aria-live": "polite" },
+  });
+  toolbar.append(resultCount);
+  registry.append(toolbar);
+
+  const rows = sources.map((source) => {
+    const citation = source.type === "guideline" ? guidelineCitation(source) : displayText(source.citation || source.ref || "Цитування не записано.");
+    const displayId = sourceRegistryId(source);
+    const idControl = source.source_uri?.startsWith("http")
+      ? element("a", { className: "source-registry-id focus-ring", text: displayId, attrs: { href: source.source_uri, target: "_blank", rel: "noopener" } })
+      : element("strong", { className: "source-registry-id", text: displayId });
+    return {
+      attrs: {
+        id: `source-${source.id}`,
+        "data-source-row": "",
+        "data-source-kind": sourceRegistryKind(source),
+      },
+      cells: [
+        idControl,
+        sourceRegistryType(source),
+        sourceRegistryStatus(source),
+        element("p", { className: "source-registry-citation", text: citation }),
+        element("span", {
+          className: "source-support-count",
+          text: String((source.supports || []).length || "—"),
+          attrs: { title: `${(source.supports || []).length} пов’язаних тверджень` },
+        }),
+      ],
+    };
+  });
+  const registryTable = table(["ID", "Тип", "Статус", "Цитування", "Підтримує"], rows, "source-registry-table");
+  registry.append(registryTable);
+
+  const applyFilter = (selected) => {
+    let visible = 0;
+    registryTable.querySelectorAll("[data-source-row]").forEach((row) => {
+      row.hidden = selected !== "all" && row.dataset.sourceKind !== selected;
+      if (!row.hidden) visible += 1;
+    });
+    toolbar.querySelectorAll("[data-source-filter]").forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.sourceFilter === selected));
+    });
+    resultCount.textContent = `Показано ${visible} із ${sources.length}`;
+  };
+  toolbar.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-source-filter]");
+    if (button) applyFilter(button.dataset.sourceFilter);
+  });
+  return registry;
+}
+
 function renderEvidence() {
   const fragment = document.createDocumentFragment();
   fragment.append(
@@ -2819,14 +2935,18 @@ function renderEvidence() {
       "Каталог публікацій, настанов і первинних документів, на яких ґрунтуються гіпотези. Клінічні прогалини та повний реєстр спостережень доступні в розділі «Повні дані».",
     ),
   );
+  fragment.append(sourceRegistry());
 
   const claims = state.bundle.claims || [];
   if (claims.length) {
-    const chain = section(
-      "Шари підтвердження",
-      "Дані кейсу + настанови й статті → пояснення для цього кейсу → робоча гіпотеза",
-      "Кожен рядок є окремою перевірюваною тезою. Настанова або стаття формулює загальне правило чи контекст; наступний шар показує, як це правило застосовано до даних конкретного кейсу.",
-    );
+    const chain = element("details", { className: "content-section source-chain-disclosure" });
+    chain.append(element("summary", { className: "source-chain-summary" }, [
+      element("div", {}, [
+        element("h3", { text: "Як джерела переходять у робочу гіпотезу" }),
+        element("p", { text: `${claims.length} перевірюваних тверджень · відкрийте для повного ланцюга` }),
+      ]),
+      element("span", { className: "source-disclosure-toggle", attrs: { "aria-hidden": "true" } }),
+    ]));
     const list = element("div", { className: "source-list" });
     claims.forEach((claim, index) => {
       const item = element("details", {
@@ -2873,64 +2993,6 @@ function renderEvidence() {
     chain.append(list);
     fragment.append(chain);
   }
-
-  const groups = [
-    ["Настанови", state.bundle.sources.filter((source) => source.type === "guideline")],
-    ["PubMed", state.bundle.sources.filter((source) => source.type === "pmid")],
-    ["Первинні документи", state.bundle.sources.filter((source) => ["case", "patient", "local"].includes(source.type))],
-    ["Джерельні прогалини", state.bundle.sources.filter((source) => source.type === "gap")],
-  ];
-  groups.forEach(([title, sources]) => {
-    const openByDefault = title === "Настанови" || title === "Джерельні прогалини";
-    const block = element("details", {
-      className: "content-section evidence-group",
-      attrs: openByDefault ? { open: "" } : {},
-    });
-    block.append(element("summary", { className: "evidence-group-summary" }, [
-      element("div", {}, [
-        element("h3", { text: title }),
-        element("p", { text: sources.length ? `${sources.length} ${sources.length === 1 ? "запис" : "записів"}` : "Записів немає" }),
-      ]),
-      element("span", { className: "section-label", text: "Шар доказів" }),
-      element("span", { className: "source-disclosure-toggle", attrs: { "aria-hidden": "true" } }),
-    ]));
-    if (!sources.length) {
-      block.append(emptyState(`Джерела категорії «${title}» відсутні.`));
-    } else {
-      if (title === "Настанови") block.append(guidelineExplainer());
-      const list = element("div", { className: "source-list" });
-      sources.forEach((source) => {
-        const item = element("article", {
-          className: "source-item",
-          attrs: { id: `source-${source.id}` },
-        });
-        let heading;
-        if (source.type === "pmid") {
-          heading = element("a", { className: "src-link", text: `◆ PMID ${source.ref} ↗`, attrs: { href: source.source_uri, target: "_blank", rel: "noopener" } });
-        } else if (source.type === "guideline") {
-          heading = evidenceChip(source.id);
-        } else if (source.source_uri && source.source_uri.startsWith("http")) {
-          heading = element("a", { className: "src-link", text: `${source.ref} ↗`, attrs: { href: source.source_uri, target: "_blank", rel: "noopener" } });
-        } else {
-          heading = element("span", { className: "src-ref", text: sourceDisplayTitle(source) });
-        }
-        item.append(element("h4", { className: "src-head source-indexed-head" }, [evidenceIndex(source.id, { link: false }), heading]));
-        item.append(element("p", { className: "src-cite", text: source.type === "guideline" ? guidelineCitation(source) : source.citation }));
-        const status = sourceStatusChips(source);
-        if (status) item.append(status);
-          const linked = hypothesesSupportedBy(source);
-        if (linked.length) {
-          const wrap = element("div", { className: "src-linked" });
-          wrap.append(element("span", { className: "src-linked-label", text: "Гіпотези" }));
-          linked.forEach((h) => wrap.append(element("span", { className: "chip", text: `#${h.rank} ${h.label}` })));
-          item.append(wrap);
-        }
-        list.append(item);
-      });
-      block.append(list);
-    }
-    fragment.append(block);
-  });
   return fragment;
 }
 
