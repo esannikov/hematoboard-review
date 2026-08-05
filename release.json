@@ -1,7 +1,7 @@
 {
   "schema_version": "hematoboard.public-release/1.0.0",
-  "released_at": "2026-08-05T14:19:12Z",
-  "release_tag": "20260805carbonui1",
+  "released_at": "2026-08-05T15:19:49Z",
+  "release_tag": "20260805mobiletap1",
   "default_case": "case02",
   "case_scope": {
     "case_key": "case02",
@@ -23,7 +23,7 @@
   },
   "presentation": {
     "ui_system": "IBM Carbon",
-    "browser_matrix": "14/14 routes and viewports passed",
+    "browser_matrix": "30/30 views plus 4/4 mobile touch layouts passed",
     "packet_pdf_pages": 3,
     "clinical_truth_changed": false
   },

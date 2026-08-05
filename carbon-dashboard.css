@@ -2433,9 +2433,40 @@ html[data-ui="carbon"] {
 
   [data-ui="carbon"] .header-case-tools { grid-template-columns: 1fr; gap: 4px; }
   [data-ui="carbon"] .status-line { max-width: 100%; }
-  [data-ui="carbon"] .route-nav { overflow-x: auto; padding: 0; }
-  [data-ui="carbon"] .route-menu { position: static; }
-  [data-ui="carbon"] .route-menu-panel { position: fixed; top: 120px; right: 12px; }
+  :root[data-ui="carbon"] .hb-shell .route-nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: visible;
+    padding: 0;
+  }
+  :root[data-ui="carbon"] .hb-shell .route-cluster-primary {
+    grid-column: 1 / -1;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  :root[data-ui="carbon"] .hb-shell .route-cluster-primary::-webkit-scrollbar { display: none; }
+  :root[data-ui="carbon"] .hb-shell .route-menu {
+    position: relative;
+    min-width: 0;
+  }
+  :root[data-ui="carbon"] .hb-shell .route-menu > summary,
+  :root[data-ui="carbon"] .hb-shell .packet-nav-action { width: 100%; }
+  :root[data-ui="carbon"] .hb-shell .route-menu-panel {
+    position: absolute;
+    z-index: 60;
+    top: 100%;
+    right: 0;
+    left: auto;
+  }
+  :root[data-ui="carbon"] .hb-shell #data-nav-menu .route-menu-panel { right: auto; left: 0; }
+  :root[data-ui="carbon"] .hb-shell #method-nav-menu .route-menu-panel {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
   [data-ui="carbon"] #content,
   [data-ui="carbon"] .shell { width: calc(100% - 24px); padding: 24px 0 48px; }
   [data-ui="carbon"] .view-header,
@@ -2482,6 +2513,12 @@ html[data-ui="carbon"] {
   [data-ui="carbon"] .route-buttons a,
   [data-ui="carbon"] .route-menu > summary,
   [data-ui="carbon"] .packet-nav-action { padding: 0 13px; font-size: .8125rem; }
+  :root[data-ui="carbon"] .hb-shell .route-menu > summary,
+  :root[data-ui="carbon"] .hb-shell .packet-nav-action {
+    padding-inline: 8px;
+    line-height: 1.15;
+    white-space: normal;
+  }
   [data-ui="carbon"] .overview-brief-title { grid-template-columns: 1fr; }
   [data-ui="carbon"] .overview-brief-facts { grid-template-columns: 1fr; border-left: 0; }
   [data-ui="carbon"] .overview-brief-facts > div { grid-column: 1 / -1; }
