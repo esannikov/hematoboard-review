@@ -1,7 +1,7 @@
 {
   "schema_version": "hematoboard.public-release/1.0.0",
-  "released_at": "2026-08-05T21:25:05Z",
-  "release_tag": "20260806workupzones2",
+  "released_at": "2026-08-05T22:04:04Z",
+  "release_tag": "20260806cardbands1",
   "default_case": "case02",
   "case_scope": {
     "case_key": "case02",
@@ -23,7 +23,7 @@
   },
   "presentation": {
     "ui_system": "IBM Carbon",
-    "browser_matrix": "24 public routes plus mobile and graph passed; scoped design review verified closed Carbon workup items, full-height phase rails and top-aligned copy at 1440, 1050 and 390 px without horizontal overflow",
+    "browser_matrix": "24 public routes plus mobile and graph passed; scoped design review verified closed Carbon workup items, compact phase markers without full-height rails, alternating warm/cool card layers and top-aligned copy at 1440, 820 and 390 px without horizontal overflow",
     "packet_pdf_pages": 3,
     "clinical_truth_changed": false
   },
