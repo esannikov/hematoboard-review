@@ -1030,6 +1030,33 @@ function overviewLeadRationale(lead, bundle) {
   return boundaryIndex < 0 ? fragments.join(" ") : fragments.slice(0, boundaryIndex).join(" ");
 }
 
+function overviewArgumentCopy(item, lead) {
+  const text = String(item?.text || "").trim();
+  if (item?.key === "support") {
+    const decisiveFacts = (lead?.data_refs || [])
+      .map((ref) => factById(ref))
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((fact) => fact.label || fact.detail)
+      .filter(Boolean);
+    return {
+      signal: decisiveFacts.join(" · ") || text,
+      detail: decisiveFacts.length ? text : "",
+    };
+  }
+
+  const separator = item?.key === "discriminate" ? "→" : ";";
+  const separatorIndex = text.indexOf(separator);
+  if (separatorIndex < 0) return { signal: text, detail: "" };
+  const signal = text.slice(0, separatorIndex).trim().replace(/[.;:]+$/u, "");
+  const remainder = text.slice(separatorIndex + separator.length).trim();
+  const detail = remainder ? `${remainder.charAt(0).toLocaleUpperCase("uk-UA")}${remainder.slice(1)}` : "";
+  return {
+    signal: signal ? `${signal}.` : text,
+    detail,
+  };
+}
+
 function overviewCompositionBar(counts) {
   const segments = [
     ...Array(counts.support).fill("support"),
@@ -1149,13 +1176,17 @@ function renderOverview() {
     assessmentCopy.append(element("div", {
       className: "overview-argument-grid",
       attrs: { "aria-label": "Клінічна аргументація провідної гіпотези" },
-    }, challenge.map((item) => element("section", {
-      className: "overview-argument-card",
-      attrs: { "data-argument": item.key },
-    }, [
-      element("h4", { text: item.label }),
-      element("p", { text: item.text }),
-    ]))));
+    }, challenge.map((item) => {
+      const copy = overviewArgumentCopy(item, lead);
+      return element("section", {
+        className: "overview-argument-card",
+        attrs: { "data-argument": item.key },
+      }, [
+        element("h4", { text: item.label }),
+        element("p", { className: "overview-argument-signal", text: copy.signal }),
+        ...(copy.detail ? [element("p", { className: "overview-argument-detail", text: copy.detail })] : []),
+      ]);
+    })));
   }
   assessment.append(assessmentHead, assessmentCopy);
   assessment.append(overviewDifferentialRank(bundle, hypotheses));

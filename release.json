@@ -1,7 +1,7 @@
 {
   "schema_version": "hematoboard.public-release/1.0.0",
-  "released_at": "2026-08-05T15:19:49Z",
-  "release_tag": "20260805mobiletap1",
+  "released_at": "2026-08-05T16:07:15Z",
+  "release_tag": "20260805argument1",
   "default_case": "case02",
   "case_scope": {
     "case_key": "case02",
