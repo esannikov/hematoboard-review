@@ -446,9 +446,11 @@ function evidencePublicationKind(source) {
 function evidencePublicationTitle(source) {
   const citation = displayText(source?.citation || source?.ref || "Джерело доказу").trim();
   const journalBoundary = citation.match(/^(.+?)(?:[.?]\s+(?:Ann(?:als)?\b|Blood\b|Leukemia\b|J\s+Clin\b|Br\s+J\b|Cytometry\b|Semin\b|Cancer\b|Hum\s+Pathol\b))/iu);
-  const title = (journalBoundary?.[1] || citation).replace(/[.;]+$/u, "").trim();
-  const year = citation.match(/\b(?:19|20)\d{2}\b/u)?.[0];
-  return `${title}${year ? ` (${year})` : ""}`;
+  return (journalBoundary?.[1] || citation).replace(/[.;]+$/u, "").trim();
+}
+
+function evidencePublicationYear(source) {
+  return displayText(source?.citation || source?.ref || "").match(/\b(?:19|20)\d{2}\b/u)?.[0] || "";
 }
 
 // Evidence chip: source type is carried by text and a restrained semantic tone.
@@ -989,10 +991,16 @@ function overviewPlanPhases(bundle) {
           }, sourceRefs.map((ref) => {
             const source = sourceById(ref);
             const title = evidencePublicationTitle(source);
+            const year = evidencePublicationYear(source);
             const content = [
               evidenceIndex(ref, { link: false }),
-              element("span", { className: "overview-plan-source-kind", text: evidencePublicationKind(source) }),
-              element("span", { className: "overview-plan-source-title", text: title }),
+              element("span", { className: "overview-plan-source-copy" }, [
+                element("span", { className: "overview-plan-source-meta" }, [
+                  element("span", { className: "overview-plan-source-kind", text: evidencePublicationKind(source) }),
+                  ...(year ? [element("span", { className: "overview-plan-source-year", text: year })] : []),
+                ]),
+                element("span", { className: "overview-plan-source-title", text: title }),
+              ]),
             ];
             const attrs = source?.source_uri?.startsWith("http")
               ? { href: source.source_uri, target: "_blank", rel: "noopener", title: source.citation || title }
@@ -1151,7 +1159,7 @@ function overviewDifferentialRank(bundle, hypotheses) {
   hypotheses.forEach((hypothesis) => {
     const counts = relationCountsForHypothesis(bundle, hypothesis.id);
     rows.append(element("div", { className: "overview-differential-row" }, [
-      element("span", { className: "overview-differential-number", text: String(hypothesis.rank || "—").padStart(2, "0") }),
+      element("span", { className: "overview-differential-number", text: hypothesis.id || "—" }),
       element("strong", { className: "overview-differential-label", text: hypothesis.short_label || hypothesis.label }),
       overviewCompositionBar(counts),
       element("span", {
