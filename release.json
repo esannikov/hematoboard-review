@@ -1,6 +1,6 @@
 {
   "schema_version": "hematoboard.public-release/1.0.0",
-  "released_at": "2026-08-05T16:26:40Z",
+  "released_at": "2026-08-05T16:34:46Z",
   "release_tag": "20260805sourcefix1",
   "default_case": "case02",
   "case_scope": {

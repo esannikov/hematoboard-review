@@ -3178,6 +3178,30 @@ function observationSignal(record, index = null) {
   return item;
 }
 
+function observationSignalRow(record, index) {
+  const { observation, group, attention } = record;
+  const interpretation = observationInterpretation(observation);
+  const sourceMeta = element("div", { className: "observation-signal-source-meta" }, [
+    element("span", { text: spineRawDate(observation.effective_at || record.documentItem?.document_date || "дата не записана") }),
+    observation.page ? element("span", { text: `стор. ${observation.page}` }) : null,
+  ]);
+  return {
+    attrs: attention ? { "data-tone": "critical" } : {},
+    cells: [
+      element("span", { className: "observation-signal-index", text: String(index + 1).padStart(2, "0") }),
+      element("strong", { className: "observation-signal-name", text: localizedObservationDisplay(observation.display) }),
+      element("div", { className: "observation-signal-data" }, [
+        element("p", { text: observationValue(observation) }),
+        interpretation ? element("span", { text: interpretation }) : null,
+      ]),
+      element("div", { className: "observation-signal-source" }, [
+        stateDataChip(group.label, "", attention ? "critical" : "evidence"),
+        sourceMeta,
+      ]),
+    ],
+  };
+}
+
 function localizedObservationDisplay(value) {
   const display = String(value || "Клінічне спостереження").trim();
   return display
@@ -3370,9 +3394,8 @@ function renderState() {
       "Ключові клінічні сигнали",
       `Для первинного огляду відібрано ${sourceObservationContext.keyRecords.length} із ${candidateObservations.length} структурованих спостережень.`,
     );
-    const keyList = element("ol", { className: "observation-key-list" });
-    sourceObservationContext.keyRecords.forEach((record, index) => keyList.append(observationSignal(record, index)));
-    orientation.append(keyList);
+    const keyRows = sourceObservationContext.keyRecords.map((record, index) => observationSignalRow(record, index));
+    orientation.append(table(["№", "Сигнал", "Ключові дані", "Джерело"], keyRows, "observation-key-table"));
     fragment.append(orientation);
 
     const thematic = section(
