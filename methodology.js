@@ -1022,7 +1022,6 @@ function overviewPlanPhases(bundle) {
         element("span", { className: "overview-plan-timing", text: timing }),
       ]),
       element("div", {}, [
-        element("strong", { className: "overview-plan-phase-title", text: phase }),
         details,
         element("small", { text: `${items.length} ${items.length === 1 ? "перевірка" : items.length < 5 ? "перевірки" : "перевірок"}` }),
       ]),
