@@ -6,11 +6,16 @@
 Live site: <https://esannikov.github.io/hematoboard/>
 
 Актуальний кандидатний синтез CASE-02:
-<https://esannikov.github.io/hematoboard/?case=case02&view=agent&release=20260804case02r12>
+<https://esannikov.github.io/hematoboard/?case=case02&view=agent&release=20260805carbonui1>
 
 Поточний публічний release-покажчик: [`release.json`](./release.json). Він
 фіксує хеш активного CASE-02 та окремо позначає агентний синтез як кандидат,
 що очікує рішення лікаря.
+
+Інтерфейс релізу `20260805carbonui1` використовує єдину IBM Carbon-мову на
+основних маршрутах, повних даних, джерелах, реплеї та друкованому брифі. Це
+presentation-реліз: хеші клінічних пакетів, replay і кандидатної reasoning
+revision не змінювалися.
 
 ## Що показує переглядач
 

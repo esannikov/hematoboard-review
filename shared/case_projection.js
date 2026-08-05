@@ -34,9 +34,9 @@ export function relationCountsForHypothesis(bundle, hypothesisId) {
 export function hypothesisChallenge(hypothesis) {
   const challenge = hypothesis?.challenge ?? {};
   return [
-    { key: "support", label: "Підтримує гіпотезу", text: challenge.proponent },
-    { key: "limit", label: "Послаблює гіпотезу", text: challenge.opponent },
-    { key: "discriminate", label: "Критерій розмежування", text: challenge.resolver },
+    { key: "support", label: "Дані на користь", text: challenge.proponent },
+    { key: "limit", label: "Обмеження гіпотези", text: challenge.opponent },
+    { key: "discriminate", label: "Критерій верифікації", text: challenge.resolver },
   ].filter((item) => typeof item.text === "string" && item.text.trim());
 }
 

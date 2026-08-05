@@ -1,7 +1,7 @@
 {
   "schema_version": "hematoboard.public-release/1.0.0",
-  "released_at": "2026-08-04T19:19:37Z",
-  "release_tag": "20260804case02r12",
+  "released_at": "2026-08-05T14:19:12Z",
+  "release_tag": "20260805carbonui1",
   "default_case": "case02",
   "case_scope": {
     "case_key": "case02",
@@ -20,6 +20,12 @@
     "revision_sha256": "fd011b7894c64b03feb27df54c09b805469d12ebc94bf266bc85de9acd4e6f23",
     "status": "candidate",
     "clinical_acceptance": "pending"
+  },
+  "presentation": {
+    "ui_system": "IBM Carbon",
+    "browser_matrix": "14/14 routes and viewports passed",
+    "packet_pdf_pages": 3,
+    "clinical_truth_changed": false
   },
   "boundary": "Публічний технічний демо-реліз. Кандидатний синтез не підміняє прийняту лікарем клінічну картину."
 }
