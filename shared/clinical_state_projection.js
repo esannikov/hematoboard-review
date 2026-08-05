@@ -130,6 +130,88 @@ function projectPathology(item, index) {
   };
 }
 
+function searchableText(value) {
+  return normalizeText(value)
+    .toLocaleLowerCase("uk-UA")
+    .replace(/[’'`]/g, "")
+    .replace(/[^\p{L}\p{N}]+/gu, " ");
+}
+
+function imagingDocumentScore(item, documentItem, observations) {
+  const itemDate = normalizeText(item?.date);
+  const documentDate = normalizeText(documentItem?.document_date);
+  if (!itemDate || itemDate !== documentDate || documentItem?.document_type !== "imaging") return -1;
+
+  const needle = searchableText([
+    item?.modality,
+    item?.stations,
+    item?.impression,
+  ].filter(Boolean).join(" "));
+  const haystack = searchableText([
+    documentItem?.title,
+    documentItem?.summary,
+    ...observations.flatMap((observation) => [observation?.display, observation?.value_text]),
+  ].filter(Boolean).join(" "));
+  const meaningfulTokens = [...new Set(needle.split(" ").filter((token) => token.length >= 4))];
+  let score = meaningfulTokens.reduce((total, token) => total + (haystack.includes(token) ? 1 : 0), 0);
+
+  const modality = searchableText(item?.modality);
+  if (/\bм?скт\b|\bкт\b/u.test(modality) && /\bм?скт\b|\bкт\b/u.test(haystack)) score += 5;
+  if (/узд|ультрас/u.test(modality) && /узд|ультрас/u.test(haystack)) score += 4;
+  if (/вуз|лімф/u.test(needle) && /вуз|лімф/u.test(haystack)) score += 5;
+  return score;
+}
+
+function projectImaging(item, index, documents, observations) {
+  const observationsByDocument = new Map();
+  observations.forEach((observation) => {
+    const documentId = normalizeText(observation?.document_id);
+    if (!documentId) return;
+    if (!observationsByDocument.has(documentId)) observationsByDocument.set(documentId, []);
+    observationsByDocument.get(documentId).push(observation);
+  });
+
+  const candidates = documents
+    .map((documentItem) => {
+      const documentObservations = observationsByDocument.get(documentItem?.id) || [];
+      return {
+        documentItem,
+        observations: documentObservations,
+        score: imagingDocumentScore(item, documentItem, documentObservations),
+      };
+    })
+    .filter((candidate) => candidate.score >= 0)
+    .sort((a, b) => b.score - a.score || String(a.documentItem?.id).localeCompare(String(b.documentItem?.id)));
+  const source = candidates[0] || null;
+  const sourceObservations = source
+    ? [...source.observations].sort((a, b) => Number(a?.page || 0) - Number(b?.page || 0) || String(a?.id).localeCompare(String(b?.id)))
+    : [];
+  const verifiedCount = sourceObservations.filter((observation) => observation?.verification?.human_verified === true).length;
+
+  return {
+    source: item,
+    id: item?.id || `imaging-${index + 1}`,
+    date: normalizeText(item?.date),
+    dateLabel: formatDate(item?.date),
+    modality: normalizeText(item?.modality || item?.kind) || "Візуалізація",
+    maxNode: normalizeText(item?.maxNode),
+    stations: normalizeText(item?.stations),
+    spleen: normalizeText(item?.spleen),
+    noderads: normalizeText(item?.noderads),
+    trend: normalizeText(item?.trend),
+    impression: normalizeText(item?.impression || item?.finding),
+    sourceDocument: source?.documentItem || null,
+    sourceObservations,
+    sourceVerification: sourceObservations.length
+      ? {
+          verified: verifiedCount,
+          total: sourceObservations.length,
+          complete: verifiedCount === sourceObservations.length,
+        }
+      : null,
+  };
+}
+
 export function projectClinicalState(bundle) {
   const clinical = bundle?.clinical_state && typeof bundle.clinical_state === "object"
     ? bundle.clinical_state
@@ -140,7 +222,12 @@ export function projectClinicalState(bundle) {
     labs: asArray(clinical.labs).map((lab) => projectLab(lab, labColumns)),
     markers: asArray(clinical.markers),
     pathology: asArray(clinical.pathology).map(projectPathology),
-    imaging: asArray(clinical.imaging),
+    imaging: asArray(clinical.imaging).map((item, index) => projectImaging(
+      item,
+      index,
+      asArray(bundle?.source_documents),
+      asArray(bundle?.observations),
+    )),
     panel: asArray(clinical.panel),
   };
 }

@@ -5,7 +5,7 @@ import {
   sourceDocumentBreakdown,
   workupPlan as projectedWorkupPlan,
 } from "./shared/case_projection.js";
-import { projectClinicalState } from "./shared/clinical_state_projection.js?v=20260805stateclarity1";
+import { projectClinicalState } from "./shared/clinical_state_projection.js?v=20260805imagingdetail1";
 
 // The case registry is data, not code: methodology/active_cases.json is the
 // validated routing manifest. Adding a case never requires editing this file.
@@ -77,22 +77,30 @@ const METHOD_VIEWS = [
 ];
 
 const OPTIONAL_METHOD_VIEWS = [
-  ["multimodal", "Узгодженість"],
   ["replay", "Докази в часі"],
   ["protocol", "Протокол AI дебатів"],
 ];
 
-const LEGACY_VIEW_REDIRECTS = { consilium: "graph" };
+const LEGACY_VIEW_REDIRECTS = { consilium: "graph", multimodal: "state" };
 const VIEW_LABELS = Object.fromEntries([
   ...PRIMARY_VIEWS,
   ...DATA_VIEWS,
   ...METHOD_VIEWS,
   ...OPTIONAL_METHOD_VIEWS,
   ["consilium", "Консиліум"],
+  ["multimodal", "Узгодженість доказів"],
   ["packet", "Бриф для консиліуму"],
   ["bodymap", "Локалізація"],
 ]);
-const state = { caseKey: "case02", view: "overview", bundle: null, latestRun: null, replay: null, reasoningCandidate: null };
+const state = {
+  caseKey: "case02",
+  view: "overview",
+  bundle: null,
+  latestRun: null,
+  replay: null,
+  reasoningCandidate: null,
+  reviewableObservationIds: new Set(),
+};
 const timelineCursorByCase = new Map();
 const timelineZoomByCase = new Map();
 const timelineEventByCase = new Map();
@@ -1838,16 +1846,20 @@ function spineKeySections(sections, limit = 6) {
     .filter((sectionItem) => sectionItem.items.length);
 }
 
-function spineEventReviewUrl(event) {
+function observationReviewUrl(observationId, documentId) {
   const params = new URLSearchParams({
     case: state.caseKey,
     ui: document.documentElement.dataset.ui || "carbon",
     mode: "recognition",
     filter: "all",
   });
-  if (event?._observationIds?.[0]) params.set("observation", event._observationIds[0]);
-  if (event?._sourceDocumentIds?.[0]) params.set("document", event._sourceDocumentIds[0]);
+  if (observationId) params.set("observation", observationId);
+  if (documentId) params.set("document", documentId);
   return `/clinician/?${params}`;
+}
+
+function reviewableObservationId(observationIds = []) {
+  return observationIds.find((id) => state.reviewableObservationIds.has(id)) || null;
 }
 
 function spineEventProvenance(event) {
@@ -1866,11 +1878,12 @@ function spineEventProvenance(event) {
       }),
     ]),
   ];
-  if (!IS_PUBLIC_STATIC_DEMO) {
+  const reviewObservationId = reviewableObservationId(event?._observationIds);
+  if (!IS_PUBLIC_STATIC_DEMO && reviewObservationId) {
     children.push(element("a", {
       className: "clinical-spine-review-link focus-ring",
       text: "Звірити з PDF →",
-      attrs: { href: spineEventReviewUrl(event) },
+      attrs: { href: observationReviewUrl(reviewObservationId, event?._sourceDocumentIds?.[0]) },
     }));
   }
   return element("div", { className: "clinical-spine-provenance" }, children);
@@ -3021,6 +3034,47 @@ function stateNarrative(text) {
   return paragraph;
 }
 
+function imagingTone(item) {
+  return /(?:прогрес|↑↑|NodeRADS\s*[45])/iu.test([
+    item?.trend,
+    item?.impression,
+    item?.noderads,
+  ].filter(Boolean).join(" ")) ? "critical" : "candidate";
+}
+
+function imagingSourceFindings(item) {
+  if (!item.sourceObservations?.length) {
+    return element("p", {
+      className: "imaging-source-empty",
+      text: "Окремі джерельні знахідки для цього дослідження не структуровано.",
+    });
+  }
+  const list = element("ul", { className: "imaging-source-findings" });
+  item.sourceObservations.forEach((observation) => {
+    const value = observationValue(observation);
+    const interpretation = observationInterpretation(observation);
+    list.append(element("li", {}, [
+      element("div", { className: "imaging-finding-main" }, [
+        element("strong", { text: localizedObservationDisplay(observation.display) }),
+        value !== "—" ? element("p", { text: value }) : null,
+      ]),
+      element("div", { className: "imaging-finding-meta" }, [
+        interpretation ? element("span", { text: interpretation }) : null,
+        observation.page ? element("span", { text: `стор. ${observation.page}` }) : null,
+      ]),
+    ]));
+  });
+  return list;
+}
+
+function imagingSourceStatus(item) {
+  const status = item.sourceVerification;
+  if (!status) return stateDataChip("Джерельні поля", "не структуровано");
+  return status.complete
+    ? stateDataChip("Звірено лікарем", `${status.verified} із ${status.total}`, "evidence")
+    : stateDataChip("Потребує звірки", `${status.total - status.verified} із ${status.total}`, "candidate");
+}
+
 const OBSERVATION_GROUPS = [
   { id: "tissue", label: "Тканини та ІГХ", documentTypes: ["pathology"], fallbackKinds: ["pathology_finding"] },
   { id: "imaging", label: "Візуалізація та поширеність", documentTypes: ["imaging"], fallbackKinds: ["imaging_finding"] },
@@ -3062,34 +3116,6 @@ function observationNeedsAttention(observation) {
   return /підвищ|знижен|вище|нижче|підозр|атип|прогрес|нерепрезент|ненадійн|нечитабель|потребує|не підтвердж|розбіж|поза референс/iu.test(text);
 }
 
-function observationPriority(observation, documentItem) {
-  const kindWeight = {
-    diagnostic_interpretation: 10,
-    pathology_finding: 9,
-    gap: 8,
-    imaging_finding: 7,
-    recommendation: 6,
-    measurement: 4,
-    procedure: 3,
-    clinical_note: 3,
-    negative_finding: 2,
-  };
-  const documentWeight = { pathology: 3, imaging: 2, consultation: 1, laboratory: 1 };
-  const date = observation.effective_at || documentItem?.document_date || "";
-  const recencyWeight = /^2026-0[4-9]/.test(date) ? 6 : /^2026/.test(date) ? 4 : 0;
-  const clinicalSignal = [observation.display, observation.value_text, observation.interpretation]
-    .filter(Boolean)
-    .join(" ");
-  const highSignalWeight = /розчинний рецептор інтерлейкіну-2|sIL-?2R|лактатдегідрогеназ|\bЛДГ\b|β2|EBV|HHV|Ki-?67|CD30|PD1|BCL6|NodeRADS|лімфом|лімфопроліфератив|стерта будова|селезін|генералізован|конгломерат/iu.test(clinicalSignal) ? 7 : 0;
-  const inflammatorySignalWeight = /С-реактив|швидкість осідання еритроцитів|\bШОЕ\b/iu.test(clinicalSignal) ? 3 : 0;
-  return (kindWeight[observation.kind] || 1)
-    + (documentWeight[documentItem?.document_type] || 0)
-    + (observationNeedsAttention(observation) ? 3 : 0)
-    + recencyWeight
-    + highSignalWeight
-    + inflammatorySignalWeight;
-}
-
 function observationInterpretation(observation) {
   const labels = {
     candidate_source_interpretation: "попередній висновок документа",
@@ -3113,6 +3139,21 @@ function observationSourceLabel(documentItem) {
   return `${type} · ${date}`;
 }
 
+function observationSourceCell(observation, documentItem) {
+  const source = element("div", { className: "observation-source-address" }, [
+    element("span", { className: "observation-source-page", text: `Сторінка ${observation.page || "не вказана"}` }),
+    element("span", { className: "observation-source-document", text: observationSourceLabel(documentItem) }),
+  ]);
+  if (!IS_PUBLIC_STATIC_DEMO && state.reviewableObservationIds.has(observation.id)) {
+    source.append(element("a", {
+      className: "observation-source-review-link focus-ring",
+      text: "Звірити з PDF →",
+      attrs: { href: observationReviewUrl(observation.id, documentItem?.id) },
+    }));
+  }
+  return source;
+}
+
 function observationContext(observations, documents) {
   const documentsById = new Map(documents.map((item) => [item.id, item]));
   const records = observations.map((observation) => {
@@ -3123,7 +3164,6 @@ function observationContext(observations, documents) {
       documentItem,
       group,
       attention: observationNeedsAttention(observation),
-      priority: observationPriority(observation, documentItem),
     };
   });
   const grouped = OBSERVATION_GROUPS.map((group) => {
@@ -3137,70 +3177,7 @@ function observationContext(observations, documents) {
     };
   }).filter((group) => group.records.length);
 
-  const keyRecords = [];
-  const perGroup = new Map();
-  const sorted = [...records]
-    .sort((a, b) => b.priority - a.priority
-      || String(b.observation.effective_at || "").localeCompare(String(a.observation.effective_at || "")));
-  sorted.forEach((record) => {
-    if (keyRecords.length >= 8 || record.priority < 8 || record.observation.kind === "gap") return;
-    if (observationValue(record.observation) === "—" && !["diagnostic_interpretation", "pathology_finding"].includes(record.observation.kind)) return;
-    const count = perGroup.get(record.group.id) || 0;
-    if (count >= 2) return;
-    const duplicate = keyRecords.some((item) => item.observation.display === record.observation.display);
-    if (duplicate) return;
-    keyRecords.push(record);
-    perGroup.set(record.group.id, count + 1);
-  });
-  return { records, grouped, keyRecords };
-}
-
-function observationSignal(record, index = null) {
-  const { observation, group, attention } = record;
-  const item = element("li", {
-    className: "observation-key-item",
-    attrs: attention ? { "data-tone": "critical" } : {},
-  });
-  const content = element("div", { className: "observation-key-content" });
-  content.append(
-    element("div", { className: "observation-key-heading" }, [
-      element("strong", { text: localizedObservationDisplay(observation.display) }),
-      stateDataChip(group.label, "", attention ? "critical" : "evidence"),
-    ]),
-    element("p", { text: observationValue(observation) }),
-    element("div", { className: "observation-key-meta" }, [
-      observationInterpretation(observation) ? element("span", { text: observationInterpretation(observation) }) : null,
-      element("span", { text: spineRawDate(observation.effective_at || record.documentItem?.document_date || "дата не записана") }),
-      observation.page ? element("span", { text: `стор. ${observation.page}` }) : null,
-    ]),
-  );
-  if (index !== null) item.append(element("span", { className: "observation-key-index", text: String(index + 1).padStart(2, "0") }));
-  item.append(content);
-  return item;
-}
-
-function observationSignalRow(record, index) {
-  const { observation, group, attention } = record;
-  const interpretation = observationInterpretation(observation);
-  const sourceMeta = element("div", { className: "observation-signal-source-meta" }, [
-    element("span", { text: spineRawDate(observation.effective_at || record.documentItem?.document_date || "дата не записана") }),
-    observation.page ? element("span", { text: `стор. ${observation.page}` }) : null,
-  ]);
-  return {
-    attrs: attention ? { "data-tone": "critical" } : {},
-    cells: [
-      element("span", { className: "observation-signal-index", text: String(index + 1).padStart(2, "0") }),
-      element("strong", { className: "observation-signal-name", text: localizedObservationDisplay(observation.display) }),
-      element("div", { className: "observation-signal-data" }, [
-        element("p", { text: observationValue(observation) }),
-        interpretation ? element("span", { text: interpretation }) : null,
-      ]),
-      element("div", { className: "observation-signal-source" }, [
-        stateDataChip(group.label, "", attention ? "critical" : "evidence"),
-        sourceMeta,
-      ]),
-    ],
-  };
+  return { records, grouped };
 }
 
 function localizedObservationDisplay(value) {
@@ -3251,6 +3228,7 @@ function observationRegistry(context) {
       return {
         attrs: {
           "data-observation-row": "",
+          "data-observation-id": observation.id,
           "data-group": group.id,
           "data-attention": String(attention),
           "data-search": searchText,
@@ -3268,7 +3246,7 @@ function observationRegistry(context) {
             observation.reference_range ? element("span", { text: `Референс: ${observation.reference_range}` }) : null,
           ]),
           observationInterpretation(observation) || "—",
-          stateDataChip(`стор. ${observation.page || "—"}`, observationSourceLabel(documentItem)),
+          observationSourceCell(observation, documentItem),
         ],
       };
     });
@@ -3350,7 +3328,7 @@ function renderState() {
   fragment.append(
     viewHeader(
       "Дослідження та прогалини",
-      "Спочатку показано ключові сигнали та тематичний огляд. Повний набір досліджень і кожне джерельне спостереження доступні нижче без втрати деталей.",
+      "Повні датовані результати згруповано за типом дослідження. Кожне джерельне спостереження доступне в реєстрі без автоматичного ранжування клінічної важливості.",
     ),
   );
   const clinical = projectClinicalState(state.bundle);
@@ -3364,50 +3342,6 @@ function renderState() {
     ...(candidateObservations.length ? [["Структуровані спостереження", candidateObservations.length]] : []),
   ].forEach(([label, value]) => coverage.append(element("div", {}, [element("dt", { text: label }), element("dd", { text: value || "немає" })])));
   fragment.append(coverage);
-
-  if (sourceObservationContext) {
-    const orientation = section(
-      "Огляд даних",
-      "Ключові клінічні сигнали",
-      `Для первинного огляду відібрано ${sourceObservationContext.keyRecords.length} із ${candidateObservations.length} структурованих спостережень.`,
-    );
-    const keyRows = sourceObservationContext.keyRecords.map((record, index) => observationSignalRow(record, index));
-    orientation.append(table(["№", "Сигнал", "Ключові дані", "Джерело"], keyRows, "observation-key-table"));
-    fragment.append(orientation);
-
-    const thematic = section(
-      "Тематичний огляд",
-      "Усі дані у п’яти клінічних напрямах",
-      "Відкрийте потрібний напрям, щоб побачити його найважливіші записи. Повний реєстр з пошуком залишається окремо нижче.",
-    );
-    const groupList = element("div", { className: "observation-theme-list" });
-    [...sourceObservationContext.grouped]
-      .sort((a, b) => b.attentionCount - a.attentionCount || b.records.length - a.records.length)
-      .forEach((group) => {
-        const disclosure = element("details", { className: "observation-theme", attrs: group.attentionCount ? { "data-tone": "critical" } : {} });
-        disclosure.append(element("summary", { className: "observation-theme-summary" }, [
-          element("div", {}, [
-            element("strong", { text: group.label }),
-            element("span", { text: `${group.documentCount} документів · ${group.records.length} записів` }),
-          ]),
-          element("div", { className: "observation-theme-counts" }, [
-            group.attentionCount ? stateDataChip("Потребує уваги", group.attentionCount, "critical") : stateDataChip("Без позначених відхилень", "", "evidence"),
-            element("span", { className: "source-disclosure-toggle", attrs: { "aria-hidden": "true" } }),
-          ]),
-        ]));
-        const representative = [...group.records]
-          .sort((a, b) => b.priority - a.priority || String(b.observation.effective_at || "").localeCompare(String(a.observation.effective_at || "")))
-          .slice(0, 4);
-        const body = element("div", { className: "observation-theme-body" });
-        const list = element("ul", { className: "observation-theme-findings" });
-        representative.forEach((record) => list.append(observationSignal(record)));
-        body.append(list, element("p", { className: "observation-theme-foot", text: `Показано ${representative.length} із ${group.records.length}. Решта доступна у повному реєстрі.` }));
-        disclosure.append(body);
-        groupList.append(disclosure);
-      });
-    thematic.append(groupList);
-    fragment.append(thematic);
-  }
 
   if (clinical.labs.length) {
     const labs = section(
@@ -3450,14 +3384,20 @@ function renderState() {
         attrs: { "data-tone": tone },
         cells: [
           element("strong", { text: panelText(marker.an) }),
-          stateDataChip(marker.date || "дата не записана", `${marker.v} ${panelText(marker.unit || "")}`.trim(), tone),
+          marker.date && marker.date !== "—"
+            ? element("time", { text: spineRawDate(marker.date), attrs: { datetime: marker.date } })
+            : "не записано",
+          element("div", { className: "marker-value-cell" }, [
+            element("strong", { text: panelText(marker.v || "—") }),
+            marker.unit ? element("span", { text: panelText(marker.unit) }) : null,
+          ]),
           marker.ref || "—",
           stateDataChip(status, "", tone),
           panelText(marker.note || "—"),
         ],
       };
     });
-    markers.append(table(["Маркер", "Значення і дата", "Референс", "Стан", "Клінічна примітка"], markerRows, "marker-table"));
+    markers.append(table(["Маркер", "Дата", "Значення", "Референс", "Стан", "Клінічна примітка"], markerRows, "marker-table"));
     fragment.append(markers);
   }
 
@@ -3512,12 +3452,48 @@ function renderState() {
   }
 
   if (clinical.imaging.length) {
-    const imaging = section("Візуалізація", "Динаміка уражень");
+    const imaging = section(
+      "Візуалізація",
+      "Динаміка уражень",
+      "Хронологія зіставляє поширення, контрольні вимірювання та стан селезінки. Нижче кожне дослідження розкрито до окремих знахідок із джерельного документа.",
+    );
+    const comparisonRows = clinical.imaging.map((item) => {
+      const tone = imagingTone(item);
+      return {
+        attrs: { "data-tone": tone },
+        cells: [
+          element("time", { text: item.dateLabel, attrs: item.date ? { datetime: item.date } : {} }),
+          element("div", { className: "imaging-study-cell" }, [
+            element("strong", { text: item.modality }),
+            item.noderads ? stateDataChip("NodeRADS", item.noderads, tone) : null,
+          ]),
+          stateDataChip(item.trend || "динаміку не зазначено", "", tone),
+          item.stations || "—",
+          item.maxNode || "—",
+          item.spleen || "—",
+          item.impression || "Висновок не структуровано.",
+        ],
+      };
+    });
+    const comparison = table(
+      ["Дата", "Дослідження", "Динаміка", "Поширення", "Найбільший вузол", "Селезінка", "Короткий результат"],
+      comparisonRows,
+      "imaging-comparison-table",
+    );
+    comparison.setAttribute("role", "region");
+    comparison.setAttribute("aria-label", "Хронологія візуалізації та динаміки уражень");
+    comparison.tabIndex = 0;
+    imaging.append(comparison);
+
+    imaging.append(element("div", { className: "imaging-detail-heading" }, [
+      element("h4", { text: "Детальні протоколи" }),
+      element("p", { text: "Розкрийте дослідження, щоб переглянути параметри та структуровані знахідки з відповідного документа." }),
+    ]));
     const list = element("div", { className: "state-list" });
     clinical.imaging.forEach((item, index) => {
-      const tone = /(?:прогрес|↑↑|NodeRADS\s*[45])/iu.test([item.trend, item.impression, item.noderads].filter(Boolean).join(" ")) ? "critical" : "candidate";
+      const tone = imagingTone(item);
       const summaryMeta = element("div", { className: "state-summary-chips" }, [
-        stateDataChip("Дата", item.date || "не записана"),
+        stateDataChip("Дата", item.dateLabel),
         item.maxNode ? stateDataChip("Макс. вузол", item.maxNode, tone) : null,
         item.noderads ? stateDataChip("NodeRADS", item.noderads, tone) : null,
       ]);
@@ -3533,9 +3509,38 @@ function renderState() {
           ]),
           element("span", { className: "source-disclosure-toggle", attrs: { "aria-hidden": "true" } }),
         ]),
-        element("div", { className: "state-item-body" }, [
-          stateNarrative(item.impression || item.finding || item.trend),
-          stateDetailGrid([["Динаміка", item.trend, tone], ["Найбільший вузол", item.maxNode], ["Станції", item.stations], ["Селезінка", item.spleen], ["NodeRADS", item.noderads, tone]]),
+        element("div", { className: "state-item-body imaging-record-body" }, [
+          element("section", { className: "imaging-result-layer" }, [
+            element("div", { className: "imaging-layer-heading" }, [
+              element("h4", { text: "Результат дослідження" }),
+              stateDataChip("Рівень", "дані кейсу"),
+            ]),
+            stateNarrative(item.impression || item.trend || "Результат не структуровано."),
+            stateDetailGrid([
+              ["Оцінка динаміки", item.trend || "не зазначено", tone],
+              ["Локалізації", item.stations || "не описано"],
+              ["Найбільший описаний вузол", item.maxNode || "не вказано"],
+              ["Селезінка", item.spleen && item.spleen !== "—" ? item.spleen : "не описано"],
+              ["NodeRADS", item.noderads || "не зазначено", item.noderads ? tone : ""],
+              ["Дата дослідження", item.dateLabel],
+            ]),
+          ]),
+          element("section", { className: "imaging-source-layer" }, [
+            element("div", { className: "imaging-layer-heading" }, [
+              element("h4", { text: "Знахідки, перенесені з документа" }),
+              imagingSourceStatus(item),
+            ]),
+            item.sourceDocument?.summary
+              ? element("p", { className: "imaging-document-summary", text: item.sourceDocument.summary })
+              : null,
+            imagingSourceFindings(item),
+            item.sourceDocument
+              ? element("p", {
+                  className: "imaging-source-boundary",
+                  text: `Джерело: ${observationSourceLabel(item.sourceDocument)}${item.sourceDocument.page_count ? ` · ${item.sourceDocument.page_count} стор.` : ""} Структуроване перенесення не є робочою гіпотезою; незвірені поля потребують перевірки за оригіналом.`,
+                })
+              : null,
+          ]),
         ]),
       );
       list.append(detail);
@@ -4084,75 +4089,6 @@ function renderGraph() {
   return fragment;
 }
 
-function renderMultimodal() {
-  const fragment = document.createDocumentFragment();
-  const multimodal = state.bundle.methodology.multimodal || {};
-  fragment.append(
-    viewHeader(
-      "Узгодженість доказів",
-      "Матриця показує лише міжшарові збіги, суперечності та прогалини. Первинні значення залишаються у «Повних даних», а бібліографія — у «Джерелах».",
-    ),
-  );
-  if (multimodal.summary) fragment.append(element("aside", { className: "comparison-summary", text: multimodal.summary }));
-
-  const modalities = section("Матриця", "Що узгоджується, а що обмежує висновок");
-  const matrix = element("div", { className: "comparison-matrix" });
-  matrix.append(element("div", { className: "comparison-matrix-head" }, [
-    element("span", { text: "Шар даних" }),
-    element("span", { text: "Ключовий сигнал" }),
-    element("span", { text: "Зв’язок із гіпотезами" }),
-    element("span", { text: "Чого бракує" }),
-  ]));
-  multimodal.modalities.forEach((item) => {
-    const linked = (item.supports || []).map((id) => hypothesisById(id)).filter(Boolean);
-    const links = element("div", { className: "comparison-links" });
-    if (linked.length) linked.forEach((hypothesis) => links.append(element("span", { text: `#${hypothesis.rank} ${hypothesis.label}` })));
-    else links.append(element("span", { className: "comparison-none", text: "Не прив’язано" }));
-    const gaps = element("div", { className: "comparison-gaps" });
-    if ((item.gaps || []).length) item.gaps.forEach((gap) => gaps.append(element("span", { text: gap })));
-    else gaps.append(element("span", { className: "comparison-none", text: "Критичну прогалину не записано" }));
-    matrix.append(element("article", { className: "comparison-row" }, [
-      element("div", {}, [element("h3", { text: item.label || item.name || "Тип даних" }), statusTag(enumLabel(item.status), enumTone(item.status))]),
-      element("p", { text: item.signal || item.summary || "Сигнал не описано." }),
-      links,
-      gaps,
-    ]));
-  });
-  modalities.append(matrix);
-  fragment.append(modalities);
-
-  const fusion = section("Міжшаровий висновок", "Що випливає лише зі зіставлення");
-  const fusionList = element("div", { className: "comparison-conclusions" });
-  (multimodal.fusion || []).forEach((item) => {
-    const row = element("article");
-    row.append(element("p", { text: item.claim || item.summary || item.text || "Висновок не описано." }));
-    const meta = element("div");
-    (item.modalities || []).forEach((label) => meta.append(chip(label)));
-    if (item.confidence) meta.append(statusTag(enumLabel(item.confidence), enumTone(item.confidence)));
-    if (meta.children.length) row.append(meta);
-    fusionList.append(row);
-  });
-  fusion.append(fusionList);
-  fragment.append(fusion);
-
-  if (Array.isArray(multimodal.explainability) && multimodal.explainability.length) {
-    const factors = section("Вплив на оцінку", "Які фактори підсилюють або обмежують напрям");
-    const directionLabels = { raises: "підсилює", weakens: "послаблює", blocks: "блокує висновок" };
-    const factorList = element("div", { className: "comparison-factors" });
-    multimodal.explainability.forEach((item) => {
-      const targetText = String(item.target || "").replace(/\bH\d+\b/g, (id) => hypothesisById(id)?.label || id);
-      factorList.append(element("article", {}, [
-        element("h3", { text: item.factor || item.label || item.title || "Фактор" }),
-        element("p", { text: targetText ? `Впливає на: ${targetText}` : item.claim || item.summary || "" }),
-        statusTag(directionLabels[item.direction] || enumLabel(item.direction), item.direction === "blocks" ? "critical" : item.direction === "weakens" ? "candidate" : "evidence"),
-      ]));
-    });
-    factors.append(factorList);
-    fragment.append(factors);
-  }
-  return fragment;
-}
-
 function agentGate(label, value, stateName, detail) {
   const row = element("div", { className: "agent-gate", attrs: { "data-state": stateName } });
   row.append(
@@ -4513,6 +4449,27 @@ async function sha256Hex(text) {
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+async function loadReviewableObservationIds(caseId, signal) {
+  if (IS_PUBLIC_STATIC_DEMO || caseId !== "CASE-02") return new Set();
+  try {
+    const response = await fetch(`/api/v1/cases/${encodeURIComponent(caseId)}/recognition-workspace`, {
+      cache: "no-store",
+      signal,
+    });
+    if (!response.ok) return new Set();
+    const workspace = await response.json();
+    const items = Array.isArray(workspace?.items) ? workspace.items : [];
+    return new Set(
+      items
+        .filter((item) => typeof item?.observation_id === "string" && item.observation_id && item.crop_url)
+        .map((item) => item.observation_id),
+    );
+  } catch (error) {
+    if (error?.name === "AbortError") throw error;
+    return new Set();
+  }
+}
+
 async function loadReasoningCandidate(bundleText, signal) {
   const config = CASES[state.caseKey];
   if (!config?.reasoningCandidate) return { status: "absent" };
@@ -4803,15 +4760,6 @@ async function loadReplay() {
   return { status: "ok", replay };
 }
 
-const MILESTONE_PRESENTATION = {
-  first_support: ["Перший доказ на користь", "candidate"],
-  first_discriminating_support: ["Початок розділення пари", "evidence"],
-  first_strict_lead: ["Строге лідерство", "evidence"],
-  unresolved_pair_window: ["Фінальна пара нерозділена", "candidate"],
-  fault_line_window: ["Розбіжність потоків", "critical"],
-  resolution: ["Фінальну відповідь зафіксовано", "evidence"],
-};
-
 function renderReplay() {
   const fragment = document.createDocumentFragment();
   fragment.append(
@@ -4857,22 +4805,6 @@ function renderReplay() {
     auditDetails.querySelector("div").append(element("p", { text: `Факти без дати виключено зі зрізів: ${replay.facts_undated.join(", ")}.` }));
   }
   fragment.append(explainer, auditDetails);
-
-  const milestones = section("Ключові моменти", "Коли докази змінили картину");
-  const milestoneGrid = element("div", { className: "milestone-grid" });
-  (replay.milestones || []).forEach((milestone) => {
-    const [title, tone] = MILESTONE_PRESENTATION[milestone.kind] || [milestone.kind, "candidate"];
-    const when = milestone.date || `${milestone.from} → ${milestone.to}${milestone.days != null ? ` · ${milestone.days} дн.` : ""}`;
-    milestoneGrid.append(
-      element("article", { className: "milestone-card", attrs: { "data-tone": tone } }, [
-        element("p", { className: "milestone-when", text: when }),
-        element("h3", { text: title }),
-        element("p", { text: milestone.note }),
-      ]),
-    );
-  });
-  milestones.append(milestoneGrid);
-  fragment.append(milestones);
 
   // Trajectory: support/refute bars for the final pair over the cutoffs.
   const trajectory = section(
@@ -4986,21 +4918,6 @@ function renderReplay() {
   cutoffsSection.append(cutoffList);
   fragment.append(cutoffsSection);
 
-  if (replay.reaction_points?.length) {
-    const reactions = section("Реакція команди", "Задокументовані дії, що змінили перебіг");
-    const list = element("div", { className: "source-list" });
-    replay.reaction_points.forEach((point) => {
-      list.append(
-        element("article", { className: "source-item" }, [
-          element("p", { className: "milestone-when", text: point.date }),
-          element("h4", { className: "src-head", text: point.label }),
-          element("p", { className: "src-cite", text: point.note }),
-        ]),
-      );
-    });
-    reactions.append(list);
-    fragment.append(reactions);
-  }
   return fragment;
 }
 
@@ -5079,7 +4996,6 @@ const RENDERERS = {
   packet: renderPacket,
   graph: renderGraph,
   bodymap: renderBodyMap,
-  multimodal: renderMultimodal,
   replay: renderReplayAsync,
   protocol: renderProtocol,
   agent: renderAgent,
@@ -5101,17 +5017,8 @@ function buildNavigation(target, views) {
   });
 }
 
-function hasMultimodalData(bundle) {
-  const multimodal = bundle?.methodology?.multimodal;
-  if (!multimodal || typeof multimodal !== "object") return false;
-  const modalityCount = Array.isArray(multimodal.modalities) ? multimodal.modalities.length : 0;
-  const hasSynthesis = [multimodal.fusion, multimodal.explainability].some((items) => Array.isArray(items) && items.length);
-  return modalityCount >= 2 && hasSynthesis;
-}
-
 function availableOptionalMethodViews(bundle) {
   return OPTIONAL_METHOD_VIEWS.filter(([id]) => {
-    if (id === "multimodal") return hasMultimodalData(bundle);
     if (id === "replay") return Boolean(CASES[state.caseKey]?.replay);
     if (id === "protocol") return Boolean(CASES[state.caseKey]?.latest);
     return true;
@@ -5136,7 +5043,7 @@ function buildPrimaryNavigation() {
   methodNavMenu?.toggleAttribute("hidden", methodViews.length === 0);
   const availableIds = new Set([...PRIMARY_VIEWS, ...DATA_VIEWS, ["packet", "Бриф для консиліуму"], ...methodViews].map(([id]) => id));
   state.view = normalizeView(state.view);
-  if (!availableIds.has(state.view)) state.view = state.view === "multimodal" ? "state" : "overview";
+  if (!availableIds.has(state.view)) state.view = "overview";
 }
 
 function normalizeView(view) {
@@ -5268,8 +5175,14 @@ async function loadCase(caseKey, { push = false, focus = false } = {}) {
     state.bundle = bundle;
     state.latestRun = null;
     state.replay = null;
-    state.reasoningCandidate = await loadReasoningCandidate(bundleText, controller.signal);
+    state.reviewableObservationIds = new Set();
+    const [reasoningCandidate, reviewableObservationIds] = await Promise.all([
+      loadReasoningCandidate(bundleText, controller.signal),
+      loadReviewableObservationIds(bundle.case.id, controller.signal),
+    ]);
     if (token !== caseLoadToken) return;
+    state.reasoningCandidate = reasoningCandidate;
+    state.reviewableObservationIds = reviewableObservationIds;
     buildPrimaryNavigation();
     statusLine.dataset.state = "ready";
     statusLine.textContent = `Пакет завантажено · контракт ${bundle.schema_version} · ${bundle.case.generated || bundle.bundle_id}`;
