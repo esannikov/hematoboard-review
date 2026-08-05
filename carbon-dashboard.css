@@ -767,20 +767,21 @@ html[data-ui="carbon"] {
 
 [data-ui="carbon"] .overview-plan-phases > li {
   display: grid;
-  grid-template-columns: 104px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
   padding: 0;
 }
 
 [data-ui="carbon"] .overview-plan-step {
   display: grid;
-  align-self: stretch;
-  align-content: start;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-self: auto;
+  align-items: baseline;
   gap: 6px;
   min-width: 0;
-  padding: 16px 12px;
+  padding: 10px 12px;
   overflow: hidden;
-  border-right: 1px solid var(--cds-border-subtle-00);
+  border-bottom: 1px solid var(--cds-border-subtle-00);
   background: var(--cds-layer-02);
 }
 
@@ -3219,8 +3220,6 @@ html[data-ui="carbon"] {
   [data-ui="carbon"] .overview-panel { padding: 20px 16px; }
   [data-ui="carbon"] .overview-primary-assessment,
   [data-ui="carbon"] .overview-decision-gate { --overview-column-padding: 16px; }
-  [data-ui="carbon"] .overview-plan-phases > li { grid-template-columns: 1fr; gap: 0; }
-  [data-ui="carbon"] .overview-plan-step { grid-template-columns: auto 1fr; align-items: baseline; padding: 10px 12px; border-right: 0; border-bottom: 1px solid var(--cds-border-subtle-00); }
   [data-ui="carbon"] .overview-plan-phases > li > div:last-child { padding: 12px 14px 14px; }
   [data-ui="carbon"] .overview-plan-item { grid-template-columns: 1fr; }
   [data-ui="carbon"] .overview-plan-field,
