@@ -31,6 +31,15 @@ export function relationCountsForHypothesis(bundle, hypothesisId) {
     || { support: 0, refute: 0, neutral: 0 };
 }
 
+export function factRefsForHypothesis(bundle, hypothesisId) {
+  const refs = [];
+  for (const relation of bundle?.relations ?? []) {
+    if (relation?.hypothesis_id !== hypothesisId || typeof relation?.fact_id !== "string") continue;
+    if (!refs.includes(relation.fact_id)) refs.push(relation.fact_id);
+  }
+  return refs;
+}
+
 export function hypothesisChallenge(hypothesis) {
   const challenge = hypothesis?.challenge ?? {};
   return [
@@ -40,55 +49,31 @@ export function hypothesisChallenge(hypothesis) {
   ].filter((item) => typeof item.text === "string" && item.text.trim());
 }
 
-function normalizedClinicalText(value) {
-  return String(value || "")
-    .toLocaleLowerCase("uk-UA")
-    .replace(/[’']/gu, "'")
-    .replace(/[^\p{L}\p{N}+-]+/gu, " ")
-    .trim();
-}
-
-const HYPOTHESIS_CONCEPTS = [
-  [/(?:\btfh\b|\bпткл\b|т[- ]?клітин)/iu, ["tfh", "пткл", "т клітин"]],
-  [/(?:ходжк|hodgkin)/iu, ["ходжк", "hodgkin"]],
-  [/(?:каслман|castleman)/iu, ["каслман", "castleman"]],
-  [/(?:саркоїд|sarcoid)/iu, ["саркоїд", "sarcoid"]],
-  [/(?:\bebv\b|\bhhv[- ]?8\b|вірус)/iu, ["ebv", "hhv 8", "hhv-8", "вірус"]],
-  [/(?:реактив|доброякіс)/iu, ["реактив", "доброякіс"]],
-  [/(?:карцином|carcinoma)/iu, ["карцином", "carcinoma"]],
-  [/(?:туберкул|інфекц|tuberc)/iu, ["туберкул", "інфекц", "tuberc"]],
-];
+const WORKUP_ROLE_LABELS = {
+  leading: "провідна",
+  direct_differential: "прямий диференціал",
+  critical_differential: "критичний диференціал",
+};
 
 function workupScope(bundle, item) {
   const hypotheses = Array.isArray(bundle?.hypotheses) ? bundle.hypotheses : [];
-  const primary = leadingHypothesis(bundle);
-  const phase = normalizedClinicalText(item?.phase);
-  if (/після.*підтвердж/iu.test(phase)) {
+  const scope = item?.scope;
+  if (!scope || typeof scope !== "object") return [];
+  if (scope.kind === "post_confirmation") {
     return [{ id: "STAGING", label: "Після підтвердження", role: "стадіювання" }];
   }
-
-  const workupText = normalizedClinicalText([item?.title, item?.action, item?.why].filter(Boolean).join(" "));
-  const scopeIds = new Set();
-  if (/верифікац/iu.test(phase) && primary?.id) scopeIds.add(primary.id);
-
-  for (const hypothesis of hypotheses) {
-    const hypothesisText = normalizedClinicalText([hypothesis?.label, hypothesis?.short_label].filter(Boolean).join(" "));
-    const aliases = HYPOTHESIS_CONCEPTS
-      .filter(([pattern]) => pattern.test(hypothesisText))
-      .flatMap(([, values]) => values);
-    if (aliases.some((alias) => workupText.includes(alias))) scopeIds.add(hypothesis.id);
-  }
-
-  return hypotheses
-    .filter((hypothesis) => scopeIds.has(hypothesis.id))
-    .sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99))
-    .map((hypothesis) => ({
-      id: hypothesis.id,
-      label: hypothesis.short_label || hypothesis.label || hypothesis.id,
-      role: hypothesis.id === primary?.id
-        ? "провідна"
-        : /паралель/iu.test(phase) ? "критичний диференціал" : "прямий диференціал",
-    }));
+  const byId = new Map(hypotheses.map((hypothesis) => [hypothesis?.id, hypothesis]));
+  return (Array.isArray(scope.hypothesis_refs) ? scope.hypothesis_refs : [])
+    .map((reference) => {
+      const hypothesis = byId.get(reference?.id);
+      if (!hypothesis) return null;
+      return {
+        id: hypothesis.id,
+        label: hypothesis.short_label || hypothesis.label || hypothesis.id,
+        role: WORKUP_ROLE_LABELS[reference.role] || reference.role || "пов’язана гіпотеза",
+      };
+    })
+    .filter(Boolean);
 }
 
 export function workupPlan(bundle) {

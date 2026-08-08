@@ -26,6 +26,21 @@ function readingStatus(value, low, high) {
 }
 
 function buildLabColumns(clinical) {
+  const structuredDates = [...new Set(
+    asArray(clinical?.labs)
+      .flatMap((lab) => asArray(lab?.readings))
+      .map((reading) => normalizeText(reading?.date))
+      .filter(Boolean),
+  )].sort();
+  if (structuredDates.length) {
+    return structuredDates.map((date) => ({
+      id: date,
+      sourceKey: date,
+      date,
+      label: formatDate(date),
+      mapped: true,
+    }));
+  }
   const declared = asArray(clinical?.dates)
     .map((item, index) => ({
       id: normalizeText(item?.id) || `__declared_${index}`,
@@ -66,6 +81,45 @@ function buildLabColumns(clinical) {
 }
 
 function projectLab(lab, columns) {
+  if (Array.isArray(lab?.readings)) {
+    const byDate = new Map(lab.readings.map((reading) => [normalizeText(reading?.date), reading]));
+    const series = columns.map((column) => {
+      const reading = byDate.get(column.date);
+      return reading
+        ? {
+            columnId: column.id,
+            date: column.date,
+            dateLabel: column.label,
+            value: reading.value,
+            status: reading.status || readingStatus(reading.value, reading.reference?.low, reading.reference?.high),
+            reference: reading.reference || null,
+            recordedFlag: reading.recorded_flag || null,
+            source: reading.source || null,
+          }
+        : {
+            columnId: column.id,
+            date: column.date,
+            dateLabel: column.label,
+            value: undefined,
+            status: "unknown",
+            reference: null,
+            recordedFlag: null,
+            source: null,
+          };
+    });
+    return {
+      source: lab,
+      name: lab?.an || lab?.name || "Показник",
+      unit: lab.readings.find((reading) => normalizeText(reading?.unit))?.unit || "",
+      low: undefined,
+      high: undefined,
+      note: lab?.note || "",
+      key: lab?.key === true,
+      series,
+      abnormal: series.some((reading) => reading.status === "low" || reading.status === "high"),
+      structured: true,
+    };
+  }
   const series = columns.map((column, index) => {
     const value = labValueAt(lab, column, index);
     return {
@@ -107,9 +161,35 @@ function conciseSpecimen(value) {
     .trim();
 }
 
-function projectPathology(item, index) {
+function explicitSourceReceipt(item, documents, observations) {
+  const sourceDocumentId = normalizeText(item?.source_document_id);
+  const sourceDocument = sourceDocumentId
+    ? documents.find((documentItem) => documentItem?.id === sourceDocumentId) || null
+    : null;
+  const sourceObservations = sourceDocument
+    ? observations
+      .filter((observation) => observation?.document_id === sourceDocument.id)
+      .sort((a, b) => Number(a?.page || 0) - Number(b?.page || 0) || String(a?.id).localeCompare(String(b?.id)))
+    : [];
+  const verifiedCount = sourceObservations.filter((observation) => observation?.verification?.human_verified === true).length;
+  return {
+    sourceDocument,
+    sourceObservations,
+    sourceVerification: sourceObservations.length
+      ? {
+          verified: verifiedCount,
+          total: sourceObservations.length,
+          complete: verifiedCount === sourceObservations.length,
+        }
+      : null,
+    sourceStatus: normalizeText(item?.source_status) || "source_link_not_recorded",
+  };
+}
+
+function projectPathology(item, index, documents, observations) {
   const recordType = pathologyRecordType(item);
   const isPhotoInterpretation = recordType === "Попередня розшифровка фото-звіту";
+  const receipt = explicitSourceReceipt(item, documents, observations);
   return {
     source: item,
     id: item?.id || `pathology-${item?.n || index + 1}`,
@@ -123,6 +203,7 @@ function projectPathology(item, index) {
     sourceSummary: normalizeText(item?.label),
     sourceConclusion: normalizeText(item?.conclusion),
     verdict: normalizeText(item?.verdict),
+    ...receipt,
     conclusionHeading: isPhotoInterpretation ? "Попередня розшифровка фото-звіту" : "Висновок у джерелі",
     boundary: isPhotoInterpretation
       ? "Потребує звірки з оригінальним звітом і тканиною; це не підтверджений висновок системи."
@@ -130,63 +211,8 @@ function projectPathology(item, index) {
   };
 }
 
-function searchableText(value) {
-  return normalizeText(value)
-    .toLocaleLowerCase("uk-UA")
-    .replace(/[’'`]/g, "")
-    .replace(/[^\p{L}\p{N}]+/gu, " ");
-}
-
-function imagingDocumentScore(item, documentItem, observations) {
-  const itemDate = normalizeText(item?.date);
-  const documentDate = normalizeText(documentItem?.document_date);
-  if (!itemDate || itemDate !== documentDate || documentItem?.document_type !== "imaging") return -1;
-
-  const needle = searchableText([
-    item?.modality,
-    item?.stations,
-    item?.impression,
-  ].filter(Boolean).join(" "));
-  const haystack = searchableText([
-    documentItem?.title,
-    documentItem?.summary,
-    ...observations.flatMap((observation) => [observation?.display, observation?.value_text]),
-  ].filter(Boolean).join(" "));
-  const meaningfulTokens = [...new Set(needle.split(" ").filter((token) => token.length >= 4))];
-  let score = meaningfulTokens.reduce((total, token) => total + (haystack.includes(token) ? 1 : 0), 0);
-
-  const modality = searchableText(item?.modality);
-  if (/\bм?скт\b|\bкт\b/u.test(modality) && /\bм?скт\b|\bкт\b/u.test(haystack)) score += 5;
-  if (/узд|ультрас/u.test(modality) && /узд|ультрас/u.test(haystack)) score += 4;
-  if (/вуз|лімф/u.test(needle) && /вуз|лімф/u.test(haystack)) score += 5;
-  return score;
-}
-
 function projectImaging(item, index, documents, observations) {
-  const observationsByDocument = new Map();
-  observations.forEach((observation) => {
-    const documentId = normalizeText(observation?.document_id);
-    if (!documentId) return;
-    if (!observationsByDocument.has(documentId)) observationsByDocument.set(documentId, []);
-    observationsByDocument.get(documentId).push(observation);
-  });
-
-  const candidates = documents
-    .map((documentItem) => {
-      const documentObservations = observationsByDocument.get(documentItem?.id) || [];
-      return {
-        documentItem,
-        observations: documentObservations,
-        score: imagingDocumentScore(item, documentItem, documentObservations),
-      };
-    })
-    .filter((candidate) => candidate.score >= 0)
-    .sort((a, b) => b.score - a.score || String(a.documentItem?.id).localeCompare(String(b.documentItem?.id)));
-  const source = candidates[0] || null;
-  const sourceObservations = source
-    ? [...source.observations].sort((a, b) => Number(a?.page || 0) - Number(b?.page || 0) || String(a?.id).localeCompare(String(b?.id)))
-    : [];
-  const verifiedCount = sourceObservations.filter((observation) => observation?.verification?.human_verified === true).length;
+  const receipt = explicitSourceReceipt(item, documents, observations);
 
   return {
     source: item,
@@ -200,15 +226,7 @@ function projectImaging(item, index, documents, observations) {
     noderads: normalizeText(item?.noderads),
     trend: normalizeText(item?.trend),
     impression: normalizeText(item?.impression || item?.finding),
-    sourceDocument: source?.documentItem || null,
-    sourceObservations,
-    sourceVerification: sourceObservations.length
-      ? {
-          verified: verifiedCount,
-          total: sourceObservations.length,
-          complete: verifiedCount === sourceObservations.length,
-        }
-      : null,
+    ...receipt,
   };
 }
 
@@ -218,10 +236,16 @@ export function projectClinicalState(bundle) {
     : {};
   const labColumns = buildLabColumns(clinical);
   return {
+    labProjection: clinical.lab_projection || null,
     labColumns,
     labs: asArray(clinical.labs).map((lab) => projectLab(lab, labColumns)),
     markers: asArray(clinical.markers),
-    pathology: asArray(clinical.pathology).map(projectPathology),
+    pathology: asArray(clinical.pathology).map((item, index) => projectPathology(
+      item,
+      index,
+      asArray(bundle?.source_documents),
+      asArray(bundle?.observations),
+    )),
     imaging: asArray(clinical.imaging).map((item, index) => projectImaging(
       item,
       index,

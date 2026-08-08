@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-08-04",
+  "updated": "2026-08-06",
   "cases": [
     {
       "key": "case01",
@@ -21,6 +21,7 @@
       "replay": "./case02/data/replay.json",
       "replay_role": "current_projection",
       "reasoning_candidate": "./case02/reasoning_runs/latest_candidate.json",
+      "reasoning_candidate_role": "historical_snapshot",
       "status": "active",
       "review": true,
       "default": true

@@ -1,10 +1,10 @@
 {
   "version": 1,
   "case_id": "CASE-02",
-  "bundle_id": "CASE-02@c33a2b020553",
-  "bundle_sha256": "f490b40f873d36523410c1793822f001b92da146596e35704f8b67c61a5592f4",
+  "bundle_id": "CASE-02@9be31f3e5ca0",
+  "bundle_sha256": "7f7dffacbc1d01e12e857bb4c49a0d7cf49d0a1b114d2f70620365ddb7dff1bd",
   "generated_by": "workbench/scripts/replay_case.py",
-  "generated_at": "2026-08-04T17:28:23+00:00",
+  "generated_at": "2026-08-05T22:58:00+00:00",
   "method": "Детерміновані часові зрізи замороженого графа доказів (relations), без виклику моделі та без реконструкції минулих міркувань. Зріз показує, які докази були доступні станом на дату; це не симуляція того, що система або команда сказали б тоді.",
   "date_map_note": "Дати призначено оператором за задокументованими подіями timeline (2026-07-17); клінічне підтвердження відповідності факт→подія очікується. Виправлення дати = правка FACT_DATE_MAP у scripts/replay_case.py і регенерація артефакту.",
   "final_hypothesis": "H1",
@@ -945,8 +945,8 @@
     "schema_version": "hematoboard.case-scope/1.0.0",
     "case_key": "case02",
     "case_id": "CASE-02",
-    "bundle_sha256": "f490b40f873d36523410c1793822f001b92da146596e35704f8b67c61a5592f4",
-    "revision_id": "CASE-02@c33a2b020553",
+    "bundle_sha256": "7f7dffacbc1d01e12e857bb4c49a0d7cf49d0a1b114d2f70620365ddb7dff1bd",
+    "revision_id": "CASE-02@9be31f3e5ca0",
     "operation_id": "replay"
   }
 }

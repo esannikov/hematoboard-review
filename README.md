@@ -22,6 +22,16 @@ The system is not an autonomous diagnostician. Its central research question is
 more practical: **can an AI-assisted workbench make every important statement
 about a difficult case inspectable, source-bound, and reversible?**
 
+### Current public release
+
+The active CASE-02 projection is published at
+<https://esannikov.github.io/hematoboard/?case=case02&view=synthesis&release=20260806synthesis1>.
+Its canonical projection and replay include the explainable nine-stage synthesis
+protocol. The earlier reasoning revision is retained as a historical audit
+artifact because its input hash does not match the current projection; clinical
+acceptance has not changed. [`release.json`](./release.json) is the active
+machine-readable release pointer.
+
 The public demonstrator is a static, de-identified projection of prepared case
 packages. Raw clinical documents, licensed guideline corpora, re-identification
 keys, private audit logs, and the clinician acceptance service are not included.
@@ -197,16 +207,23 @@ The reasoning agent receives a minimum-necessary clinical projection. Raw PDFs,
 OCR traces, direct identifiers, UI state, previous ranking, and clinician
 decisions are excluded from the initial breadth pass.
 
-The current synthesis protocol has four controlled passes:
+The current versioned synthesis protocol has nine controlled stages:
 
-1. **Breadth** — generate plausible hypotheses and dangerous alternatives
-   without inheriting the previous ranking.
-2. **Grounding** — connect each claim to accepted observation identifiers and
-   allowed external evidence.
-3. **Reconciliation** — expose contradictions, missing tissue or staging data,
-   and evidence that can change the ordering.
-4. **Safety critic** — reject unsupported certainty, directive treatment
-   language, stale inputs, broken provenance, and mixed accepted/candidate state.
+1. **Register** the de-identified, minimum-necessary source set and its hashes.
+2. **Atomize** measurements, findings, source conclusions, recommendations,
+   and events.
+3. **Normalize** dated measurements while preserving original literals and
+   source rows.
+4. **Establish facts** with explicit source addresses and evidence classes.
+5. **Broaden** the candidate differential without prior ranking or old
+   hypotheses.
+6. **Research** diagnostic definitions, critical differentials, and verification
+   methods in allowed guidance and literature.
+7. **Relate** facts to hypotheses as supporting, challenging, or contextual.
+8. **Critique** contradictions, neglected alternatives, weak sources, missing
+   data, and over-strong language.
+9. **Hand off** a hash-pinned immutable candidate, gaps, and verification plan
+   for clinician review.
 
 The result is an immutable candidate revision with its own input snapshot,
 method, comparison to the prior revision, gaps, limitations, and audit chain.

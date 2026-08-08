@@ -1,31 +1,34 @@
 {
   "schema_version": "hematoboard.public-release/1.0.0",
-  "released_at": "2026-08-05T22:04:04Z",
-  "release_tag": "20260806cardbands1",
+  "released_at": "2026-08-06T06:51:26Z",
+  "release_tag": "20260806readability2",
   "default_case": "case02",
   "case_scope": {
     "case_key": "case02",
     "case_id": "CASE-02",
-    "bundle_sha256": "f490b40f873d36523410c1793822f001b92da146596e35704f8b67c61a5592f4",
-    "revision_id": "CASE-02@c33a2b020553"
+    "bundle_sha256": "7f7dffacbc1d01e12e857bb4c49a0d7cf49d0a1b114d2f70620365ddb7dff1bd",
+    "revision_id": "CASE-02@9be31f3e5ca0"
   },
   "replay_projection": {
     "artifact_role": "current_projection",
-    "generated_at": "2026-08-04T17:28:23+00:00",
-    "sha256": "5b72bf458ee2d09faabc86203c0cdf2c5e09c49b650e0255599d379ef01444f3"
+    "generated_at": "2026-08-05T22:58:00+00:00",
+    "sha256": "3267b6fb13287e32d51902d3ebf5685f5b1a34982aafb123a624cea83d728d15"
   },
   "reasoning_candidate": {
     "reasoning_revision_id": "RR-CASE-02-6d703a1a54d0",
     "run_id": "20260804T161927304806Z-CASE-02-reasoning-6d703a1a54d0",
     "revision_sha256": "fd011b7894c64b03feb27df54c09b805469d12ebc94bf266bc85de9acd4e6f23",
-    "status": "candidate",
+    "source_bundle_sha256": "f490b40f873d36523410c1793822f001b92da146596e35704f8b67c61a5592f4",
+    "artifact_role": "historical_snapshot",
+    "status": "stale",
     "clinical_acceptance": "pending"
   },
   "presentation": {
     "ui_system": "IBM Carbon",
-    "browser_matrix": "24 public routes plus mobile and graph passed; scoped design review verified closed Carbon workup items, compact phase markers without full-height rails, alternating warm/cool card layers and top-aligned copy at 1440, 820 and 390 px without horizontal overflow",
+    "browser_matrix": "27 public routes plus mobile and graph passed; all light clinical surfaces use black text, the dark application shell uses pure-white text, graph labels remain black while focus is carried by surfaces and edges, and Clinical Spine uses one IBM Plex Sans title role",
     "packet_pdf_pages": 3,
-    "clinical_truth_changed": false
+    "canonical_projection_changed": true,
+    "clinical_acceptance_changed": false
   },
   "boundary": "Публічний технічний демо-реліз. Кандидатний синтез не підміняє прийняту лікарем клінічну картину."
 }

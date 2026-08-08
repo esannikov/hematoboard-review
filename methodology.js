@@ -1,15 +1,17 @@
 import {
   leadingHypothesis,
+  factRefsForHypothesis,
   hypothesisChallenge,
   relationCountsForHypothesis,
   sourceDocumentBreakdown,
   workupPlan as projectedWorkupPlan,
-} from "./shared/case_projection.js?v=20260805workupclarity1";
-import { projectClinicalState } from "./shared/clinical_state_projection.js?v=20260805imagingdetail1";
+} from "./shared/case_projection.js?v=20260806synthesis1";
+import { projectClinicalState } from "./shared/clinical_state_projection.js?v=20260806synthesis1";
 
 // The case registry is data, not code: methodology/active_cases.json is the
 // validated routing manifest. Adding a case never requires editing this file.
 const CASE_MANIFEST_URL = "active_cases.json";
+const SYNTHESIS_PROTOCOL_URL = "synthesis_protocol.json";
 const IS_PUBLIC_STATIC_DEMO = window.location.hostname.endsWith(".github.io");
 let CASES = {};
 
@@ -44,6 +46,7 @@ async function loadCaseManifest() {
         replay: entry.replay ?? null,
         replayRole: entry.replay_role ?? null,
         reasoningCandidate: entry.reasoning_candidate ?? null,
+        reasoningCandidateRole: entry.reasoning_candidate_role ?? null,
         default: entry.default === true,
       },
     ]),
@@ -73,12 +76,13 @@ const DATA_VIEWS = [
 ];
 
 const METHOD_VIEWS = [
+  ["synthesis", "Як сформовано висновок"],
   ["agent", "Агент"],
 ];
 
 const OPTIONAL_METHOD_VIEWS = [
   ["replay", "Докази в часі"],
-  ["protocol", "Протокол AI дебатів"],
+  ["protocol", "Історичний протокол"],
 ];
 
 const LEGACY_VIEW_REDIRECTS = { consilium: "graph", multimodal: "state" };
@@ -99,6 +103,7 @@ const state = {
   latestRun: null,
   replay: null,
   reasoningCandidate: null,
+  synthesisProtocol: null,
   reviewableObservationIds: new Set(),
 };
 const timelineCursorByCase = new Map();
@@ -1099,7 +1104,7 @@ function overviewLeadRationale(lead, bundle) {
 function overviewArgumentCopy(item, lead) {
   const text = String(item?.text || "").trim();
   if (item?.key === "support") {
-    const decisiveFacts = (lead?.data_refs || [])
+    const decisiveFacts = factRefsForHypothesis(state.bundle, lead?.id)
       .map((ref) => factById(ref))
       .filter(Boolean)
       .slice(0, 2)
@@ -2547,9 +2552,10 @@ function renderConsilium() {
       ]);
       article.append(summary);
 
-      if (hypothesis.data_refs.length) {
+      const hypothesisFactRefs = factRefsForHypothesis(state.bundle, hypothesis.id);
+      if (hypothesisFactRefs.length) {
         const row = element("div", { className: "chip-row", attrs: { "aria-label": "Дані пацієнта" } });
-        hypothesis.data_refs.forEach((ref) => row.append(dataChip(ref)));
+        hypothesisFactRefs.forEach((ref) => row.append(dataChip(ref)));
         article.append(element("p", { className: "chip-label", text: "Дані пацієнта" }), row);
       }
       if (hypothesis.evidence_refs.length) {
@@ -2759,7 +2765,7 @@ function renderProvenance() {
   const lead = bundle.hypotheses.find((hypothesis) => hypothesis.primary) || [...bundle.hypotheses].sort((a, b) => a.rank - b.rank)[0];
   const leadClaimRefs = lead?.claim_refs || [];
   const interpretation = leadClaimRefs.map((id) => claimById(id)).find((claim) => claim?.kind === "case_interpretation");
-  const facts = (interpretation?.fact_refs?.length ? interpretation.fact_refs : lead?.data_refs || [])
+  const facts = (interpretation?.fact_refs?.length ? interpretation.fact_refs : factRefsForHypothesis(bundle, lead?.id))
     .map((id) => factById(id))
     .filter(Boolean);
   const sourceClaims = (interpretation?.claim_refs?.length ? interpretation.claim_refs : leadClaimRefs)
@@ -3126,10 +3132,30 @@ function imagingSourceFindings(item) {
 
 function imagingSourceStatus(item) {
   const status = item.sourceVerification;
-  if (!status) return stateDataChip("Джерельні поля", "не структуровано");
+  if (!status) {
+    return item.sourceStatus === "source_link_not_recorded" || item.sourceStatus === "legacy_projection_pending_source_link"
+      ? stateDataChip("Джерельний зв’язок", "очікує зіставлення", "critical")
+      : stateDataChip("Джерельні поля", "не структуровано");
+  }
   return status.complete
     ? stateDataChip("Звірено лікарем", `${status.verified} із ${status.total}`, "evidence")
     : stateDataChip("Потребує звірки", `${status.total - status.verified} із ${status.total}`, "candidate");
+}
+
+function projectionSourceCell(item) {
+  if (item?.source_status === "structured_csv" && item?.source?.row) {
+    return element("div", { className: "projection-source-cell" }, [
+      element("strong", { text: `CSV · рядок ${item.source.row}` }),
+      element("code", { text: item.source.sha256?.slice(0, 10) || "хеш відсутній" }),
+    ]);
+  }
+  if (item?.source_observation_id) {
+    return element("div", { className: "projection-source-cell" }, [
+      element("strong", { text: item.source_observation_id }),
+      element("span", { text: "кандидатне спостереження" }),
+    ]);
+  }
+  return stateDataChip("Походження", "очікує атомізації", "critical");
 }
 
 const OBSERVATION_GROUPS = [
@@ -3330,17 +3356,27 @@ function observationRegistry(context) {
 }
 
 function labReadingCell(reading) {
+  if (reading.value === undefined || reading.value === null || reading.value === "") {
+    return element("span", {
+      className: "lab-value-empty",
+      text: "—",
+      attrs: { "aria-label": `${reading.dateLabel}: значення відсутнє у структурованому джерелі` },
+    });
+  }
   const statusLabel = reading.status === "low" ? "нижче референсу" : reading.status === "high" ? "вище референсу" : "";
+  const referenceLabel = reading.reference?.text ? `референс ${reading.reference.text}` : "референс не вказано";
+  const sourceLabel = reading.source?.row ? `CSV, рядок ${reading.source.row}` : "";
   const chip = element("span", {
     className: "lab-value-chip",
     attrs: {
       "data-status": reading.status,
-      title: [reading.dateLabel, statusLabel].filter(Boolean).join(" · "),
-      "aria-label": [textValue(reading.value), statusLabel].filter(Boolean).join(", "),
+      title: [reading.dateLabel, referenceLabel, statusLabel, sourceLabel].filter(Boolean).join(" · "),
+      "aria-label": [textValue(reading.value), referenceLabel, statusLabel].filter(Boolean).join(", "),
     },
   });
   chip.append(element("strong", { text: textValue(reading.value) }));
   if (statusLabel) chip.append(element("em", { text: reading.status === "low" ? "нижче" : "вище" }));
+  if (reading.reference?.text) chip.append(element("small", { text: reading.reference.text }));
   return chip;
 }
 
@@ -3404,8 +3440,26 @@ function renderState() {
     const labs = section(
       "Кількісні дані",
       "Лабораторні показники",
-      "Кожна колонка — окрема дата з канонічного пакета кейсу. Внутрішні ключі часових точок у таблиці не показуються.",
+      clinical.labProjection
+        ? "Кожна клітинка читається безпосередньо зі структурованого лабораторного джерела разом із референсом саме цього дня. Значення з PDF-розшифровок не домішуються до цієї таблиці до перевірки."
+        : "Кожна колонка — окрема дата з пакета кейсу. Для цього кейсу ще не записано атомарний референс кожного вимірювання.",
     );
+    if (clinical.labProjection) {
+      labs.append(element("div", { className: "lab-projection-receipt" }, [
+        element("div", {}, [
+          element("span", { text: "Джерело таблиці" }),
+          element("strong", { text: clinical.labProjection.source_uri }),
+        ]),
+        element("div", {}, [
+          element("span", { text: "Перевірка цілісності" }),
+          element("code", { text: clinical.labProjection.source_sha256.slice(0, 16) }),
+        ]),
+        element("div", {}, [
+          element("span", { text: "Рядків у джерелі" }),
+          element("strong", { text: clinical.labProjection.row_count }),
+        ]),
+      ]));
+    }
     const labRows = clinical.labs.map((lab) => {
       return {
         attrs: { ...(lab.abnormal ? { "data-tone": "critical" } : {}), ...(lab.key ? { "data-key": "true" } : {}) },
@@ -3413,20 +3467,22 @@ function renderState() {
           labNameCell(lab, lab.abnormal),
           ...lab.series.map(labReadingCell),
           panelText(lab.unit),
-          lab.low !== undefined || lab.high !== undefined ? `${textValue(lab.low)}–${textValue(lab.high)}` : "—",
+          ...(clinical.labProjection ? [] : [lab.low !== undefined || lab.high !== undefined ? `${textValue(lab.low)}–${textValue(lab.high)}` : "—"]),
           panelText(lab.note),
         ],
       };
     });
     const labTable = table(
-      ["Показник", ...clinical.labColumns.map((column) => column.label), "Одиниця", "Референс", "Примітка"],
+      ["Показник", ...clinical.labColumns.map((column) => column.label), "Одиниця", ...(clinical.labProjection ? [] : ["Референс"]), "Примітка"],
       labRows,
       "lab-table",
     );
     labTable.setAttribute("role", "region");
     labTable.setAttribute("aria-label", "Лабораторні показники за датами");
     labTable.tabIndex = 0;
-    labTable.querySelector(".lab-table")?.style.setProperty("--lab-date-columns", clinical.labColumns.length);
+    const labTableNode = labTable.querySelector(".lab-table");
+    labTableNode?.style.setProperty("--lab-date-columns", clinical.labColumns.length);
+    if (clinical.labProjection) labTableNode?.setAttribute("data-structured", "true");
     labs.append(labTable);
     fragment.append(labs);
   }
@@ -3451,10 +3507,11 @@ function renderState() {
           marker.ref || "—",
           stateDataChip(status, "", tone),
           panelText(marker.note || "—"),
+          projectionSourceCell(marker),
         ],
       };
     });
-    markers.append(table(["Маркер", "Дата", "Значення", "Референс", "Стан", "Клінічна примітка"], markerRows, "marker-table"));
+    markers.append(table(["Маркер", "Дата", "Значення", "Референс", "Стан", "Клінічна примітка", "Походження"], markerRows, "marker-table"));
     fragment.append(markers);
   }
 
@@ -3498,6 +3555,9 @@ function renderState() {
             item.sourceSummary ? element("strong", { className: "pathology-source-summary", text: item.sourceSummary }) : null,
             stateNarrative(item.sourceConclusion || "Висновок у джерелі не структуровано."),
             element("p", { className: "pathology-boundary", text: item.boundary }),
+            item.sourceDocument
+              ? element("p", { className: "pathology-boundary", text: `Документ: ${observationSourceLabel(item.sourceDocument)} · ${item.sourceObservations.length} структурованих спостережень.` })
+              : element("p", { className: "pathology-boundary is-warning", text: "Точну адресу первинного документа для цієї legacy-проєкції ще не записано; формулювання не можна вважати атомарно звіреним." }),
           ]),
           stateDetailGrid([["Дата", item.dateLabel], ["Тип запису", item.recordType], ["Дослідження", item.title], ["Матеріал у джерелі", item.specimen]]),
         ]),
@@ -3687,7 +3747,8 @@ function renderPacket() {
     element("p", { className: "packet-lead-copy", text: lead?.stance || bundle.case.signal || "Клінічне резюме не записано." }),
   );
   const keySignals = element("div", { className: "packet-signal-list", attrs: { "aria-label": "Ключові клінічні дані" } });
-  const leadDataRefs = lead?.data_refs?.length ? lead.data_refs : bundle.facts.slice(0, 4).map((fact) => fact.id);
+  const typedLeadRefs = factRefsForHypothesis(bundle, lead?.id);
+  const leadDataRefs = typedLeadRefs.length ? typedLeadRefs : bundle.facts.slice(0, 4).map((fact) => fact.id);
   leadDataRefs.slice(0, 4).forEach((ref) => keySignals.append(element("span", { text: factById(ref)?.label || ref })));
   coverMain.append(keySignals);
 
@@ -4221,7 +4282,7 @@ function candidateRelationCounts(revision, hypothesisId) {
 function renderReasoningCandidate(candidate) {
   const section = element("section", { className: "reasoning-candidate" });
   if (!candidate || candidate.status === "absent") return section;
-  if (candidate.status !== "ok") {
+  if (!candidate.revision) {
     section.append(
       element("div", { className: "reasoning-candidate-error" }, [
         element("strong", { text: "Кандидатний синтез не пройшов перевірку" }),
@@ -4232,17 +4293,18 @@ function renderReasoningCandidate(candidate) {
   }
 
   const revision = candidate.revision;
+  const isHistorical = candidate.status === "stale";
   const hypotheses = [...(revision.hypotheses || [])].sort((a, b) => Number(a.rank) - Number(b.rank));
   const lead = hypotheses[0];
   const head = element("header", { className: "reasoning-candidate-head" });
   head.append(
     element("div", {}, [
-      element("p", { className: "reasoning-candidate-kicker", text: "Свіжа кандидатна ревізія" }),
+      element("p", { className: "reasoning-candidate-kicker", text: isHistorical ? "Історична кандидатна ревізія" : "Свіжа кандидатна ревізія" }),
       element("h2", { text: `Синтез гіпотез ${overviewCaseCode(state.bundle)}` }),
-      element("p", { text: revision.reason }),
+      element("p", { text: isHistorical ? candidate.detail : revision.reason }),
     ]),
     element("div", { className: "reasoning-candidate-status" }, [
-      statusTag("очікує рішення лікаря", "candidate"),
+      statusTag(isHistorical ? "неактуальний знімок" : "очікує рішення лікаря", isHistorical ? "neutral" : "candidate"),
       element("code", { text: revision.reasoning_revision_id }),
     ]),
   );
@@ -4482,6 +4544,8 @@ async function renderAgent() {
         `${state.reasoningCandidate.revision.hypotheses?.length || 0} гіпотез; рішення лікаря ще не записано.`,
       ),
     );
+  } else if (state.reasoningCandidate?.status === "stale") {
+    rail.append(agentGate("Кандидатний синтез", "Історичний", "review", state.reasoningCandidate.detail));
   } else if (state.reasoningCandidate && state.reasoningCandidate.status !== "absent") {
     rail.append(agentGate("Кандидатний синтез", "Недоступний", "blocked", state.reasoningCandidate.detail || "Артефакт не пройшов перевірку."));
   }
@@ -4525,6 +4589,30 @@ async function loadReviewableObservationIds(caseId, signal) {
   } catch (error) {
     if (error?.name === "AbortError") throw error;
     return new Set();
+  }
+}
+
+async function loadSynthesisProtocol(signal) {
+  let response;
+  try {
+    response = await fetch(SYNTHESIS_PROTOCOL_URL, { cache: "no-store", signal });
+  } catch (error) {
+    if (error?.name === "AbortError") throw error;
+    return { status: "network-error", detail: "Версійований протокол синтезу недоступний: сервер не відповів." };
+  }
+  if (!response.ok) return { status: "missing", detail: `Протокол синтезу недоступний (HTTP ${response.status}).` };
+  try {
+    const protocol = await response.json();
+    if (
+      protocol?.schema_version !== "hematoboard.synthesis-protocol/1.0.0"
+      || !Array.isArray(protocol.steps)
+      || !protocol.steps.length
+    ) {
+      return { status: "invalid", detail: "Протокол синтезу не відповідає підтримуваній схемі." };
+    }
+    return { status: "ok", protocol };
+  } catch {
+    return { status: "invalid", detail: "Протокол синтезу не є валідним JSON." };
   }
 }
 
@@ -4587,11 +4675,21 @@ async function loadReasoningCandidate(bundleText, signal) {
   }
   const actualBundleHash = await sha256Hex(bundleText);
   if (
-    actualBundleHash !== null
-    && typeof revision.input?.bundle_sha256 === "string"
-    && actualBundleHash !== revision.input.bundle_sha256.toLowerCase()
+    config.reasoningCandidateRole === "historical_snapshot"
+    || (
+      actualBundleHash !== null
+      && typeof revision.input?.bundle_sha256 === "string"
+      && actualBundleHash !== revision.input.bundle_sha256.toLowerCase()
+    )
   ) {
-    return { status: "stale", detail: "Кандидатний синтез побудовано для іншої версії пакета; його не показано як актуальний." };
+    return {
+      status: "stale",
+      detail: "Кандидатний синтез побудовано для попередньої версії пакета. Він доступний лише як історичний аудиторський слід і не є поточним висновком.",
+      pointer,
+      revision,
+      hashState: actualRevisionHash === null ? "unverified" : "verified",
+      bundleHashState: "historical",
+    };
   }
   return {
     status: "ok",
@@ -4984,6 +5082,199 @@ async function renderReplayAsync() {
   return renderReplay();
 }
 
+function synthesisStepState(stepId) {
+  const bundle = state.bundle;
+  const observations = Array.isArray(bundle?.observations) ? bundle.observations : [];
+  const verifiedObservations = observations.filter((item) => item?.verification?.human_verified === true).length;
+  const candidate = state.reasoningCandidate;
+  const revision = candidate?.revision;
+  const graphAlignment = bundle?.methodology?.graph_alignment;
+  const pendingLinks = Array.isArray(graphAlignment?.pending_untyped_links) ? graphAlignment.pending_untyped_links.length : 0;
+  const labProjection = bundle?.clinical_state?.lab_projection;
+  const sourceTypes = sourceDocumentBreakdown(bundle);
+  const guidelines = (bundle?.sources || []).filter((item) => item?.type === "guideline");
+  const articles = (bundle?.sources || []).filter((item) => item?.type === "pmid");
+  const verifiedGuidelines = guidelines.filter((item) => item?.human_verified === true).length;
+  const candidateLabel = candidate?.status === "ok"
+    ? "свіжий кандидат"
+    : candidate?.status === "stale" ? "історичний кандидат" : "поточного кандидата немає";
+  const states = {
+    P1: {
+      tone: bundle?.deidentification?.patient_identifiers_removed === true ? "ready" : "blocked",
+      label: `${bundle?.source_documents?.length || 0} документів · ${bundle?.deidentification?.status || "статус не вказано"}`,
+    },
+    P2: {
+      tone: verifiedObservations === observations.length && observations.length ? "ready" : "review",
+      label: `${observations.length} спостережень · перевірено людиною ${verifiedObservations}`,
+    },
+    P3: {
+      tone: labProjection ? "ready" : "blocked",
+      label: labProjection
+        ? `${labProjection.row_count} рядків CSV · хеш ${labProjection.source_sha256.slice(0, 10)}`
+        : "атомарну лабораторну проєкцію не записано",
+    },
+    P4: {
+      tone: bundle?.facts?.length ? "ready" : "blocked",
+      label: `${bundle?.facts?.length || 0} фактів F# · джерельні адреси перевіряє контракт`,
+    },
+    P5: {
+      tone: candidate?.status === "ok" ? "review" : candidate?.status === "stale" ? "review" : "blocked",
+      label: `${candidateLabel}${revision ? ` · ${revision.hypotheses?.length || 0} гіпотез` : ""}`,
+    },
+    P6: {
+      tone: guidelines.length || articles.length ? "review" : "blocked",
+      label: `${guidelines.length} настанов · ${articles.length} статей · перевірено настанов людиною ${verifiedGuidelines}`,
+    },
+    P7: {
+      tone: pendingLinks ? "review" : "ready",
+      label: `${bundle?.relations?.length || 0} типізованих зв’язків · ${pendingLinks} нетипізованих очікують рішення`,
+    },
+    P8: {
+      tone: revision?.method?.critic_pass === true ? "review" : "blocked",
+      label: revision?.method?.critic_pass === true
+        ? `критичний прохід записано · ${revision.critical_gaps?.length || 0} прогалин`
+        : "для активного пакета критичний прохід не записано",
+    },
+    P9: {
+      tone: "review",
+      label: `${candidateLabel} · автоматичне прийняття заборонено`,
+    },
+  };
+  return states[stepId] || { tone: "review", label: "стан не записано" };
+}
+
+function synthesisMethodReceipt(candidate) {
+  if (!candidate?.revision) return emptyState("Для активного пакета ще немає кандидатної ревізії з машинною квитанцією методу.");
+  const method = candidate.revision.method || {};
+  const rows = [
+    ["Очищена вхідна проєкція", method.clinical_input_projection_used],
+    ["Широкий ряд до порівняння зі старим пакетом", method.breadth_pass_before_bundle_comparison],
+    ["Окрема сесія без попереднього синтезу", method.fresh_session_blinded],
+    ["Цільова перевірка джерел", method.grounding_pass],
+    ["Критична рецензія", method.critic_pass],
+  ];
+  const wrapper = element("div", { className: "synthesis-method-receipt" });
+  rows.forEach(([label, value]) => wrapper.append(element("div", {}, [
+    element("span", { text: label }),
+    statusTag(value === true ? "так" : value === false ? "ні" : "не записано", value === true ? "evidence" : value === false ? "critical" : "neutral"),
+  ])));
+  if (Array.isArray(method.limitations) && method.limitations.length) {
+    wrapper.append(element("div", { className: "synthesis-limitations" }, [
+      element("strong", { text: "Записані обмеження" }),
+      element("ul", {}, method.limitations.map((item) => element("li", { text: item }))),
+    ]));
+  }
+  return wrapper;
+}
+
+function synthesisReasoningPath() {
+  const bundle = state.bundle;
+  const lead = leadingHypothesis(bundle);
+  const path = (bundle?.methodology?.reasoning_paths || []).find((item) => item?.hypothesis_id === lead?.id);
+  if (!lead || !path) return emptyState("Для провідної робочої гіпотези не записано повний шлях обґрунтування.");
+  const interpretation = claimById(path.interpretation_claim_id);
+  const flow = element("div", { className: "synthesis-reasoning-flow" });
+  const facts = element("div", { className: "synthesis-flow-stage" }, [element("span", { text: "1 · Факти кейсу" })]);
+  (path.relation_refs || []).forEach((item) => facts.append(dataChip(item.fact_id)));
+  const sources = element("div", { className: "synthesis-flow-stage" }, [element("span", { text: "2 · Положення джерел" })]);
+  (path.source_claim_refs || []).forEach((claimId) => {
+    const claim = claimById(claimId);
+    sources.append(element("div", { className: "synthesis-flow-claim" }, [
+      element("strong", { text: claimId }),
+      element("p", { text: claim?.text || "Текст положення не знайдено." }),
+    ]));
+  });
+  const caseMeaning = element("div", { className: "synthesis-flow-stage" }, [
+    element("span", { text: "3 · Інтерпретація для кейсу" }),
+    element("p", { text: interpretation?.text || "Інтерпретацію не записано." }),
+  ]);
+  const hypothesis = element("div", { className: "synthesis-flow-stage is-result" }, [
+    element("span", { text: "4 · Робоча гіпотеза" }),
+    element("strong", { text: `${lead.id} · ${lead.label}` }),
+    element("p", { text: path.limitations || "Межі застосовності не записано." }),
+  ]);
+  flow.append(facts, sources, caseMeaning, hypothesis);
+  return flow;
+}
+
+function renderSynthesis() {
+  const fragment = document.createDocumentFragment();
+  const loaded = state.synthesisProtocol;
+  fragment.append(viewHeader(
+    "Як сформовано висновок",
+    "Лікарський протокол показує послідовність перетворень, джерело кожного шару, причину кроку та точку людського рішення. Це опис поточного стану системи, а не рекламна схема.",
+    "Протокол синтезу",
+  ));
+  if (!loaded || loaded.status !== "ok") {
+    fragment.append(element("section", { className: "error-panel" }, [
+      element("h2", { text: "Протокол синтезу недоступний" }),
+      element("p", { text: loaded?.detail || "Файл протоколу не завантажено." }),
+    ]));
+    return fragment;
+  }
+
+  const protocol = loaded.protocol;
+  const principle = element("section", { className: "synthesis-principle" }, [
+    element("p", { className: "synthesis-principle-label", text: "Незмінна послідовність" }),
+    element("h2", { text: protocol.principle }),
+    element("p", { text: protocol.evidence_order_note }),
+  ]);
+  fragment.append(principle);
+
+  const current = section("Поточний CASE", "Стан проходження протоколу", "Кожен рядок нижче поєднує правило методу з фактичним станом активного пакета.");
+  const sequence = element("ol", { className: "synthesis-sequence" });
+  protocol.steps.forEach((step, index) => {
+    const currentState = synthesisStepState(step.id);
+    sequence.append(element("li", { className: "synthesis-step", attrs: { "data-tone": currentState.tone } }, [
+      element("div", { className: "synthesis-step-index" }, [
+        element("span", { text: String(index + 1).padStart(2, "0") }),
+        element("small", { text: step.stage }),
+      ]),
+      element("div", { className: "synthesis-step-main" }, [
+        element("h3", { text: step.title }),
+        element("p", { text: step.what }),
+      ]),
+      element("div", { className: "synthesis-step-why" }, [
+        element("span", { text: "Навіщо" }),
+        element("p", { text: step.why }),
+      ]),
+      element("div", { className: "synthesis-step-control" }, [
+        element("span", { text: "Вихід і контроль" }),
+        element("p", { text: step.output }),
+        element("p", { className: "synthesis-gate", text: step.gate }),
+        element("small", { text: step.owner }),
+      ]),
+      element("div", { className: "synthesis-step-current" }, [
+        element("span", { text: "У цьому кейсі" }),
+        element("p", { text: currentState.label }),
+      ]),
+    ]));
+  });
+  current.append(sequence);
+  fragment.append(current);
+
+  const path = section("Провідна робоча гіпотеза", "Від факту до інтерпретації", "Це не прихований бал: кожен перехід має типізовану адресу в активному пакеті.");
+  path.append(synthesisReasoningPath());
+  fragment.append(path);
+
+  const receipt = section("Квитанція запуску", "Що саме зробив агент", "Поля нижче читаються з незмінної кандидатної ревізії. Якщо пакет змінився, ревізія лишається видимою тільки як історичний слід.");
+  receipt.append(synthesisMethodReceipt(state.reasoningCandidate));
+  fragment.append(receipt);
+
+  const observations = state.bundle?.observations || [];
+  const verified = observations.filter((item) => item?.verification?.human_verified === true).length;
+  const pendingLinks = state.bundle?.methodology?.graph_alignment?.pending_untyped_links?.length || 0;
+  const gate = section("Рішення лікаря", "Що ще не дозволяє назвати висновок прийнятим");
+  gate.append(element("ul", { className: "synthesis-clinician-gate" }, [
+    element("li", { text: `Джерельні спостереження: перевірено людиною ${verified} із ${observations.length}.` }),
+    element("li", { text: state.reasoningCandidate?.status === "ok" ? "Кандидатна ревізія актуальна, але ще не прийнята лікарем." : "Після зміни пакета потрібна нова кандидатна ревізія." }),
+    element("li", { text: pendingLinks ? `${pendingLinks} застарілих нетипізованих зв’язків очікують рішення лікаря.` : "Активний індекс графа повністю відповідає типізованим зв’язкам." }),
+    element("li", { text: "Технічна перевірка структури не дорівнює клінічному підтвердженню діагнозу." }),
+  ]));
+  fragment.append(gate);
+  return fragment;
+}
+
 async function renderProtocol() {
   const isHistorical = CASES[state.caseKey]?.latestRole === "historical_snapshot";
   const fragment = document.createDocumentFragment();
@@ -5055,6 +5346,7 @@ const RENDERERS = {
   graph: renderGraph,
   bodymap: renderBodyMap,
   replay: renderReplayAsync,
+  synthesis: renderSynthesis,
   protocol: renderProtocol,
   agent: renderAgent,
 };
@@ -5233,14 +5525,17 @@ async function loadCase(caseKey, { push = false, focus = false } = {}) {
     state.bundle = bundle;
     state.latestRun = null;
     state.replay = null;
+    state.synthesisProtocol = null;
     state.reviewableObservationIds = new Set();
-    const [reasoningCandidate, reviewableObservationIds] = await Promise.all([
+    const [reasoningCandidate, reviewableObservationIds, synthesisProtocol] = await Promise.all([
       loadReasoningCandidate(bundleText, controller.signal),
       loadReviewableObservationIds(bundle.case.id, controller.signal),
+      loadSynthesisProtocol(controller.signal),
     ]);
     if (token !== caseLoadToken) return;
     state.reasoningCandidate = reasoningCandidate;
     state.reviewableObservationIds = reviewableObservationIds;
+    state.synthesisProtocol = synthesisProtocol;
     buildPrimaryNavigation();
     statusLine.dataset.state = "ready";
     statusLine.textContent = `Пакет завантажено · контракт ${bundle.schema_version} · ${bundle.case.generated || bundle.bundle_id}`;

@@ -153,7 +153,7 @@ blockquote { max-width: 880px; margin: 46px 0 0; padding: 24px 28px; color: #5d3
 .callout { grid-column: 2; margin-top: -55px; padding: 24px 28px; background: var(--canvas); border: 1px solid var(--line); }
 .callout p { margin: 0; max-width: none; }
 
-.pass-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin: 40px 0; padding: 1px; background: #c9badc; list-style: none; }
+.pass-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 40px 0; padding: 1px; background: #c9badc; list-style: none; }
 .pass-list li { min-height: 230px; padding: 28px 22px; background: #f7f3fb; }
 .pass-list span { color: var(--purple); font-size: 18px; font-weight: 750; }
 .pass-list p { margin: 22px 0 0; color: var(--muted); font-size: 14px; }

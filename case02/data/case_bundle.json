@@ -1,6 +1,6 @@
 {
   "schema_version": "1.4.0",
-  "bundle_id": "CASE-02@c33a2b020553",
+  "bundle_id": "CASE-02@9be31f3e5ca0",
   "case": {
     "id": "CASE-02",
     "title": "лімфаденопатія — Т-клітинна лімфома з TFH-фенотипом / ПТКЛ проти лімфоми Ходжкіна / реактивного якоря",
@@ -848,12 +848,18 @@
       "stance": "Фото-звіт ІГХ від 30.06 формулює висновок на користь нодальної TFH-лімфоми та описує PD1+, BCL6+ і поодинокі CD10+ лімфоцити на CD4+ Т-клітинному тлі. Разом із тривалим прогресуванням вузлів і селезінки це робить напрям провідним. Водночас маркери описані переважно у лімфоцитах навколо гістіоцитарних скупчень, а повна будова вузла з фото недоступна; тому це провідна попередня гіпотеза, а не верифікований підтип.",
       "status": "leading-provisional",
       "data_refs": [
-        "F17",
-        "F18",
-        "F4",
-        "F2",
         "F1",
-        "F5"
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F10",
+        "F12",
+        "F16",
+        "F17",
+        "F18"
       ],
       "evidence_refs": [
         "E8",
@@ -898,11 +904,18 @@
       "stance": "Діагноз лімфоми Ходжкіна залишається також можливим варіантом, але з меншою ймовірністю. Його підтримують раніше описані ходжкіноподібні великі клітини, CD30/MUM1 і саркоїдоподібний фон; водночас звіт 24.06 не підтвердив класичний фенотип повною мірою, а 30.06 змістив оцінку на користь TFH-лімфоми.",
       "status": "downgraded",
       "data_refs": [
-        "F6",
-        "F3",
+        "F1",
         "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F10",
+        "F12",
         "F16",
-        "F17"
+        "F17",
+        "F18"
       ],
       "evidence_refs": [
         "E1",
@@ -943,8 +956,7 @@
         "F1",
         "F5",
         "F7",
-        "F18",
-        "F2"
+        "F12"
       ],
       "evidence_refs": [
         "E5",
@@ -980,11 +992,11 @@
       "stance": "Саркоїдоподібні гранульоми є задокументованою знахідкою. Вони можуть відображати самостійний саркоїдоз або реактивний фон навколо лімфоїдного процесу. Нормальний ACE не виключає саркоїдоз; нижчий ранг самостійної гіпотези визначають прогресування лімфаденопатії та нова тканинна інтерпретація, а не ACE.",
       "status": "possible-reactive-background",
       "data_refs": [
-        "F2",
-        "F8",
         "F1",
+        "F2",
         "F5",
-        "F17"
+        "F7",
+        "F8"
       ],
       "evidence_refs": [
         "E2",
@@ -1057,8 +1069,11 @@
       "status": "less-likely-not-excluded",
       "data_refs": [
         "F1",
+        "F3",
+        "F4",
+        "F5",
         "F6",
-        "F16",
+        "F14",
         "F17"
       ],
       "evidence_refs": [
@@ -1091,9 +1106,8 @@
       "status": "low-probability",
       "data_refs": [
         "F5",
-        "F15",
         "F13",
-        "F12"
+        "F15"
       ],
       "evidence_refs": [],
       "confirms": "Цитокератин-позитивна пухлина або первинний солідний рак.",
@@ -1387,145 +1401,728 @@
     }
   ],
   "clinical_state": {
-    "dates": [
-      {
-        "id": "d1",
-        "date": "2025-08-28"
-      },
-      {
-        "id": "d2",
-        "date": "2025-09-24"
-      },
-      {
-        "id": "d3",
-        "date": "2025-11-28"
-      },
-      {
-        "id": "d4",
-        "date": "2025-12-09"
-      },
-      {
-        "id": "d5",
-        "date": "2026-03-18"
-      },
-      {
-        "id": "d6",
-        "date": "2026-06-03"
-      }
-    ],
     "labs": [
       {
         "an": "WBC",
-        "unit": "10⁹/L",
-        "lo": 3.9,
-        "hi": 10.2,
-        "v": {
-          "d1": 4.26,
-          "d2": 4.41,
-          "d3": 3.51,
-          "d4": 3.87,
-          "d5": 4.2,
-          "d6": 4.4
-        },
         "grp": "count",
         "key": true,
-        "note": "легка лейкопенія лис–гру '25, потім нормалізувалась"
+        "note": "легка лейкопенія лис–гру '25, потім нормалізувалась",
+        "readings": [
+          {
+            "date": "2025-08-28",
+            "analyte": "WBC",
+            "value": 4.26,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 3.9,
+              "high": 10.2,
+              "text": "3.9–10.2"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 2
+            }
+          },
+          {
+            "date": "2025-09-24",
+            "analyte": "WBC",
+            "value": 4.41,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 4.16,
+              "high": 11.48,
+              "text": "4.16–11.48"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 8
+            }
+          },
+          {
+            "date": "2025-11-28",
+            "analyte": "WBC",
+            "value": 3.51,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 4,
+              "high": 10,
+              "text": "4–10"
+            },
+            "status": "low",
+            "recorded_flag": "LOW",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 13
+            }
+          },
+          {
+            "date": "2025-12-09",
+            "analyte": "WBC",
+            "value": 3.87,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 4,
+              "high": 9,
+              "text": "4–9"
+            },
+            "status": "low",
+            "recorded_flag": "LOW",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 19
+            }
+          },
+          {
+            "date": "2026-03-18",
+            "analyte": "WBC",
+            "value": 4.2,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 3.9,
+              "high": 10.2,
+              "text": "3.9–10.2"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 25
+            }
+          },
+          {
+            "date": "2026-06-03",
+            "analyte": "WBC",
+            "value": 4.4,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 3.9,
+              "high": 10.2,
+              "text": "3.9–10.2"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 32
+            }
+          }
+        ]
       },
       {
         "an": "Lymph#",
-        "unit": "10⁹/L",
-        "lo": 1.1,
-        "hi": 4.5,
-        "v": {
-          "d1": 1.2,
-          "d2": 1.31,
-          "d3": 0.97,
-          "d4": 1.02,
-          "d5": 1.36,
-          "d6": 1.22
-        },
         "grp": "count",
         "key": true,
-        "note": "транзиторна лімфопенія — неспецифічна"
+        "note": "транзиторна лімфопенія — неспецифічна",
+        "readings": [
+          {
+            "date": "2025-08-28",
+            "analyte": "Lymph#",
+            "value": 1.2,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 1.18,
+              "high": 3.74,
+              "text": "1.18–3.74"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 5
+            }
+          },
+          {
+            "date": "2025-09-24",
+            "analyte": "Lymph#",
+            "value": 1.31,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 1.2,
+              "high": 3.3,
+              "text": "1.2–3.3"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 11
+            }
+          },
+          {
+            "date": "2025-11-28",
+            "analyte": "Lymph#",
+            "value": 0.97,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 1.5,
+              "high": 4.5,
+              "text": "1.5–4.5"
+            },
+            "status": "low",
+            "recorded_flag": "LOW",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 16
+            }
+          },
+          {
+            "date": "2025-12-09",
+            "analyte": "Lymph#",
+            "value": 1.02,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 1.18,
+              "high": 3.74,
+              "text": "1.18–3.74"
+            },
+            "status": "low",
+            "recorded_flag": "LOW",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 22
+            }
+          },
+          {
+            "date": "2026-03-18",
+            "analyte": "Lymph#",
+            "value": 1.36,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 1.1,
+              "high": 4.5,
+              "text": "1.1–4.5"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 28
+            }
+          },
+          {
+            "date": "2026-06-03",
+            "analyte": "Lymph#",
+            "value": 1.22,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 1.1,
+              "high": 4.5,
+              "text": "1.1–4.5"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 35
+            }
+          }
+        ]
       },
       {
         "an": "Mono#",
-        "unit": "10⁹/L",
-        "lo": 0.1,
-        "hi": 0.9,
-        "v": {
-          "d1": 0.32,
-          "d2": 0.31,
-          "d3": 0.31,
-          "d4": 0.4,
-          "d5": 0.36,
-          "d6": 0.38
-        },
-        "grp": "count"
+        "grp": "count",
+        "key": false,
+        "note": "",
+        "readings": [
+          {
+            "date": "2025-08-28",
+            "analyte": "Mono#",
+            "value": 0.32,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 0.1,
+              "high": 0.9,
+              "text": "0.1–0.9"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 6
+            }
+          },
+          {
+            "date": "2025-09-24",
+            "analyte": "Mono#",
+            "value": 0.31,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 0.34,
+              "high": 0.94,
+              "text": "0.34–0.94"
+            },
+            "status": "low",
+            "recorded_flag": "LOW",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 12
+            }
+          },
+          {
+            "date": "2025-11-28",
+            "analyte": "Mono#",
+            "value": 0.31,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 0.1,
+              "high": 0.9,
+              "text": "0.1–0.9"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 17
+            }
+          },
+          {
+            "date": "2025-12-09",
+            "analyte": "Mono#",
+            "value": 0.4,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 0.24,
+              "high": 0.82,
+              "text": "0.24–0.82"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 23
+            }
+          },
+          {
+            "date": "2026-03-18",
+            "analyte": "Mono#",
+            "value": 0.36,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 0.1,
+              "high": 0.9,
+              "text": "0.1–0.9"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 29
+            }
+          },
+          {
+            "date": "2026-06-03",
+            "analyte": "Mono#",
+            "value": 0.38,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 0.1,
+              "high": 0.9,
+              "text": "0.1–0.9"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 36
+            }
+          }
+        ]
       },
       {
         "an": "Hgb",
-        "unit": "g/L",
-        "lo": 120,
-        "hi": 156,
-        "v": {
-          "d1": 130,
-          "d2": 125,
-          "d3": 121,
-          "d4": 121,
-          "d5": 123,
-          "d6": 133
-        },
         "grp": "count",
-        "note": "без вираженої анемії"
+        "key": false,
+        "note": "без вираженої анемії",
+        "readings": [
+          {
+            "date": "2025-08-28",
+            "analyte": "Hgb",
+            "value": 130,
+            "unit": "g/L",
+            "reference": {
+              "low": 120,
+              "high": 154,
+              "text": "120–154"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 3
+            }
+          },
+          {
+            "date": "2025-09-24",
+            "analyte": "Hgb",
+            "value": 125,
+            "unit": "g/L",
+            "reference": {
+              "low": 120,
+              "high": 150,
+              "text": "120–150"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 9
+            }
+          },
+          {
+            "date": "2025-11-28",
+            "analyte": "Hgb",
+            "value": 121,
+            "unit": "g/L",
+            "reference": {
+              "low": 120,
+              "high": 160,
+              "text": "120–160"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 14
+            }
+          },
+          {
+            "date": "2025-12-09",
+            "analyte": "Hgb",
+            "value": 121,
+            "unit": "g/L",
+            "reference": {
+              "low": 120,
+              "high": 140,
+              "text": "120–140"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 20
+            }
+          },
+          {
+            "date": "2026-03-18",
+            "analyte": "Hgb",
+            "value": 123,
+            "unit": "g/L",
+            "reference": {
+              "low": 120,
+              "high": 156,
+              "text": "120–156"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 26
+            }
+          },
+          {
+            "date": "2026-06-03",
+            "analyte": "Hgb",
+            "value": 133,
+            "unit": "g/L",
+            "reference": {
+              "low": 120,
+              "high": 156,
+              "text": "120–156"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 33
+            }
+          }
+        ]
       },
       {
         "an": "PLT",
-        "unit": "10⁹/L",
-        "lo": 150,
-        "hi": 389,
-        "v": {
-          "d1": 164,
-          "d2": 182,
-          "d3": 155,
-          "d4": 147,
-          "d5": 158,
-          "d6": 163
-        },
         "grp": "count",
-        "note": "на нижній межі норми весь час"
+        "key": false,
+        "note": "на нижній межі норми весь час",
+        "readings": [
+          {
+            "date": "2025-08-28",
+            "analyte": "PLT",
+            "value": 164,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 150,
+              "high": 370,
+              "text": "150–370"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 4
+            }
+          },
+          {
+            "date": "2025-09-24",
+            "analyte": "PLT",
+            "value": 182,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 162,
+              "high": 379,
+              "text": "162–379"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 10
+            }
+          },
+          {
+            "date": "2025-11-28",
+            "analyte": "PLT",
+            "value": 155,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 150,
+              "high": 400,
+              "text": "150–400"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 15
+            }
+          },
+          {
+            "date": "2025-12-09",
+            "analyte": "PLT",
+            "value": 147,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 180,
+              "high": 360,
+              "text": "180–360"
+            },
+            "status": "low",
+            "recorded_flag": "LOW",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 21
+            }
+          },
+          {
+            "date": "2026-03-18",
+            "analyte": "PLT",
+            "value": 158,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 166,
+              "high": 389,
+              "text": "166–389"
+            },
+            "status": "low",
+            "recorded_flag": "LOW",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 27
+            }
+          },
+          {
+            "date": "2026-06-03",
+            "analyte": "PLT",
+            "value": 163,
+            "unit": "10^9/L",
+            "reference": {
+              "low": 166,
+              "high": 389,
+              "text": "166–389"
+            },
+            "status": "low",
+            "recorded_flag": "LOW",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 34
+            }
+          }
+        ]
       },
       {
         "an": "ESR",
-        "unit": "mm/h",
-        "lo": 0,
-        "hi": 15,
-        "v": {
-          "d1": null,
-          "d2": null,
-          "d3": null,
-          "d4": 2,
-          "d5": 17,
-          "d6": 8
-        },
-        "grp": "inflammation"
+        "grp": "inflammation",
+        "key": false,
+        "note": "",
+        "readings": [
+          {
+            "date": "2025-12-09",
+            "analyte": "ESR",
+            "value": 2,
+            "unit": "mm/h",
+            "reference": {
+              "low": 0,
+              "high": 20,
+              "text": "0–20"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 24
+            }
+          },
+          {
+            "date": "2026-03-18",
+            "analyte": "ESR",
+            "value": 17,
+            "unit": "mm/h",
+            "reference": {
+              "low": 0,
+              "high": 15,
+              "text": "0–15"
+            },
+            "status": "high",
+            "recorded_flag": "HIGH",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 30
+            }
+          },
+          {
+            "date": "2026-06-03",
+            "analyte": "ESR",
+            "value": 8,
+            "unit": "mm/h",
+            "reference": {
+              "low": 0,
+              "high": 15,
+              "text": "0–15"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 37
+            }
+          }
+        ]
       },
       {
         "an": "CRP",
-        "unit": "mg/L",
-        "lo": 0,
-        "hi": 5,
-        "v": {
-          "d1": 9.1,
-          "d2": null,
-          "d3": 1.9,
-          "d4": null,
-          "d5": 12.1,
-          "d6": 8.5
-        },
         "grp": "inflammation",
         "key": true,
-        "note": "легкий, коливний запальний сигнал"
+        "note": "легкий, коливний запальний сигнал",
+        "readings": [
+          {
+            "date": "2025-08-28",
+            "analyte": "CRP",
+            "value": 9.1,
+            "unit": "mg/L",
+            "reference": {
+              "low": 0,
+              "high": 5,
+              "text": "0–5"
+            },
+            "status": "high",
+            "recorded_flag": "HIGH",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 7
+            }
+          },
+          {
+            "date": "2025-11-28",
+            "analyte": "CRP",
+            "value": 1.9,
+            "unit": "mg/L",
+            "reference": {
+              "low": 0,
+              "high": 5,
+              "text": "0–5"
+            },
+            "status": "normal",
+            "recorded_flag": null,
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 18
+            }
+          },
+          {
+            "date": "2026-03-18",
+            "analyte": "CRP",
+            "value": 12.1,
+            "unit": "mg/L",
+            "reference": {
+              "low": 0,
+              "high": 5,
+              "text": "0–5"
+            },
+            "status": "high",
+            "recorded_flag": "HIGH",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 31
+            }
+          },
+          {
+            "date": "2026-06-03",
+            "analyte": "CRP",
+            "value": 8.5,
+            "unit": "mg/L",
+            "reference": {
+              "low": 0,
+              "high": 5,
+              "text": "0–5"
+            },
+            "status": "high",
+            "recorded_flag": "HIGH",
+            "source": {
+              "uri": "data/CASE-02_labs.csv",
+              "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+              "row": 38
+            }
+          }
+        ]
       }
     ],
     "markers": [
@@ -1536,7 +2133,13 @@
         "unit": "U/mL",
         "ref": "158–623",
         "flag": "HIGH",
-        "note": "неспецифічний маркер активації/пухлинного навантаження; підтримує активний лімфопроліферативний/запальний процес, але не обирає підтип"
+        "note": "неспецифічний маркер активації/пухлинного навантаження; підтримує активний лімфопроліферативний/запальний процес, але не обирає підтип",
+        "source_status": "structured_csv",
+        "source": {
+          "uri": "data/CASE-02_labs.csv",
+          "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+          "row": 41
+        }
       },
       {
         "an": "ACE",
@@ -1545,7 +2148,13 @@
         "unit": "U/L",
         "ref": "20–70",
         "flag": "",
-        "note": "норма — послаблює версію ізольованого саркоїдозу"
+        "note": "норма — послаблює версію ізольованого саркоїдозу",
+        "source_status": "structured_csv",
+        "source": {
+          "uri": "data/CASE-02_labs.csv",
+          "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+          "row": 42
+        }
       },
       {
         "an": "β2-microglobulin",
@@ -1554,7 +2163,13 @@
         "unit": "mg/L",
         "ref": "0.8–2.4",
         "flag": "",
-        "note": "норма"
+        "note": "норма",
+        "source_status": "structured_csv",
+        "source": {
+          "uri": "data/CASE-02_labs.csv",
+          "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+          "row": 43
+        }
       },
       {
         "an": "CA-125",
@@ -1563,10 +2178,18 @@
         "unit": "U/mL",
         "ref": "0–35",
         "flag": "HIGH",
-        "note": "неспецифічний; CEA/CA19-9/AFP норма — не патерн солідного раку"
+        "note": "неспецифічний; CEA/CA19-9/AFP норма — не патерн солідного раку",
+        "source_status": "structured_csv",
+        "source": {
+          "uri": "data/CASE-02_labs.csv",
+          "sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+          "row": 40
+        }
       },
       {
         "an": "EBV DNA (PCR)",
+        "source_observation_id": "OBS-69DA0453E20F-006",
+        "source_status": "candidate_source_observation",
         "date": "2026-03-18",
         "v": "5.7×10²",
         "unit": "IU/mL",
@@ -1575,7 +2198,9 @@
         "note": "але видалений вузол EBV-негативний у попередньому звіті → вірусна роль може бути супутньою"
       },
       {
-        "an": "HSV-7 DNA (PCR)",
+        "an": "HHV-7 DNA (PCR)",
+        "source_observation_id": "OBS-69DA0453E20F-010",
+        "source_status": "candidate_source_observation",
         "date": "2026-03-18",
         "v": "5.5×10²",
         "unit": "IU/mL",
@@ -1585,6 +2210,7 @@
       },
       {
         "an": "CMV IgG",
+        "source_status": "legacy_projection_pending_source_link",
         "date": "2025-12-10",
         "v": "505",
         "unit": "AU/mL",
@@ -1594,6 +2220,7 @@
       },
       {
         "an": "LDH",
+        "source_status": "recorded_gap_pending_source_link",
         "date": "—",
         "v": "NOT DONE",
         "unit": "",
@@ -1605,6 +2232,8 @@
     "pathology": [
       {
         "n": 1,
+        "source_document_id": "DOC-36D212332499",
+        "source_status": "linked_to_source_document",
         "date": "2025-09-19",
         "kind": "Core-needle біопсія",
         "specimen": "Вузол кута нижньої щелепи, 2 стовпчики",
@@ -1615,6 +2244,7 @@
       },
       {
         "n": 2,
+        "source_status": "legacy_projection_pending_source_link",
         "date": "2025-11-20",
         "kind": "ІГХ — весь вузол",
         "specimen": "Лівий шийний вузол",
@@ -1625,6 +2255,7 @@
       },
       {
         "n": 3,
+        "source_status": "legacy_projection_pending_source_link",
         "date": "2025-12-23",
         "kind": "Повторний перегляд препаратів",
         "specimen": "Оригінальні препарати",
@@ -1635,6 +2266,7 @@
       },
       {
         "n": 4,
+        "source_status": "legacy_projection_pending_source_link",
         "date": "2026-06-10",
         "kind": "Повторний перегляд парафінового блоку",
         "specimen": "Парафіновий блок",
@@ -1645,6 +2277,7 @@
       },
       {
         "n": 5,
+        "source_status": "photo_report_interpretation_pending_original",
         "date": "2026-06-24",
         "kind": "ІГХ від 24.06.2026",
         "specimen": "Парафіновий блок (агентна розшифровка фото-звіту)",
@@ -1655,6 +2288,7 @@
       },
       {
         "n": 6,
+        "source_status": "photo_report_interpretation_pending_original",
         "date": "2026-06-30",
         "kind": "ІГХ від 30.06.2026",
         "specimen": "Той самий парафіновий блок (агентна розшифровка фото-звіту)",
@@ -1666,6 +2300,8 @@
     ],
     "imaging": [
       {
+        "source_document_id": "DOC-DAE970BAABF0",
+        "source_status": "linked_to_source_document",
         "date": "2025-08-28",
         "modality": "УЗД шиї",
         "maxNode": "21×20 mm",
@@ -1676,6 +2312,8 @@
         "impression": "Ліві шийні вузли «патологічні»; праворуч непідозріло."
       },
       {
+        "source_document_id": "DOC-A0BEAA4DFFD5",
+        "source_status": "linked_to_source_document",
         "date": "2025-09-23",
         "modality": "УЗД паху",
         "maxNode": "45×19 mm",
@@ -1686,6 +2324,8 @@
         "impression": "Два патологічні ліві пахвинні вузли."
       },
       {
+        "source_document_id": "DOC-D55DF32AB580",
+        "source_status": "linked_to_source_document",
         "date": "2025-09-24",
         "modality": "КТ грудної клітки+",
         "maxNode": "19 mm",
@@ -1696,6 +2336,8 @@
         "impression": "Підозріла інфільтративна зміна селезінки + патологічні вузли."
       },
       {
+        "source_document_id": "DOC-3ADB3B3350B2",
+        "source_status": "linked_to_source_document",
         "date": "2025-12-09",
         "modality": "УЗД вузлів",
         "maxNode": "58.9×32.7 mm",
@@ -1706,6 +2348,8 @@
         "impression": "Збільшені; сонографіст утримався від остаточного висновку."
       },
       {
+        "source_document_id": "DOC-D09AE65C0E98",
+        "source_status": "linked_to_source_document",
         "date": "2026-06-03",
         "modality": "УЗД генералізоване",
         "maxNode": "44×30 mm",
@@ -1716,6 +2360,8 @@
         "impression": "Генералізована лімфаденопатія."
       },
       {
+        "source_document_id": "DOC-F609A59E9016",
+        "source_status": "linked_to_source_document",
         "date": "2026-06-11",
         "modality": "МСКТ голова→таз",
         "maxNode": "43 mm (шия IIa)",
@@ -1842,7 +2488,16 @@
           }
         ]
       }
-    ]
+    ],
+    "lab_projection": {
+      "schema_version": "hematoboard.structured-labs/1.0.0",
+      "source_uri": "data/CASE-02_labs.csv",
+      "source_sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+      "row_count": 42,
+      "series_analyte_count": 7,
+      "built_by": "case02/scripts/build_structured_labs.py",
+      "policy": "Only repeated analytes from the declared CSV source enter the longitudinal table; PDF-derived candidate measurements remain in the source observation registry until reviewed."
+    }
   },
   "methodology": {
     "question": "Жінка ~44 роки, 14-місячна прогресуюча генералізована лімфаденопатія + спленомегалія; ранні висновки були реактивно/саркоїдоподібні, 10.06 підняв Ходжкіна, але ІГХ 24/30.06 тепер схиляє до нодальної лімфоми із фолікулярних T-хелперів. Який диференціал і що треба зробити, щоб не помилитися з підтипом?",
@@ -2310,7 +2965,20 @@
         ],
         "status": "Обов’язкова перевірка",
         "tone": "danger",
-        "phase": "Для верифікації діагнозу"
+        "phase": "Для верифікації діагнозу",
+        "scope": {
+          "kind": "hypothesis_verification",
+          "hypothesis_refs": [
+            {
+              "id": "H1",
+              "role": "leading"
+            },
+            {
+              "id": "H2",
+              "role": "direct_differential"
+            }
+          ]
+        }
       },
       {
         "id": "W2",
@@ -2323,7 +2991,16 @@
         ],
         "status": "Обов’язкова перевірка",
         "tone": "danger",
-        "phase": "Для верифікації діагнозу"
+        "phase": "Для верифікації діагнозу",
+        "scope": {
+          "kind": "hypothesis_verification",
+          "hypothesis_refs": [
+            {
+              "id": "H1",
+              "role": "leading"
+            }
+          ]
+        }
       },
       {
         "id": "W3",
@@ -2336,7 +3013,16 @@
         ],
         "status": "Треба підтвердити",
         "tone": "danger",
-        "phase": "Для верифікації діагнозу"
+        "phase": "Для верифікації діагнозу",
+        "scope": {
+          "kind": "hypothesis_verification",
+          "hypothesis_refs": [
+            {
+              "id": "H1",
+              "role": "leading"
+            }
+          ]
+        }
       },
       {
         "id": "W4",
@@ -2350,7 +3036,20 @@
         ],
         "status": "Не пропустити",
         "tone": "miss",
-        "phase": "Паралельна перевірка"
+        "phase": "Паралельна перевірка",
+        "scope": {
+          "kind": "critical_differential",
+          "hypothesis_refs": [
+            {
+              "id": "H3",
+              "role": "critical_differential"
+            },
+            {
+              "id": "H5",
+              "role": "critical_differential"
+            }
+          ]
+        }
       },
       {
         "id": "W5",
@@ -2363,9 +3062,81 @@
         ],
         "status": "Після підтвердження",
         "tone": "caution",
-        "phase": "Після тканинного підтвердження"
+        "phase": "Після тканинного підтвердження",
+        "scope": {
+          "kind": "post_confirmation",
+          "hypothesis_refs": []
+        }
       }
-    ]
+    ],
+    "graph_alignment": {
+      "schema_version": "hematoboard.typed-graph-alignment/1.0.0",
+      "canonical_ledger": "relations",
+      "compatibility_index": "hypotheses[].data_refs",
+      "policy": "The compatibility index is rebuilt only from typed relations; untyped legacy links require clinician review.",
+      "pending_untyped_links": [
+        {
+          "fact_id": "F18",
+          "hypothesis_id": "H3",
+          "question": "Визначити тип зв’язку або вилучити застаріле посилання.",
+          "allowed_resolutions": [
+            "support",
+            "refute",
+            "neutral",
+            "remove"
+          ],
+          "status": "pending_clinician_review"
+        },
+        {
+          "fact_id": "F2",
+          "hypothesis_id": "H3",
+          "question": "Визначити тип зв’язку або вилучити застаріле посилання.",
+          "allowed_resolutions": [
+            "support",
+            "refute",
+            "neutral",
+            "remove"
+          ],
+          "status": "pending_clinician_review"
+        },
+        {
+          "fact_id": "F17",
+          "hypothesis_id": "H4",
+          "question": "Визначити тип зв’язку або вилучити застаріле посилання.",
+          "allowed_resolutions": [
+            "support",
+            "refute",
+            "neutral",
+            "remove"
+          ],
+          "status": "pending_clinician_review"
+        },
+        {
+          "fact_id": "F16",
+          "hypothesis_id": "H6",
+          "question": "Визначити тип зв’язку або вилучити застаріле посилання.",
+          "allowed_resolutions": [
+            "support",
+            "refute",
+            "neutral",
+            "remove"
+          ],
+          "status": "pending_clinician_review"
+        },
+        {
+          "fact_id": "F12",
+          "hypothesis_id": "H7",
+          "question": "Визначити тип зв’язку або вилучити застаріле посилання.",
+          "allowed_resolutions": [
+            "support",
+            "refute",
+            "neutral",
+            "remove"
+          ],
+          "status": "pending_clinician_review"
+        }
+      ]
+    }
   },
   "provenance": {
     "migration": "legacy_med_data_js",
@@ -2389,7 +3160,10 @@
     "ingest_protocol": "CASE_DATA_INGEST_PROTOCOL_UA.md",
     "ingest_contract": "minimum_necessary_clinical_projection_v1",
     "ingest_release_status": "candidate_only",
-    "clinical_content_sha256": "c33a2b020553c72210db0bddc8491f35f3def2498cdc4b854656c52841b9ecbb"
+    "clinical_content_sha256": "9be31f3e5ca0a7f4a9e364968b0a72c45f3a6adcd0dade31d7482ffbae448470",
+    "structured_labs": "data/CASE-02_labs.csv",
+    "structured_labs_sha256": "ef62a8fe8b9b72b1cdee814d5d47b4a9df09a32e05f76ce7814111d4c8399bc0",
+    "structured_labs_contract": "hematoboard.structured-labs/1.0.0"
   },
   "claims": [
     {
@@ -3410,11 +4184,11 @@
     }
   ],
   "bundle_revision": {
-    "id": "CASE-02@c33a2b020553",
-    "parent_bundle_sha256": "c30d2f850148e8addf329962597227f9ab3ba810a6de37f6fce0ccd8c3478e07",
+    "id": "CASE-02@9be31f3e5ca0",
+    "parent_bundle_sha256": "d3ca90dc751ee61f791d58c667efde4a8451f810285770555d9c5ae10540f95d",
     "source_layer_sha256": "d5edc0290f915eb28311d285c6cf27ab840b511749fb0c8a553403dca1a017bd",
-    "created_at": "2026-08-02T20:18:21+00:00",
-    "change_type": "reasoning_paths_and_local_guideline_index",
+    "created_at": "2026-08-05T22:58:00.444778+00:00",
+    "change_type": "structured_laboratory_projection",
     "release_status": "candidate_clinical_projection"
   },
   "source_documents": [
