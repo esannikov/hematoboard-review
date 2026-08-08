@@ -12,9 +12,11 @@ HematoBoard is an experimental clinical evidence environment for studying how
 agentic AI can assist the review of long, heterogeneous hematology records while
 preserving provenance and clinician authority. It reconstructs scanned reports,
 laboratory tables, pathology, imaging and clinical narrative as a versioned case
-state. Candidate hypotheses appear beside the observations and external sources
-that support, challenge or contextualize them. Missing verification remains
-visible throughout the review.
+state, responding to established concerns about completeness, conformance and
+plausibility when clinical data are reused across sources (Kahn et al., 2016;
+Weiskopf & Weng, 2013). Candidate hypotheses appear beside the observations and
+external sources that support, challenge or contextualize them. Missing
+verification remains visible throughout the review.
 
 The research asks whether an agentic system can make complex clinical reasoning
 more inspectable: **can every material statement retain a path to its source,
@@ -47,6 +49,16 @@ revision begins a new hash-pinned cycle. The append-only receipt plane records
 input and output hashes, privacy checks, agent results, tool actions and phase
 time across these paths.
 
+The architecture draws on four established bodies of work: hematologic
+classification as a versioned integration of morphology, phenotype, clinical
+context and genomics (Alaggio et al., 2022; Arber et al., 2022); formal clinical
+data-quality assessment (Kahn et al., 2016); provenance as explicit relations
+among entities, activities and responsible agents (World Wide Web Consortium,
+2013); and staged evaluation of AI decision-support systems before claims of
+clinical utility (Liu et al., 2020; Vasey et al., 2022). HematoBoard translates
+these foundations into case-level controls that remain inspectable by a
+clinician.
+
 ## Three working surfaces
 
 <table>
@@ -76,9 +88,14 @@ score. Together they provide three readings of the same versioned material.
 
 A difficult hematology case often spans several institutions, laboratories,
 modalities and episodes of care. Values appear under different reference
-intervals. Narrative conclusions can outlive the evidence that originally
-supported them. A later pathology report may reorganize the meaning of an
-earlier imaging finding. Missing tissue, staging or molecular data can remain
+intervals, which must remain distinct from clinical decision limits and retain
+their analytical context (Ozarda et al., 2018). Narrative conclusions can
+outlive the evidence that originally supported them. A later pathology report
+may reorganize the meaning of an earlier imaging finding. Contemporary
+hematologic classifications explicitly combine morphology, immunophenotype,
+clinical context and molecular findings, while revisions can change entities
+and diagnostic criteria (Alaggio et al., 2022; Arber et al., 2022; Campo et al.,
+2022). Missing tissue, staging or molecular data can therefore remain
 clinically decisive even when the record already contains hundreds of pages.
 
 HematoBoard treats the accepted case as a ledger of addressable observations.
@@ -91,16 +108,18 @@ the clinical projection it received.
 
 This separation gives the dashboard a precise role. The interface is the
 primary presentation output of the system and a read-only projection of
-accepted data and candidate reasoning. It has no authority to create a clinical fact, alter a
-source receipt or record a clinician decision. A separate clinician review
-surface opens proposed changes together with their supporting records. Accepted
-changes create a new hash-pinned ledger revision and preserve the earlier state.
+accepted data and candidate reasoning. It has no authority to create a clinical
+fact, alter a source receipt or record a clinician decision. A separate
+clinician review surface opens proposed changes together with their supporting
+records. Accepted changes create a new hash-pinned ledger revision and preserve
+the earlier state.
 
 The resulting architecture is close to the entity–activity–agent logic of W3C
 PROV-O, adapted to a smaller clinical contract. The central objects are source
 records, structured observations, external propositions, reasoning revisions,
 review actions and accepted states. Their lineage remains inspectable across
-document processing, synthesis and presentation.
+document processing, synthesis and presentation (World Wide Web Consortium,
+2013).
 
 ## Two implemented verification rules
 
@@ -134,7 +153,8 @@ case-specific clinical literals embedded in page code.
 
 The clinical input is a canonical projection $\pi_c(B)$ of accepted bundle
 $B$. Let $H$ denote SHA-256 over the canonical JSON bytes of that projection.
-The reasoning revision records:
+The reasoning revision records the following value, using the standardized
+SHA-256 hash function (National Institute of Standards and Technology, 2015):
 
 $$
 h_R = H(\pi_c(B))
@@ -224,9 +244,9 @@ bounded reasoning roles; runtime surfaces identify deterministic controls.
 
 Document reconstruction is treated as measurement transfer. Apple Vision runs
 locally on macOS with Ukrainian, Russian and English recognition settings. It
-returns recognized strings, confidence and bounding regions. The original PDF
-remains the pixel source of truth, while optimized renders and coordinate
-transforms provide bounded working surfaces for verification.
+returns recognized strings, confidence and bounding regions (Apple, n.d.). The
+original PDF remains the pixel source of truth, while optimized renders and
+coordinate transforms provide bounded working surfaces for verification.
 
 Spatial structure is resolved before de-identification. A laboratory row binds
 the analyte, result, unit, comparator and reference interval to one row identity.
@@ -267,9 +287,10 @@ and applicability remain separate reviewed activities. Documents with
 restrictive licences stay within the local workspace.
 
 Guideline quality and reporting can be appraised with instruments such as AGREE
-II. Disease-specific classifications and practice guidelines retain their
-edition and date because diagnostic categories, staging definitions and
-recommendations change over time.
+II (Brouwers et al., 2010). Disease-specific classifications and practice
+guidelines retain their edition and date because diagnostic categories,
+staging definitions and recommendations change over time (Alaggio et al., 2022;
+Campo et al., 2022; d’Amore et al., 2025).
 
 ## Agentic synthesis under bounded authority
 
@@ -286,14 +307,17 @@ ledger remains under controlled promotion. The clinician review surface presents
 the candidate together with the evidence needed to evaluate it.
 
 Research on human susceptibility to erroneous AI advice motivates this visible
-separation of accepted state, AI Agent interpretation and clinician authority.
-The design supports disagreement, abstention and revision as first-class
-outcomes of the workflow.
+separation of accepted state, AI Agent interpretation and clinician authority
+(Cabitza et al., 2017; Gaube et al., 2021). The design supports disagreement,
+abstention and revision as first-class outcomes of the workflow, consistent
+with calls for clinically grounded, safety-aware evaluation throughout the
+machine-learning lifecycle (Wiens et al., 2019).
 
 ## Privacy and cloud processing
 
 HematoBoard uses a local-first privacy boundary organized around data
-minimization, purpose limitation and traceable disclosure.
+minimization, purpose limitation and traceable disclosure (European Parliament
+& Council of the European Union, 2016).
 
 - Raw PDFs, page renders, direct identifiers and re-identification mappings stay
   in private case quarantine.
@@ -311,9 +335,13 @@ minimization, purpose limitation and traceable disclosure.
   through an explicit clinician decision and controlled promotion transaction.
 
 De-identification reduces disclosure risk while institutional, legal, security
-and ethics governance remains necessary. Planned experiments will compare local
-multimodal and language models for crop adjudication, evidence synthesis and
-safety critique under the same receipt and projection contracts.
+and ethics governance remains necessary. Clinical-text de-identification is a
+measurable information-extraction task with documented residual errors rather
+than an absolute guarantee of anonymity (Meystre et al., 2010; Uzuner et al.,
+2007). Planned experiments will compare local multimodal and language models
+for crop adjudication, evidence synthesis and safety critique under the same
+receipt and projection contracts, following the broader governance principles
+for AI in health set out by the World Health Organization (2021).
 
 ## Sources and methods
 
@@ -336,7 +364,10 @@ External clinical validation, prospective effectiveness evaluation, regulatory
 qualification and deployment performance remain future stages. Planned studies
 separate exact field transfer, provenance failures, appropriate AI Agent
 abstention, correction recovery, clinician review time, decision disagreement
-and usability. Each outcome retains its own interpretation and limitation.
+and usability. This staged approach follows reporting frameworks that distinguish
+early live clinical evaluation from later comparative clinical trials (Liu et
+al., 2020; Vasey et al., 2022). Each outcome retains its own interpretation and
+limitation.
 
 The screenshots document a de-identified research demonstrator. Case packages,
 runtime data and clinician decisions remain inside the controlled workspace.
@@ -364,8 +395,25 @@ prospective evaluation is welcome.
 
 ## References
 
+Alaggio, R., Amador, C., Anagnostopoulos, I., Attygalle, A. D., Araujo, I. B.
+O., Berti, E., Bhagat, G., Borges, A. M., Boyer, D., Calaminici, M., Chadburn,
+A., Chan, J. K. C., Cheuk, W., Chng, W.-J., Choi, J. K., Chuang, S.-S.,
+Coupland, S. E., Czader, M., Dave, S. S., … Xiao, W. (2022). The 5th edition
+of the World Health Organization classification of haematolymphoid tumours:
+Lymphoid neoplasms. *Leukemia, 36*(7), 1720–1748.
+<https://doi.org/10.1038/s41375-022-01620-2>
+
 Apple. (n.d.). *Recognizing text in images*. Apple Developer Documentation.
+Retrieved August 8, 2026, from
 <https://developer.apple.com/documentation/vision/recognizing-text-in-images>
+
+Arber, D. A., Orazi, A., Hasserjian, R. P., Borowitz, M. J., Calvo, K. R.,
+Kvasnicka, H.-M., Wang, S. A., Bagg, A., Barbui, T., Branford, S., Bueso-Ramos,
+C. E., Cortes, J. E., Dal Cin, P., DiNardo, C. D., Dombret, H., Duncavage, E.
+J., Ebert, B. L., Estey, E. H., Facchetti, F., … Tefferi, A. (2022).
+International consensus classification of myeloid neoplasms and acute
+leukemias: Integrating morphologic, clinical, and genomic data. *Blood,
+140*(11), 1200–1228. <https://doi.org/10.1182/blood.2022015850>
 
 Brouwers, M. C., Kho, M. E., Browman, G. P., Burgers, J. S., Cluzeau, F.,
 Feder, G., Fervers, B., Graham, I. D., Grimshaw, J., Hanna, S. E., Littlejohns,
@@ -374,37 +422,86 @@ AGREE II: Advancing guideline development, reporting and evaluation in health
 care. *Journal of Clinical Epidemiology, 63*(12), 1308–1311.
 <https://doi.org/10.1016/j.jclinepi.2010.07.001>
 
-Campo, E., Jaffe, E. S., Cook, J. R., Quintanilla-Martinez, L., Swerdlow, S. H.,
-Anderson, K. C., et al. (2022). The International Consensus Classification of
-Mature Lymphoid Neoplasms: A report from the Clinical Advisory Committee.
-*Blood, 140*(11), 1229–1253. <https://doi.org/10.1182/blood.2022015851>
+Cabitza, F., Rasoini, R., & Gensini, G. F. (2017). Unintended consequences of
+machine learning in medicine. *JAMA, 318*(6), 517–518.
+<https://doi.org/10.1001/jama.2017.7797>
 
-d'Amore, F., Federico, M., de Leval, L., Ellin, F., Hermine, O., Kim, W. S.,
+Campo, E., Jaffe, E. S., Cook, J. R., Quintanilla-Martinez, L., Swerdlow, S.
+H., Anderson, K. C., Brousset, P., Cerroni, L., de Leval, L., Dirnhofer, S.,
+Dogan, A., Feldman, A. L., Fend, F., Friedberg, J. W., Gaulard, P., Ghia, P.,
+Horwitz, S. M., King, R. L., Salles, G., … Zelenetz, A. D. (2022). The
+international consensus classification of mature lymphoid neoplasms: A report
+from the Clinical Advisory Committee. *Blood, 140*(11), 1229–1253.
+<https://doi.org/10.1182/blood.2022015851>
+
+d’Amore, F., Federico, M., de Leval, L., Ellin, F., Hermine, O., Kim, W. S.,
 Lemonnier, F., Vermaat, J. S. P., Wulf, G., Buske, C., Dreyling, M., & Jerkeman,
 M. (2025). Peripheral T- and natural killer-cell lymphomas: ESMO–EHA Clinical
 Practice Guideline for diagnosis, treatment and follow-up. *Annals of Oncology,
 36*(6), 626–644. <https://doi.org/10.1016/j.annonc.2025.01.023>
 
-European Parliament & Council of the European Union. (2016). *Regulation (EU)
+European Parliament, & Council of the European Union. (2016). *Regulation (EU)
 2016/679 (General Data Protection Regulation), Article 5*. Official Journal of
 the European Union. <https://eur-lex.europa.eu/eli/reg/2016/679/oj>
 
 Gaube, S., Suresh, H., Raue, M., Merritt, A., Berkowitz, S. J., Lermer, E.,
 Coughlin, J. F., Guttag, J. V., Colak, E., & Ghassemi, M. (2021). Do as AI say:
 Susceptibility in deployment of clinical decision-aids. *npj Digital Medicine,
-4*, 31. <https://doi.org/10.1038/s41746-021-00385-9>
+4*(1), Article 31. <https://doi.org/10.1038/s41746-021-00385-9>
+
+Kahn, M. G., Callahan, T. J., Barnard, J., Bauck, A. E., Brown, J., Davidson,
+B. N., Estiri, H., Goerg, C., Holve, E., Johnson, S. G., Liaw, S.-T.,
+Hamilton-Lopez, M., Meeker, D., Ong, T. C., Ryan, P., Shang, N., Weiskopf, N.
+G., Weng, C., Zozus, M. N., & Schilling, L. (2016). A harmonized data quality
+assessment terminology and framework for the secondary use of electronic
+health record data. *eGEMs (Generating Evidence & Methods to Improve Patient
+Outcomes), 4*(1), 18. <https://doi.org/10.13063/2327-9214.1244>
+
+Liu, X., Cruz Rivera, S., Moher, D., Calvert, M. J., Denniston, A. K., &
+SPIRIT-AI and CONSORT-AI Working Group. (2020). Reporting guidelines for
+clinical trial reports for interventions involving artificial intelligence:
+The CONSORT-AI extension. *Nature Medicine, 26*(9), 1364–1374.
+<https://doi.org/10.1038/s41591-020-1034-x>
+
+Meystre, S. M., Friedlin, F. J., South, B. R., Shen, S., & Samore, M. H.
+(2010). Automatic de-identification of textual documents in the electronic
+health record: A review of recent research. *BMC Medical Research Methodology,
+10*, Article 70. <https://doi.org/10.1186/1471-2288-10-70>
 
 National Institute of Standards and Technology. (2015). *Secure Hash Standard
 (SHS)* (FIPS PUB 180-4). <https://doi.org/10.6028/NIST.FIPS.180-4>
 
+Ozarda, Y., Sikaris, K., Streichert, T., & Macri, J. (2018). Distinguishing
+reference intervals and clinical decision limits: A review by the IFCC
+Committee on Reference Intervals and Decision Limits. *Critical Reviews in
+Clinical Laboratory Sciences, 55*(6), 420–431.
+<https://doi.org/10.1080/10408363.2018.1482256>
+
+Uzuner, O., Luo, Y., & Szolovits, P. (2007). Evaluating the state-of-the-art in
+automatic de-identification. *Journal of the American Medical Informatics
+Association, 14*(5), 550–563. <https://doi.org/10.1197/jamia.M2444>
+
 Vasey, B., Nagendran, M., Campbell, B., Clifton, D. A., Collins, G. S., Denaxas,
-S., et al. (2022). Reporting guideline for the early-stage clinical evaluation
-of decision support systems driven by artificial intelligence: DECIDE-AI.
-*Nature Medicine, 28*, 924–933.
+S., Denniston, A. K., Faes, L., Geerts, B., Ibrahim, M., Liu, X., Mateen, B. A.,
+Mathur, P., McCradden, M. D., Morgan, L., Ordish, J., Rogers, C., Saria, S.,
+Ting, D. S. W., … DECIDE-AI Expert Group. (2022). Reporting guideline for the
+early-stage clinical evaluation of decision support systems driven by
+artificial intelligence: DECIDE-AI. *Nature Medicine, 28*(5), 924–933.
 <https://doi.org/10.1038/s41591-022-01772-9>
 
+Weiskopf, N. G., & Weng, C. (2013). Methods and dimensions of electronic health
+record data quality assessment: Enabling reuse for clinical research. *Journal
+of the American Medical Informatics Association, 20*(1), 144–151.
+<https://doi.org/10.1136/amiajnl-2011-000681>
+
+Wiens, J., Saria, S., Sendak, M., Ghassemi, M., Liu, V. X., Doshi-Velez, F.,
+Jung, K., Heller, K., Kale, D., Saeed, M., Ossorio, P. N., Thadaney-Israni, S.,
+& Goldenberg, A. (2019). Do no harm: A roadmap for responsible machine
+learning for health care. *Nature Medicine, 25*(9), 1337–1340.
+<https://doi.org/10.1038/s41591-019-0548-6>
+
 World Health Organization. (2021). *Ethics and governance of artificial
-intelligence for health: WHO guidance*. World Health Organization.
+intelligence for health: WHO guidance*.
 <https://www.who.int/publications/i/item/9789240029200>
 
 World Wide Web Consortium. (2013). *PROV-O: The PROV Ontology* (W3C
