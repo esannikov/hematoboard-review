@@ -239,6 +239,7 @@ html[data-ui="carbon"] {
 [data-ui="carbon"] .route-button,
 [data-ui="carbon"] .route-buttons a,
 [data-ui="carbon"] .route-menu > summary,
+[data-ui="carbon"] .research-nav-action,
 [data-ui="carbon"] .packet-nav-action {
   position: relative;
   display: inline-flex;
@@ -269,6 +270,7 @@ html[data-ui="carbon"] {
 [data-ui="carbon"] .route-button:hover,
 [data-ui="carbon"] .route-buttons a:hover,
 [data-ui="carbon"] .route-menu > summary:hover,
+[data-ui="carbon"] .research-nav-action:hover,
 [data-ui="carbon"] .packet-nav-action:hover {
   color: #fff;
   background: #353535;

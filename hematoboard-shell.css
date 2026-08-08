@@ -392,6 +392,7 @@ html {
 
 .hb-shell .route-button,
 .hb-shell .route-buttons a,
+.hb-shell .research-nav-action,
 .hb-shell .packet-nav-action {
   min-height: 38px;
   display: inline-flex;
@@ -413,6 +414,7 @@ html {
 
 .hb-shell .route-button:hover,
 .hb-shell .route-buttons a:hover,
+.hb-shell .research-nav-action:hover,
 .hb-shell .packet-nav-action:hover {
   color: var(--hb-ink);
   background: var(--hb-canvas);

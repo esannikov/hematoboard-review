@@ -4522,7 +4522,7 @@ async function renderAgent() {
         Number.isInteger(review.safe_syncs) ? `${review.safe_syncs} технічних розбіжностей можна синхронізувати без зміни клінічного змісту.` : "Пакет звірки ще не завантажено.",
       ),
       agentGate(
-        "Codex",
+        "AI Agent",
         health.codex?.activation === "ready" ? "Готовий" : "Запуск закритий",
         health.codex?.activation === "ready" ? "ready" : "blocked",
         health.codex?.activation === "ready"
