@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; script-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+    <meta
+      name="description"
+      content="HematoBoard is a clinician-controlled, provenance-first evidence and gap workbench for complex hematology cases."
+    />
+    <meta property="og:title" content="HematoBoard · Controlled clinical evidence architecture" />
+    <meta
+      property="og:description"
+      content="How HematoBoard reconstructs difficult records, preserves provenance, separates accepted facts from AI Agent reasoning, and keeps clinical authority with the clinician."
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://esannikov.github.io/hematoboard/research.html" />
+    <meta property="og:image" content="https://esannikov.github.io/hematoboard/diagrams/hematoboard-trace-system.png" />
+    <link rel="canonical" href="https://esannikov.github.io/hematoboard/research.html" />
+    <link rel="icon" href="assets/hematoboard-mark.svg" />
+    <link rel="stylesheet" href="research.css?v=20260808article1" />
+    <title>HematoBoard · Research preview</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#article">Skip to article</a>
+
+    <header class="site-header">
+      <a class="wordmark" href="research.html" aria-label="HematoBoard research preview">
+        <img src="assets/hematoboard-mark.svg" width="38" height="38" alt="" />
+        <span>HematoBoard</span>
+      </a>
+      <nav aria-label="Article navigation">
+        <a href="#architecture">Architecture</a>
+        <a href="#method">Method</a>
+        <a href="#safety">Safety</a>
+        <a href="#references">References</a>
+        <a class="dashboard-link" href="index.html">Open dashboard</a>
+      </nav>
+    </header>
+
+    <main id="article">
+      <article>
+        <header class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Research preview · clinician-in-the-loop testing</p>
+            <h1>A clinician-controlled evidence and gap workbench for complex hematology cases</h1>
+            <p class="standfirst">
+              HematoBoard turns heterogeneous clinical records into a traceable case state,
+              places candidate hypotheses beside the evidence that supports or challenges
+              them, and makes missing verification visible before a clinician decides what
+              to accept.
+            </p>
+            <div class="hero-actions">
+              <a class="primary-action" href="index.html">Explore the public dashboard</a>
+              <a class="secondary-action" href="#architecture">Study the architecture</a>
+            </div>
+          </div>
+          <aside class="status-card" aria-label="Research status">
+            <span class="status-chip">Code coming soon</span>
+            <p>Controlled clinical testing</p>
+            <dl>
+              <div><dt>Public surface</dt><dd>De-identified, read-only</dd></div>
+              <div><dt>Accepted state</dt><dd>Versioned evidence ledger</dd></div>
+              <div><dt>AI output</dt><dd>Separate immutable candidate</dd></div>
+              <div><dt>Clinical authority</dt><dd>Clinician only</dd></div>
+            </dl>
+          </aside>
+        </header>
+
+        <section class="principles" aria-label="System boundaries">
+          <div><strong>Source-bound</strong><span>Important fields retain page, crop, coordinate, and hash receipts.</span></div>
+          <div><strong>Candidate-aware</strong><span>AI Agent reasoning is visible but cannot overwrite accepted clinical facts.</span></div>
+          <div><strong>Clinician-controlled</strong><span>Only an explicit clinician decision can promote a revised accepted state.</span></div>
+        </section>
+
+        <section class="section intro" id="purpose">
+          <div class="section-kicker">01 · Purpose</div>
+          <div class="section-body">
+            <h2>Inspectability before automation</h2>
+            <p class="lead">
+              Long hematology records are not merely large. They combine scanned tables,
+              narrative findings, pathology, imaging, changing terminology, partial work-up,
+              and conclusions made at different moments. A useful system must preserve which
+              statement came from which source, which interpretation remains provisional,
+              and what information could still change the case.
+            </p>
+            <p>
+              HematoBoard is not an autonomous diagnostician. Its research question is more
+              practical: <strong>can an AI-assisted workbench make every important statement
+              about a difficult case inspectable, source-bound, and reversible?</strong>
+              The public site is a static, de-identified projection of prepared case packages.
+              Raw clinical documents, re-identification keys, licensed guideline corpora,
+              private audit logs, and the clinician acceptance service remain outside it.
+            </p>
+          </div>
+        </section>
+
+        <section class="section architecture" id="architecture">
+          <div class="section-kicker">02 · Architecture</div>
+          <div class="section-body">
+            <h2>A controlled graph, not a single linear pipeline</h2>
+            <p class="lead">
+              The figure describes trust dependencies. Recognition can reopen a targeted crop;
+              a reasoning candidate can generate a new evidence question; and an accepted
+              revision begins a new hash-pinned cycle. Colour identifies the authority of each
+              block, not its position in a simple job queue.
+            </p>
+
+            <figure class="architecture-figure">
+              <a href="diagrams/hematoboard-trace-system.svg">
+                <img
+                  src="diagrams/hematoboard-trace-system.svg"
+                  alt="HematoBoard architecture showing private source processing, canonical state, AI Agent reasoning, the highlighted dashboard output, and clinician review"
+                  loading="eager"
+                />
+              </a>
+              <figcaption>
+                <strong>Figure 1. Controlled HematoBoard architecture.</strong> Blue marks
+                deterministic control; indigo local model inference; purple AI Agent work;
+                amber hybrid verification; teal immutable state; green clinician authority;
+                muted blue the review surface; and coral the primary public output—the
+                read-only HematoBoard Dashboard. Select the figure to open the scalable SVG.
+              </figcaption>
+            </figure>
+
+            <ol class="architecture-notes">
+              <li><strong>Private intake</strong><span>Creates an isolated case workspace, inventories pages, preserves the original file, and records hashes and phase time.</span></li>
+              <li><strong>Apple Vision OCR</strong><span>Runs locally and returns recognized text, confidence, and word positions while the PDF remains the pixel source of truth.</span></li>
+              <li><strong>Structure and de-identification</strong><span>Reconstructs test, result, unit, comparator, and reference as strict JSON, then removes identifiers without losing row geometry.</span></li>
+              <li><strong>Source review</strong><span>Uses privacy-screened crops and bounded multimodal readers; consensus closes a field, disagreement reopens only that field.</span></li>
+              <li><strong>Accepted evidence ledger</strong><span>Stores canonical measurements, dates, findings, provenance, and immutable revisions. AI Agents may read it but cannot revise it.</span></li>
+              <li><strong>External evidence and synthesis</strong><span>Finds and verifies narrow propositions, then builds a separate candidate argument with explicit gaps and limitations.</span></li>
+              <li><strong>Projection closure</strong><span>Builds each page from ledger and candidate files and blocks review when the rendered document differs from those sources.</span></li>
+              <li><strong>Dashboard and clinician review</strong><span>The dashboard is the primary public output and remains read-only. A separate review surface records the responsible clinician’s decision.</span></li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="section surfaces" id="surfaces">
+          <div class="section-kicker">03 · Working surfaces</div>
+          <div class="section-body">
+            <h2>One case, three complementary readings</h2>
+            <div class="surface-grid">
+              <figure>
+                <a href="assets/research-preview/hematoboard-overview.png"><img src="assets/research-preview/hematoboard-overview.png" alt="HematoBoard case overview" /></a>
+                <figcaption><strong>Figure 2. Case overview.</strong> Accepted patient state, a clearly marked reasoning candidate, its unresolved limitation, and named verification steps.</figcaption>
+              </figure>
+              <figure>
+                <a href="assets/research-preview/hematoboard-timeline.png"><img src="assets/research-preview/hematoboard-timeline.png" alt="HematoBoard clinical timeline" /></a>
+                <figcaption><strong>Figure 3. Clinical timeline.</strong> Canonical dates and source records; undated findings stay outside chronology instead of receiving a guessed date.</figcaption>
+              </figure>
+              <figure>
+                <a href="assets/research-preview/hematoboard-graph.png"><img src="assets/research-preview/hematoboard-graph.png" alt="HematoBoard typed evidence graph" /></a>
+                <figcaption><strong>Figure 4. Typed evidence graph.</strong> Supporting, challenging, and contextual relations organise the argument; edge counts are not diagnostic probabilities.</figcaption>
+              </figure>
+            </div>
+            <p class="figure-note">
+              Screenshots use the de-identified public CASE-02 demonstrator and show the
+              Ukrainian interface. They belong to the public presentation layer; CASE006 and
+              its private source-review workspace are not published.
+            </p>
+          </div>
+        </section>
+
+        <section class="section" id="ledger">
+          <div class="section-kicker">04 · Ledger</div>
+          <div class="section-body split-copy">
+            <div>
+              <h2>The dashboard is a projection, not a second record</h2>
+              <p class="lead">
+                Canonical case state lives in a versioned evidence bundle. The public interface
+                is rebuilt from that bundle and one hash-pinned reasoning revision.
+              </p>
+              <p>
+                Accepted observations use stable identifiers and may carry document, page and
+                crop identity; source text; normalized result, unit, comparator, and reference
+                interval; date provenance; verification and privacy status; and links to
+                interpretations, hypotheses, and work-up questions.
+              </p>
+            </div>
+            <aside class="boundary-card">
+              <h3>Three states remain separate</h3>
+              <ol>
+                <li><strong>Accepted ledger</strong> — the current canonical patient facts.</li>
+                <li><strong>Reasoning candidate</strong> — immutable AI Agent interpretation awaiting review.</li>
+                <li><strong>Rendered dashboard</strong> — a read-only view that cannot create clinical truth.</li>
+              </ol>
+            </aside>
+          </div>
+        </section>
+
+        <section class="section" id="method">
+          <div class="section-kicker">05 · Source reconstruction</div>
+          <div class="section-body">
+            <h2>Reading difficult documents as measurement transfer</h2>
+            <div class="method-grid">
+              <article><span>01</span><h3>Local recognition</h3><p>Apple Vision runs on-device and returns strings, confidence, and bounding regions. Coordinates allow every field to reopen at its exact source location.</p></article>
+              <article><span>02</span><h3>Structure before de-identification</h3><p>Strict JSON binds a test name, result, unit, comparator, and reference interval to one row identity before unnecessary identifiers are removed.</p></article>
+              <article><span>03</span><h3>No silent correction</h3><p>Raw OCR stays immutable. A correction such as <code>ч</code> instead of <code>4</code> becomes a separate receipt linked to crop, page hash, reader, and time.</p></article>
+              <article><span>04</span><h3>Selective agent adjudication</h3><p>Bounded multimodal readers receive de-identified crops. Exact independent consensus may close a field; low confidence or disagreement creates a targeted exception.</p></article>
+            </div>
+            <blockquote>
+              Machine consensus is an auditable source-reading result. It is not a clinician’s
+              acceptance of a diagnosis, stage, or treatment indication.
+            </blockquote>
+          </div>
+        </section>
+
+        <section class="section" id="evidence">
+          <div class="section-kicker">06 · External evidence</div>
+          <div class="section-body split-copy">
+            <div>
+              <h2>Search ranking is not evidence</h2>
+              <p class="lead">
+                AI Agent discovery, deterministic source lookup, proposition verification, and
+                case applicability are distinct operations.
+              </p>
+              <p>
+                A proposition-level receipt records one exact clinical statement together with
+                source identity and version, page or section, evidence type, licence and model-use
+                status, case applicability, and reviewer. A PMID or guideline title alone cannot
+                establish concordance, diagnosis, stage, or treatment indication.
+              </p>
+            </div>
+            <div class="sequence" aria-label="Evidence acceptance sequence">
+              <span>AI Agent discovery</span><i aria-hidden="true">→</i>
+              <span>Deterministic lookup</span><i aria-hidden="true">→</i>
+              <span>Proposition verification</span><i aria-hidden="true">→</i>
+              <span>Applicability check</span><i aria-hidden="true">→</i>
+              <span>Ledger receipt</span>
+            </div>
+          </div>
+          <div class="section-body callout">
+            <p>
+              Prepared guideline corpora may use a case-local SQLite full-text index as a locator.
+              FTS does not judge whether a recommendation applies. Licensed text remains local
+              when its terms do not permit external model processing.
+            </p>
+          </div>
+        </section>
+
+        <section class="section" id="reasoning">
+          <div class="section-kicker">07 · AI Agent reasoning</div>
+          <div class="section-body">
+            <h2>A candidate argument with bounded authority</h2>
+            <p class="lead">
+              The AI Agent receives a minimum-necessary clinical projection. Raw PDFs, direct
+              identifiers, UI state, prior ranking, and clinician decisions are excluded from
+              the initial breadth pass.
+            </p>
+            <ol class="pass-list">
+              <li><span>Breadth</span><p>Generate plausible hypotheses and dangerous alternatives without inheriting the previous ranking.</p></li>
+              <li><span>Grounding</span><p>Connect every material claim to accepted observation identifiers and allowed external evidence.</p></li>
+              <li><span>Reconciliation</span><p>Expose contradictions, missing tissue or staging data, and evidence capable of changing the order.</p></li>
+              <li><span>Safety critic</span><p>Reject unsupported certainty, directive treatment language, stale inputs, broken provenance, and mixed accepted/candidate state.</p></li>
+            </ol>
+            <p>
+              The result is an immutable revision with its own input snapshot, method, comparison
+              to the previous revision, gaps, limitations, and audit chain. It cannot promote itself.
+            </p>
+          </div>
+        </section>
+
+        <section class="section equations" id="verification">
+          <div class="section-kicker">08 · Verification logic</div>
+          <div class="section-body">
+            <h2>Formal invariants used by the system</h2>
+            <p class="lead">These expressions describe implemented verification boundaries. They are not decorative clinical scores.</p>
+            <div class="equation-grid">
+              <article>
+                <h3>Field-level projection closure</h3>
+                <div class="formula" role="img" aria-label="Projection closure equals the mean of exact dashboard-to-ledger field matches">C<sub>proj</sub> = 1/(|O||F|) Σ<sub>o∈O</sub> Σ<sub>f∈F</sub> 𝟙[D(o,f) = L(o,f)]</div>
+                <p>Technical projection passes only when <em>C</em><sub>proj</sub> = 1, identifier sets are identical, and static analysis finds no case-specific clinical values embedded in page code.</p>
+              </article>
+              <article>
+                <h3>Reasoning freshness</h3>
+                <div class="formula" role="img" aria-label="Clinical input hash equals SHA-256 of the canonical clinical projection">h<sub>in</sub> = SHA-256(π<sub>clin</sub>(B))</div>
+                <p>A candidate is fresh only while its recorded input hash matches the current canonical clinical projection. A relevant bundle change makes it stale.</p>
+              </article>
+              <article>
+                <h3>Typed argument graph</h3>
+                <div class="formula" role="img" aria-label="Argument graph combines fact and hypothesis vertices with supporting, challenging, and contextual edges">G = (V<sub>F</sub> ∪ V<sub>H</sub>, E<sub>+</sub> ∪ E<sub>−</sub> ∪ E<sub>0</sub>)</div>
+                <p>The graph preserves an inspectable argument structure. It does not estimate a diagnostic probability.</p>
+              </article>
+              <article>
+                <h3>Promotion boundary</h3>
+                <div class="formula" role="img" aria-label="Promotion requires eligibility and a successful controlled transaction">Promote = (S ∧ P ∧ T ∧ H ∧ C) ∧ V<sub>tx</sub></div>
+                <p>Source closure, privacy, technical verification, unchanged input, clinician decision, and a valid atomic transaction are all required.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section safety" id="safety">
+          <div class="section-kicker">09 · Privacy and safety</div>
+          <div class="section-body">
+            <h2>Minimum-necessary data across a local-first boundary</h2>
+            <div class="safety-grid">
+              <ul>
+                <li>Raw PDFs, page renders, direct identifiers, and re-identification mappings stay in private case quarantine.</li>
+                <li>Apple Vision OCR runs locally; de-identification follows structured reconstruction.</li>
+                <li>A cloud AI Agent receives only an approved, de-identified projection or a tightly scoped cleared crop.</li>
+                <li>Licensed guidance remains local when external model processing is not permitted.</li>
+              </ul>
+              <ul>
+                <li>Adapters fail closed until isolation and data-boundary checks pass.</li>
+                <li>AI Agent outputs are candidates and cannot publish a case or impersonate a clinician decision.</li>
+                <li>Material transformations retain version, hash, operation, and responsible human or agent identity.</li>
+                <li>Local multimodal and language models are planned for evaluation under the same receipt contracts.</li>
+              </ul>
+            </div>
+            <p class="warning">
+              De-identification reduces disclosure risk; it is not proof of irreversible
+              anonymity. Institutional, legal, security, and ethics governance remain necessary.
+            </p>
+          </div>
+        </section>
+
+        <section class="section" id="sources">
+          <div class="section-kicker">10 · Sources and methods</div>
+          <div class="section-body table-wrap">
+            <h2>What enters the evidence environment</h2>
+            <table>
+              <thead><tr><th>Layer</th><th>Source families</th><th>Recorded control</th></tr></thead>
+              <tbody>
+                <tr><td>Patient record</td><td>Laboratory, pathology, imaging, procedures, clinical narrative</td><td>Document, page or crop, field structure, date, verification, privacy</td></tr>
+                <tr><td>Literature</td><td>PubMed, DOI records, peer-reviewed articles</td><td>Citation, evidence type, exact proposition, applicability, retrieval receipt</td></tr>
+                <tr><td>Guidelines</td><td>Official societies, classifications, institutional or licensed local PDFs</td><td>Edition, date, page or node, licence, model-use permission, review status</td></tr>
+                <tr><td>Provenance</td><td>Versioned JSON, SHA-256, immutable revisions, typed relations</td><td>Input/output identity, lineage, responsible agent, projection closure</td></tr>
+                <tr><td>Human authority</td><td>Source review and final clinician decision</td><td>Append-only acceptance, correction, rejection, or deferral</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section status" id="status">
+          <div class="section-kicker">11 · Research status</div>
+          <div class="section-body">
+            <h2>Controlled testing; clinical benefit not yet established</h2>
+            <p class="lead">
+              Current work evaluates source reconstruction, measurement transfer, evidence
+              traceability, reasoning freshness, projection closure, and clinician-facing review
+              ergonomics using prepared, de-identified case packages.
+            </p>
+            <p>
+              Formal external clinical validation, prospective effectiveness evaluation,
+              regulatory qualification, and deployment performance are not yet established.
+              Planned evaluation separates exact field transfer, provenance failures, appropriate
+              abstention, correction recovery, clinician review time, disagreement, and usability.
+              No single aggregate score will be treated as proof of clinical benefit.
+            </p>
+            <div class="code-soon">
+              <strong>Code coming soon</strong>
+              <p>The repository currently publishes the read-only demonstrator, de-identified example packages, diagrams, and release receipts. Reusable schemas, validators, and a sanitized reference pipeline are being prepared for a later release.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section references" id="references">
+          <div class="section-kicker">12 · References</div>
+          <div class="section-body">
+            <h2>Selected standards, methods, and clinical sources</h2>
+            <ol>
+              <li>Apple. (n.d.). <cite>Recognizing text in images</cite>. Apple Developer Documentation. <a href="https://developer.apple.com/documentation/vision/recognizing-text-in-images">developer.apple.com</a></li>
+              <li>Brouwers, M. C., et al. (2010). AGREE II: Advancing guideline development, reporting and evaluation in health care. <cite>Journal of Clinical Epidemiology, 63</cite>(12), 1308–1311. <a href="https://doi.org/10.1016/j.jclinepi.2010.07.001">https://doi.org/10.1016/j.jclinepi.2010.07.001</a></li>
+              <li>Campo, E., et al. (2022). The International Consensus Classification of Mature Lymphoid Neoplasms. <cite>Blood, 140</cite>(11), 1229–1253. <a href="https://doi.org/10.1182/blood.2022015851">https://doi.org/10.1182/blood.2022015851</a></li>
+              <li>d'Amore, F., et al. (2025). Peripheral T- and natural killer-cell lymphomas: ESMO–EHA Clinical Practice Guideline. <cite>Annals of Oncology, 36</cite>(6), 626–644. <a href="https://doi.org/10.1016/j.annonc.2025.01.023">https://doi.org/10.1016/j.annonc.2025.01.023</a></li>
+              <li>European Parliament &amp; Council of the European Union. (2016). <cite>Regulation (EU) 2016/679, Article 5</cite>. <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj">EUR-Lex</a></li>
+              <li>Gaube, S., et al. (2021). Do as AI say: Susceptibility in deployment of clinical decision-aids. <cite>npj Digital Medicine, 4</cite>, 31. <a href="https://doi.org/10.1038/s41746-021-00385-9">https://doi.org/10.1038/s41746-021-00385-9</a></li>
+              <li>National Institute of Standards and Technology. (2015). <cite>Secure Hash Standard (FIPS PUB 180-4)</cite>. <a href="https://doi.org/10.6028/NIST.FIPS.180-4">https://doi.org/10.6028/NIST.FIPS.180-4</a></li>
+              <li>Vasey, B., et al. (2022). Reporting guideline for early-stage clinical evaluation of AI decision support: DECIDE-AI. <cite>Nature Medicine, 28</cite>, 924–933. <a href="https://doi.org/10.1038/s41591-022-01772-9">https://doi.org/10.1038/s41591-022-01772-9</a></li>
+              <li>World Health Organization. (2021). <cite>Ethics and governance of artificial intelligence for health</cite>. <a href="https://www.who.int/publications/i/item/9789240029200">who.int</a></li>
+              <li>World Wide Web Consortium. (2013). <cite>PROV-O: The PROV Ontology</cite>. <a href="https://www.w3.org/TR/prov-o/">w3.org/TR/prov-o</a></li>
+            </ol>
+          </div>
+        </section>
+
+        <footer class="article-footer">
+          <div>
+            <strong>Eugene Sannikov</strong>
+            <p>System architecture, provenance method, AI Agent workflow, and interface research.</p>
+          </div>
+          <div>
+            <a href="https://orcid.org/0009-0008-9917-8461">ORCID 0009-0008-9917-8461</a>
+            <a href="https://github.com/esannikov/hematoboard">GitHub repository</a>
+          </div>
+        </footer>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      HematoBoard supports structured review and clinical discussion. Final clinical
+      responsibility remains with the treating team after review of the complete primary record.
+    </footer>
+  </body>
+</html>

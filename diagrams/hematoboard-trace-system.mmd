@@ -1,0 +1,64 @@
+flowchart LR
+  O["AGENTIC · AI AGENT ORCHESTRATOR<br/>Chooses permitted operations, calls tools and bounded agents, and records receipts.<br/>Cannot approve clinical facts or publish accepted state."]
+
+  subgraph L["PRIVATE SOURCE PROCESSING"]
+    A["DETERMINISTIC · PRIVATE INTAKE<br/>Isolates the case, inventories pages, preserves the original and records hashes."]
+    B["LOCAL MODEL · APPLE VISION OCR<br/>Reads text, confidence and word positions locally; the PDF remains pixel truth."]
+    C["DETERMINISTIC · STRUCTURE + DE-IDENTIFICATION<br/>Rebuilds table fields and removes identifiers without changing source geometry."]
+    D["HYBRID · SOURCE REVIEW<br/>Terra reads privacy-screened crops; exact consensus closes fields, disagreement reopens review."]
+    A --> B --> C --> D
+    D -. targeted correction .-> C
+  end
+
+  subgraph S["CANONICAL STATE + DETERMINISTIC CONTROL"]
+    E["STATE · ACCEPTED EVIDENCE LEDGER<br/>Canonical measurements, dates, findings and provenance; agents can only read it."]
+    I["DETERMINISTIC · PROJECTION + DOM CLOSURE<br/>Builds every view and blocks review if any rendered field differs from its source."]
+    V["PRIMARY PUBLIC OUTPUT · HEMATOBOARD DASHBOARD<br/>Shows accepted state and a separate candidate across overview, timeline and graph.<br/>Read-only: it never writes clinical state."]
+    K["STATE · ACCEPTED REVISION<br/>Stores approved changes as a new hash-pinned state; dependent reasoning becomes stale."]
+    I -->|publish view| V
+  end
+
+  subgraph R["AGENTIC REASONING + EVIDENCE"]
+    X["SOURCE · EXTERNAL EVIDENCE<br/>Finds literature and guidance for narrow questions with version, location, licence and scope."]
+    F["HYBRID · EVIDENCE REVIEW<br/>Checks what the source states and whether it applies; a search hit alone is not evidence."]
+    G["AGENTIC · CONTROLLED AI AGENT SYNTHESIS<br/>Builds and challenges a candidate argument from accepted facts and reviewed evidence."]
+    H["STATE · IMMUTABLE CANDIDATE<br/>Write-once hypotheses, evidence links, gaps and next questions; never overwrites the ledger."]
+    X --> F --> G --> H
+    H -. new evidence question .-> F
+  end
+
+  subgraph U["PRESENTATION + CLINICIAN REVIEW"]
+    W["SURFACE · CLINICIAN REVIEW APP<br/>Opens source-linked candidate changes and records review actions."]
+    J["HUMAN · CLINICIAN DECISION<br/>Only the responsible clinician can accept, correct, reject or defer changes."]
+    N["STATE · DEFER / REJECT<br/>Preserves candidate and rationale for audit without changing accepted state."]
+    W --> J
+    J -->|defer or reject| N
+  end
+
+  P["DETERMINISTIC · APPEND-ONLY RECEIPT PLANE<br/>Records hashes, privacy checks, agent results, tool actions and time; history is never rewritten."]
+
+  D --> E
+  E --> G
+  H --> I
+  I -->|open review| W
+  J -->|accept or correct| K
+  K -. new hash-pinned cycle .-> E
+
+  classDef deterministic fill:#edf6ff,stroke:#2f78bb,color:#171717;
+  classDef model fill:#eef0ff,stroke:#5367b8,color:#171717;
+  classDef agentic fill:#f4effb,stroke:#7650aa,color:#171717;
+  classDef hybrid fill:#fff7e8,stroke:#b87700,color:#171717;
+  classDef state fill:#eef8f6,stroke:#16857b,color:#171717;
+  classDef human fill:#eef8ea,stroke:#2c8835,color:#171717;
+  classDef source fill:#f4f5f6,stroke:#66707b,color:#171717;
+  classDef surface fill:#eff6fb,stroke:#527a9f,color:#171717;
+  classDef dashboard fill:#fff2e8,stroke:#d94700,stroke-width:4px,color:#8f2d00;
+  class A,C,I,P deterministic;
+  class B model;
+  class O,G agentic;
+  class D,F hybrid;
+  class E,H,K,N state;
+  class J human;
+  class X source;
+  class W surface;
+  class V dashboard;
