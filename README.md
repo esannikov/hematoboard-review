@@ -41,7 +41,7 @@ interpretation, a working hypothesis and an accepted clinical revision.
   <sub><strong>Figure 1.</strong> HematoBoard controlled architecture. Blue marks deterministic control; indigo local model inference; purple AI Agent work; amber hybrid verification; teal immutable state; green clinician authority; muted blue the review surface; and coral the primary system output—the read-only HematoBoard Dashboard. Feedback paths create new receipts and revisions while preserving earlier history.</sub>
 </p>
 
-<p align="center"><a href="https://raw.githubusercontent.com/esannikov/hematoboard/main/diagrams/hematoboard-trace-system.png">Open full-size PNG</a> · <a href="https://raw.githubusercontent.com/esannikov/hematoboard/main/diagrams/hematoboard-trace-system.svg">Open scalable SVG</a></p>
+<p align="center"><a href="https://raw.githubusercontent.com/esannikov/hematoboard-review/main/diagrams/hematoboard-trace-system.png">Open full-size PNG</a> · <a href="https://raw.githubusercontent.com/esannikov/hematoboard-review/main/diagrams/hematoboard-trace-system.svg">Open scalable SVG</a></p>
 
 The map is intentionally non-linear. Source review can reopen one bounded crop.
 A reasoning candidate can generate a new evidence question. An accepted
