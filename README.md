@@ -90,8 +90,8 @@ Candidate reasoning is stored in a separate immutable revision with a hash of
 the clinical projection it received.
 
 This separation gives the dashboard a precise role. The interface is the
-primary public output of the system and a read-only projection of accepted data
-and candidate reasoning. It has no authority to create a clinical fact, alter a
+primary presentation output of the system and a read-only projection of
+accepted data and candidate reasoning. It has no authority to create a clinical fact, alter a
 source receipt or record a clinician decision. A separate clinician review
 surface opens proposed changes together with their supporting records. Accepted
 changes create a new hash-pinned ledger revision and preserve the earlier state.
