@@ -40,7 +40,7 @@ clinical revision.
 
 <p align="center">
   <a href="diagrams/hematoboard-trace-system.svg">
-    <img src="diagrams/hematoboard-trace-system.png" width="900" alt="HematoBoard protocol 2.0 architecture: one router and CaseScope, private intake, accepted ledger, four controlled synthesis passes, method self-check, immutable candidate, detached projection and clinician-only promotion">
+    <img src="diagrams/hematoboard-trace-system.png" width="900" alt="HematoBoard workflow: private document checks, one accepted case record, four recorded analysis passes, dashboard verification and clinician-only approval">
   </a>
   <br>
   <sub><strong>Figure 1.</strong> HematoBoard controlled architecture under synthesis protocol 2.0. One router resolves the CaseScope and allowed mode. Four separately hashed reasoning passes precede a fail-closed method check and immutable candidate. Projection is verified in a detached step; the Material dashboard remains read-only, and only a recorded clinician decision can create a new accepted revision.</sub>

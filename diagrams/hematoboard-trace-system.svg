@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="2100" viewBox="0 0 1440 2100" role="img" aria-labelledby="title desc">
   <title id="title">HematoBoard controlled synthesis protocol 2.0 architecture</title>
-  <desc id="desc">One HematoBoard router resolves a CaseScope and one explicit mode: view, intake, data revision, source review, evidence review, controlled synthesis, projection, clinician review or audit. Private intake and source review produce an accepted evidence ledger. Exact-hash admission controls the external evidence available to an agent. Four separately recorded passes—breadth, grounding, reconciliation and independent critique—feed a deterministic method-conformance gate. A complete immutable candidate is published before a detached projection check. Patient-source links resolve by case and observation to an exact PDF page and highlighted region inside the private clinician viewer. The Material dashboard remains read-only. Only a recorded clinician decision can promote a new accepted revision.</desc>
+  <desc id="desc">HematoBoard receives a case request and sends it through one controlled process. Patient documents stay private while text, tables and source locations are checked. The system then creates a clean analysis input, verifies the method and allowed medical sources, and runs four recorded reasoning passes. A separate check confirms that the process was followed before a read-only candidate is shown in the dashboard. The clinician can open the exact source page for each proposed change and is the only person who can approve a new accepted version.</desc>
 
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto">
@@ -65,180 +65,192 @@
   <!-- One operational entry point and one case identity. -->
   <rect x="50" y="68" width="1340" height="150" rx="24" class="node router"/>
   <rect x="70" y="86" width="92" height="22" rx="11" class="routerBadge"/>
-  <text x="116" y="102" class="badgeText">ONE ROUTER</text>
-  <text x="720" y="130" class="nodeTitle">HEMATOBOARD ROUTER + CASESCOPE</text>
-  <text x="720" y="155" class="nodeCopy">Binds mode, case key, case ID, bundle hash, revision and operation ID.</text>
-  <text x="720" y="180" class="nodeCopySmall">view · intake · data_revision · source_review · evidence_review · controlled_synthesis · projection · clinician_review · audit</text>
-  <text x="720" y="202" class="nodeCopySmall">It can orchestrate work; it cannot approve clinical truth or promote accepted state.</text>
+  <text x="116" y="102" class="badgeText">ONE ENTRY</text>
+  <text x="720" y="130" class="nodeTitle">CASE ROUTER</text>
+  <text x="720" y="158" class="nodeCopy">Receives a request, identifies the case and sends the work to the right module.</text>
+  <text x="720" y="183" class="nodeCopySmall">It records the exact case version used for every operation.</text>
+  <text x="720" y="204" class="nodeCopySmall">It coordinates the process but cannot approve a clinical conclusion.</text>
 
   <!-- Three authority regions. -->
   <rect x="45" y="230" width="430" height="565" rx="22" class="region privateRegion"/>
-  <text x="260" y="264" class="regionTitle" fill="#2f78bb">PRIVATE SOURCE PROCESSING</text>
-  <text x="260" y="287" class="regionCopy">Raw material stays local; only verified de-identified structure crosses the boundary</text>
+  <text x="260" y="264" class="regionTitle" fill="#2f78bb">PRIVATE CASE DOCUMENTS</text>
+  <text x="260" y="282" class="regionCopy">Documents stay local while their text, tables</text>
+  <text x="260" y="301" class="regionCopy">and source locations are checked</text>
 
   <rect x="505" y="230" width="420" height="565" rx="22" class="region stateRegion"/>
-  <text x="715" y="264" class="regionTitle" fill="#087c73">ACCEPTED CLINICAL STATE</text>
-  <text x="715" y="287" class="regionCopy">One versioned evidence ledger; no agent-owned clinical canon</text>
+  <text x="715" y="264" class="regionTitle" fill="#087c73">ACCEPTED CASE RECORD</text>
+  <text x="715" y="287" class="regionCopy">The current accepted facts are kept here as one versioned record</text>
 
   <rect x="955" y="230" width="440" height="565" rx="22" class="region protocolRegion"/>
-  <text x="1175" y="264" class="regionTitle" fill="#6750a4">METHOD + EXTERNAL EVIDENCE</text>
-  <text x="1175" y="287" class="regionCopy">Versioned protocol, reviewed sources and deterministic self-check</text>
+  <text x="1175" y="264" class="regionTitle" fill="#6750a4">METHOD AND MEDICAL SOURCES</text>
+  <text x="1175" y="282" class="regionCopy">The method and allowed external sources are checked</text>
+  <text x="1175" y="301" class="regionCopy">before analysis begins</text>
 
   <!-- Private source path. -->
   <rect x="70" y="315" width="380" height="120" rx="12" class="node controlNode"/>
   <rect x="88" y="331" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="140" y="347" class="badgeText">DETERMINISTIC</text>
-  <text x="260" y="382" class="nodeTitle">PRIVATE INTAKE</text>
-  <text x="260" y="410" class="nodeCopy">Inventory, source hashes, page identity and phase receipts.</text>
+  <text x="140" y="347" class="badgeText">RULE-BASED</text>
+  <text x="260" y="382" class="nodeTitle">REGISTER DOCUMENTS</text>
+  <text x="260" y="407" class="nodeCopy">Registers every file and page and creates a</text>
+  <text x="260" y="428" class="nodeCopySmall">digital fingerprint so later checks use the same material.</text>
 
   <rect x="70" y="475" width="380" height="120" rx="12" class="node controlNode"/>
   <rect x="88" y="491" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="140" y="507" class="badgeText">LOCAL + RULED</text>
-  <text x="260" y="542" class="nodeTitle">OCR + STRUCTURE</text>
-  <text x="260" y="570" class="nodeCopy">Text, geometry and typed rows retain exact source addresses.</text>
+  <text x="140" y="507" class="badgeText">LOCAL</text>
+  <text x="260" y="542" class="nodeTitle">READ TEXT AND TABLES</text>
+  <text x="260" y="567" class="nodeCopy">Reads each page while keeping the exact</text>
+  <text x="260" y="588" class="nodeCopySmall">position of every word, value and table cell.</text>
 
   <rect x="70" y="635" width="380" height="140" rx="12" class="node hybridNode"/>
   <rect x="88" y="651" width="72" height="22" rx="11" class="hybridBadge"/>
-  <text x="124" y="667" class="badgeText">HYBRID</text>
-  <text x="260" y="700" class="nodeTitle">DE-IDENTIFY + SOURCE REVIEW</text>
-  <text x="260" y="728" class="nodeCopy">Privacy, field consensus and targeted human exceptions.</text>
-  <text x="260" y="751" class="nodeCopySmall">Source links resolve through case_id + observation_id.</text>
-  <text x="260" y="770" class="nodeCopySmall">Raw PDFs, identifiers and licensed text remain private.</text>
+  <text x="124" y="667" class="badgeText">CHECKED</text>
+  <text x="260" y="700" class="nodeTitle">DE-IDENTIFY AND VERIFY</text>
+  <text x="260" y="726" class="nodeCopy">Removes identifying details and checks that</text>
+  <text x="260" y="748" class="nodeCopySmall">clinical values still match the original page.</text>
+  <text x="260" y="770" class="nodeCopySmall">Original files never leave the private system.</text>
 
   <!-- Accepted state and controlled input. -->
   <rect x="530" y="315" width="370" height="150" rx="12" class="node stateNode"/>
   <rect x="548" y="331" width="66" height="22" rx="11" class="stateBadge"/>
-  <text x="581" y="347" class="badgeText">STATE</text>
-  <text x="715" y="382" class="nodeTitle">ACCEPTED EVIDENCE LEDGER</text>
-  <text x="715" y="412" class="nodeCopy">Versioned observations, facts, dates and provenance.</text>
-  <text x="715" y="438" class="nodeCopySmall">Canonical case_bundle.json · clinician authority preserved.</text>
+  <text x="581" y="347" class="badgeText">ACCEPTED</text>
+  <text x="715" y="382" class="nodeTitle">CURRENT CASE RECORD</text>
+  <text x="715" y="410" class="nodeCopy">Stores the facts, dates and source links that</text>
+  <text x="715" y="433" class="nodeCopySmall">have passed review. The agent cannot replace this record.</text>
 
   <rect x="530" y="515" width="370" height="150" rx="12" class="node controlNode"/>
   <rect x="548" y="531" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="600" y="547" class="badgeText">DETERMINISTIC</text>
-  <text x="715" y="582" class="nodeTitle">FRESHNESS + BREADTH INPUT</text>
-  <text x="715" y="612" class="nodeCopy">Pins the clinical input hash and builds a shielded projection.</text>
-  <text x="715" y="638" class="nodeCopySmall">Excludes prior H#, ranks, relations, work-up, interpretations and literature.</text>
+  <text x="600" y="547" class="badgeText">RULE-BASED</text>
+  <text x="715" y="582" class="nodeTitle">PREPARE A FRESH ANALYSIS</text>
+  <text x="715" y="610" class="nodeCopy">Creates a clean copy of the current case.</text>
+  <text x="715" y="634" class="nodeCopySmall">Earlier hypotheses and conclusions are hidden.</text>
+  <text x="715" y="654" class="nodeCopySmall">They cannot bias the new analysis.</text>
 
   <rect x="530" y="705" width="370" height="60" rx="12" class="node stateNode"/>
-  <text x="715" y="742" class="nodeCopy">Any accepted change makes the prior candidate stale.</text>
+  <text x="715" y="731" class="nodeCopy">If the accepted case record changes,</text>
+  <text x="715" y="753" class="nodeCopySmall">the existing analysis is marked out of date.</text>
 
   <!-- Protocol and evidence controls. -->
   <rect x="980" y="315" width="390" height="130" rx="12" class="node agentNode"/>
   <rect x="998" y="331" width="82" height="22" rx="11" class="agentBadge"/>
-  <text x="1039" y="347" class="badgeText">PROTOCOL</text>
-  <text x="1175" y="382" class="nodeTitle">SYNTHESIS PROTOCOL 2.0</text>
-  <text x="1175" y="411" class="nodeCopy">Declares pass order, schemas, required files and gates.</text>
-  <text x="1175" y="433" class="nodeCopySmall">One canonical skill · one runner · one publisher.</text>
+  <text x="1039" y="347" class="badgeText">METHOD</text>
+  <text x="1175" y="382" class="nodeTitle">ANALYSIS METHOD</text>
+  <text x="1175" y="409" class="nodeCopy">Defines the four analysis passes, required</text>
+  <text x="1175" y="432" class="nodeCopySmall">outputs and checks. Every case uses the same versioned process.</text>
 
   <rect x="980" y="485" width="390" height="130" rx="12" class="node controlNode"/>
   <rect x="998" y="501" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="1050" y="517" class="badgeText">SELF-CHECK</text>
-  <text x="1175" y="552" class="nodeTitle">METHOD READINESS</text>
-  <text x="1175" y="581" class="nodeCopy">Validates router, protocol, schemas, tools and CaseScope.</text>
-  <text x="1175" y="603" class="nodeCopySmall">A failed check blocks synthesis before an agent pass starts.</text>
+  <text x="1050" y="517" class="badgeText">PRE-FLIGHT</text>
+  <text x="1175" y="552" class="nodeTitle">CHECK READINESS</text>
+  <text x="1175" y="579" class="nodeCopy">Checks that the case, tools, method and</text>
+  <text x="1175" y="602" class="nodeCopySmall">required files agree. Analysis cannot start if anything is missing.</text>
 
-  <rect x="980" y="645" width="390" height="130" rx="12" class="node sourceNode"/>
+  <rect x="980" y="645" width="390" height="140" rx="12" class="node sourceNode"/>
   <rect x="998" y="661" width="72" height="22" rx="11" class="sourceBadge"/>
-  <text x="1034" y="677" class="badgeText">SOURCES</text>
-  <text x="1175" y="708" class="nodeTitle">ADMITTED EVIDENCE CORPUS</text>
-  <text x="1175" y="735" class="nodeCopy">Exact hashes · agent_context_allowed · stable E-CAND IDs.</text>
-  <text x="1175" y="758" class="nodeCopySmall">Licensed NCCN requires an operator authorization receipt.</text>
+  <text x="1034" y="677" class="badgeText">ALLOWED</text>
+  <text x="1175" y="705" class="nodeTitle">MEDICAL EVIDENCE LIBRARY</text>
+  <text x="1175" y="730" class="nodeCopy">Makes only checked, unchanged sources</text>
+  <text x="1175" y="752" class="nodeCopySmall">available to the agent. Licensed guidelines</text>
+  <text x="1175" y="773" class="nodeCopySmall">are used only with recorded permission.</text>
 
   <!-- Explicit four-pass synthesis. -->
   <rect x="45" y="835" width="1350" height="285" rx="22" class="region reasonRegion"/>
-  <rect x="535" y="817" width="370" height="36" rx="18" class="entryGate"/>
-  <text x="720" y="840" class="entryGateText">FRESH INPUT + METHOD PASS + ADMITTED EVIDENCE</text>
-  <text x="720" y="872" class="regionTitle" fill="#6750a4">FOUR SEPARATELY RECORDED REASONING PASSES</text>
-  <text x="720" y="895" class="regionCopy">Each receipt records input/output hashes, execution identity, prompt hash, tools, budget and events</text>
+  <rect x="420" y="817" width="600" height="36" rx="18" class="entryGate"/>
+  <text x="720" y="840" class="entryGateText">ANALYSIS STARTS ONLY WHEN THE CASE, METHOD AND SOURCES ARE READY</text>
+  <text x="720" y="872" class="regionTitle" fill="#6750a4">FOUR RECORDED ANALYSIS PASSES</text>
+  <text x="720" y="895" class="regionCopy">Each pass saves what it received, what it produced, which tools it used and how long it took</text>
 
-  <rect x="70" y="925" width="290" height="155" rx="14" class="node agentNode"/>
+  <rect x="70" y="925" width="290" height="175" rx="14" class="node agentNode"/>
   <rect x="88" y="941" width="82" height="22" rx="11" class="agentBadge"/>
   <text x="129" y="957" class="badgeText">PASS 1</text>
-  <text x="215" y="995" class="nodeTitle">BREADTH</text>
-  <text x="215" y="1024" class="nodeCopy">Wide differential, must-not-miss</text>
+  <text x="215" y="995" class="nodeTitle">BUILD THE DIFFERENTIAL</text>
+  <text x="215" y="1024" class="nodeCopy">Lists plausible diagnoses, urgent</text>
   <text x="215" y="1047" class="nodeCopy">alternatives and open questions.</text>
-  <text x="215" y="1068" class="nodeCopySmall">No old synthesis or external literature.</text>
+  <text x="215" y="1068" class="nodeCopySmall">It cannot see the previous analysis</text>
+  <text x="215" y="1088" class="nodeCopySmall">or external medical sources.</text>
 
-  <rect x="405" y="925" width="290" height="155" rx="14" class="node agentNode"/>
+  <rect x="405" y="925" width="290" height="175" rx="14" class="node agentNode"/>
   <rect x="423" y="941" width="82" height="22" rx="11" class="agentBadge"/>
   <text x="464" y="957" class="badgeText">PASS 2</text>
-  <text x="550" y="995" class="nodeTitle">GROUNDING</text>
-  <text x="550" y="1024" class="nodeCopy">Narrow questions, accepted and</text>
-  <text x="550" y="1047" class="nodeCopy">rejected sources, claim mappings.</text>
-  <text x="550" y="1068" class="nodeCopySmall">Final search round must prove saturation.</text>
+  <text x="550" y="995" class="nodeTitle">CHECK THE EVIDENCE</text>
+  <text x="550" y="1024" class="nodeCopy">Tests each question against allowed</text>
+  <text x="550" y="1047" class="nodeCopy">medical sources and records the result.</text>
+  <text x="550" y="1068" class="nodeCopySmall">The search ends when a final round</text>
+  <text x="550" y="1088" class="nodeCopySmall">finds no new useful source.</text>
 
-  <rect x="740" y="925" width="290" height="155" rx="14" class="node agentNode"/>
+  <rect x="740" y="925" width="290" height="175" rx="14" class="node agentNode"/>
   <rect x="758" y="941" width="82" height="22" rx="11" class="agentBadge"/>
   <text x="799" y="957" class="badgeText">PASS 3</text>
-  <text x="885" y="995" class="nodeTitle">RECONCILIATION</text>
-  <text x="885" y="1024" class="nodeCopy">Maps every old and new H#:</text>
-  <text x="885" y="1047" class="nodeCopy">retain, add, merge, rerank, deactivate.</text>
-  <text x="885" y="1068" class="nodeCopySmall">Identifiers are never silently reassigned.</text>
+  <text x="885" y="995" class="nodeTitle">COMPARE AND UPDATE</text>
+  <text x="885" y="1024" class="nodeCopy">Compares the new result with earlier</text>
+  <text x="885" y="1047" class="nodeCopy">hypotheses and records every change.</text>
+  <text x="885" y="1068" class="nodeCopySmall">A hypothesis identifier is never</text>
+  <text x="885" y="1088" class="nodeCopySmall">silently reused.</text>
 
-  <rect x="1075" y="925" width="290" height="155" rx="14" class="node agentNode"/>
+  <rect x="1075" y="925" width="290" height="175" rx="14" class="node agentNode"/>
   <rect x="1093" y="941" width="82" height="22" rx="11" class="agentBadge"/>
   <text x="1134" y="957" class="badgeText">PASS 4</text>
-  <text x="1220" y="995" class="nodeTitle">INDEPENDENT CRITIC</text>
-  <text x="1220" y="1024" class="nodeCopy">Tests anchoring, closure, weak evidence,</text>
-  <text x="1220" y="1047" class="nodeCopy">missing alternatives and overclaiming.</text>
-  <text x="1220" y="1068" class="nodeCopySmall">Distinct execution; critical issues block finalize.</text>
+  <text x="1220" y="995" class="nodeTitle">INDEPENDENT REVIEW</text>
+  <text x="1220" y="1024" class="nodeCopy">A separate agent looks for missed</text>
+  <text x="1220" y="1047" class="nodeCopy">diagnoses, weak evidence and overclaiming.</text>
+  <text x="1220" y="1068" class="nodeCopySmall">A critical problem blocks publication.</text>
 
   <!-- Method gate, immutable candidate and detached projection. -->
   <rect x="160" y="1165" width="1120" height="135" rx="18" class="node controlNode"/>
   <rect x="180" y="1181" width="118" height="22" rx="11" class="controlBadge"/>
-  <text x="239" y="1197" class="badgeText">METHOD GATE</text>
-  <text x="720" y="1227" class="nodeTitle">FAIL-CLOSED METHOD CONFORMANCE</text>
-  <text x="720" y="1256" class="nodeCopy">Checks exact pass order, files, hashes, saturation, source coverage, critic independence and unresolved critical issues.</text>
-  <text x="720" y="1280" class="nodeCopySmall">Boolean claims alone do not establish that the method ran.</text>
+  <text x="239" y="1197" class="badgeText">FINAL CHECK</text>
+  <text x="720" y="1227" class="nodeTitle">VERIFY THE ANALYSIS PROCESS</text>
+  <text x="720" y="1255" class="nodeCopy">Confirms that all four passes ran in order, used the required material and resolved every critical issue.</text>
+  <text x="720" y="1280" class="nodeCopySmall">A PASS label is not enough: the recorded work must prove that the method was followed.</text>
 
   <rect x="70" y="1350" width="600" height="150" rx="18" class="node stateNode"/>
   <rect x="90" y="1366" width="66" height="22" rx="11" class="stateBadge"/>
-  <text x="123" y="1382" class="badgeText">STATE</text>
-  <text x="370" y="1418" class="nodeTitle">IMMUTABLE CANDIDATE REVISION</text>
-  <text x="370" y="1448" class="nodeCopy">Input snapshots · four pass receipts · candidate draft · manifest · audit chain.</text>
-  <text x="370" y="1474" class="nodeCopySmall">Write-once and candidate-only; never overwrites the accepted ledger.</text>
+  <text x="123" y="1382" class="badgeText">CANDIDATE</text>
+  <text x="370" y="1418" class="nodeTitle">SAVE A NEW CANDIDATE</text>
+  <text x="370" y="1446" class="nodeCopy">Saves the complete analysis as a read-only</text>
+  <text x="370" y="1471" class="nodeCopySmall">candidate. It never overwrites the accepted case record.</text>
 
   <rect x="770" y="1350" width="600" height="150" rx="18" class="node controlNode"/>
   <rect x="790" y="1366" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="842" y="1382" class="badgeText">DETACHED</text>
-  <text x="1070" y="1418" class="nodeTitle">PROJECTION + DOM CLOSURE</text>
-  <text x="1070" y="1448" class="nodeCopy">Static source-of-truth test and real-browser audit after candidate publication.</text>
-  <text x="1070" y="1474" class="nodeCopySmall">Receipt binds candidate and build hashes; failure cannot rewrite the run.</text>
+  <text x="842" y="1382" class="badgeText">DISPLAY CHECK</text>
+  <text x="1070" y="1418" class="nodeTitle">CHECK THE DASHBOARD</text>
+  <text x="1070" y="1446" class="nodeCopy">Opens the published candidate in a real browser</text>
+  <text x="1070" y="1468" class="nodeCopySmall">and checks that every fact, hypothesis, source link and gap appears.</text>
+  <text x="1070" y="1488" class="nodeCopySmall">A display failure cannot change the saved candidate.</text>
 
   <!-- Human-facing destinations and authority. -->
   <rect x="45" y="1545" width="1350" height="390" rx="22" fill="#fbfcfd" stroke="#b7c6d5" stroke-width="1.8"/>
-  <text x="720" y="1582" class="regionTitle" fill="#4e779d">PRESENTATION + CLINICIAN AUTHORITY</text>
-  <text x="720" y="1605" class="regionCopy">The dashboard displays; the review application records; only the clinician decides</text>
+  <text x="720" y="1582" class="regionTitle" fill="#4e779d">DISPLAY AND CLINICIAN REVIEW</text>
+  <text x="720" y="1605" class="regionCopy">The dashboard explains the case, the review app records decisions, and only the clinician approves changes</text>
 
   <rect x="70" y="1640" width="380" height="145" rx="18" class="node dashboardNode"/>
   <rect x="88" y="1656" width="104" height="22" rx="11" class="agentBadge"/>
-  <text x="140" y="1672" class="badgeText">READ-ONLY</text>
-  <text x="260" y="1707" class="nodeTitle">MATERIAL DASHBOARD</text>
-  <text x="260" y="1737" class="nodeCopy">Accepted ledger + visibly separate candidate.</text>
-  <text x="260" y="1761" class="nodeCopySmall">Overview · Timeline · Graph · Data · Gaps</text>
+  <text x="140" y="1672" class="badgeText">READ ONLY</text>
+  <text x="260" y="1707" class="nodeTitle">CASE DASHBOARD</text>
+  <text x="260" y="1735" class="nodeCopy">Shows the accepted case and clearly labels</text>
+  <text x="260" y="1758" class="nodeCopySmall">the new candidate. It cannot change clinical data.</text>
 
   <rect x="530" y="1640" width="380" height="145" rx="18" class="node surfaceNode"/>
   <rect x="548" y="1656" width="76" height="22" rx="11" class="surfaceBadge"/>
   <text x="586" y="1672" class="badgeText">REVIEW</text>
-  <text x="720" y="1707" class="nodeTitle">CLINICIAN REVIEW APP</text>
-  <text x="720" y="1737" class="nodeCopy">Opens candidate changes with exact sources and limits.</text>
-  <text x="720" y="1761" class="nodeCopySmall">case_id + observation_id → PDF page + highlighted bbox.</text>
+  <text x="720" y="1707" class="nodeTitle">SOURCE REVIEW</text>
+  <text x="720" y="1735" class="nodeCopy">Lets the clinician compare every proposed change</text>
+  <text x="720" y="1758" class="nodeCopySmall">with the exact PDF page and highlighted source area.</text>
 
   <rect x="990" y="1640" width="380" height="145" rx="18" class="node humanNode"/>
   <rect x="1008" y="1656" width="72" height="22" rx="11" class="humanBadge"/>
-  <text x="1044" y="1672" class="badgeText">HUMAN</text>
+  <text x="1044" y="1672" class="badgeText">CLINICIAN</text>
   <text x="1180" y="1707" class="nodeTitle">CLINICIAN DECISION</text>
-  <text x="1180" y="1737" class="nodeCopy">Accept · correct · reject · defer.</text>
-  <text x="1180" y="1761" class="nodeCopySmall">Only a recorded action can promote accepted state.</text>
+  <text x="1180" y="1735" class="nodeCopy">Accepts, corrects, rejects or postpones</text>
+  <text x="1180" y="1758" class="nodeCopySmall">a proposed change. Only this decision can update the case.</text>
 
   <rect x="285" y="1825" width="410" height="90" rx="16" class="node stateNode"/>
-  <text x="490" y="1861" class="nodeTitle">NEW ACCEPTED REVISION</text>
-  <text x="490" y="1890" class="nodeCopySmall">Parent hash preserved; dependent reasoning becomes stale.</text>
+  <text x="490" y="1858" class="nodeTitle">CREATE AN ACCEPTED VERSION</text>
+  <text x="490" y="1883" class="nodeCopySmall">Saves the approved changes and marks</text>
+  <text x="490" y="1904" class="nodeCopySmall">dependent analysis as out of date.</text>
 
   <rect x="745" y="1825" width="410" height="90" rx="16" class="node sourceNode"/>
-  <text x="950" y="1861" class="nodeTitle">REJECT / DEFER</text>
-  <text x="950" y="1890" class="nodeCopySmall">Candidate, evidence and rationale remain in audit history.</text>
+  <text x="950" y="1861" class="nodeTitle">REJECT OR POSTPONE</text>
+  <text x="950" y="1888" class="nodeCopySmall">Keeps the candidate, evidence and reason in the audit history.</text>
 
   <!-- Primary dependencies. -->
   <path d="M260 435 V470" class="flow"/>
@@ -258,12 +270,12 @@
   <path d="M1115 1785 V1805 H490 V1820" class="flowGreen"/>
   <path d="M1245 1785 V1805 H950 V1820" class="flow"/>
   <path d="M285 1870 H20 V131 H45" class="loop"/>
-  <text x="34" y="1120" class="flowLabel" fill="#087c73" transform="rotate(-90 34 1120)">new hash-pinned cycle</text>
+  <text x="34" y="1120" class="flowLabel" fill="#087c73" transform="rotate(-90 34 1120)">start a new checked cycle</text>
 
   <!-- Cross-cutting receipt plane. -->
   <rect x="50" y="1960" width="1340" height="105" rx="18" class="node controlNode"/>
   <rect x="70" y="1976" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="122" y="1992" class="badgeText">APPEND-ONLY</text>
-  <text x="720" y="2018" class="nodeTitle">RECEIPT PLANE</text>
-  <text x="720" y="2047" class="nodeCopy">CaseScope · protocol · input/output hashes · prompts · models · tools · privacy · decisions · phase time</text>
+  <text x="122" y="1992" class="badgeText">APPEND ONLY</text>
+  <text x="720" y="2018" class="nodeTitle">AUDIT LOG</text>
+  <text x="720" y="2047" class="nodeCopy">Records the case, method, inputs, outputs, prompts, tools, privacy checks, decisions and time used at every step.</text>
 </svg>
