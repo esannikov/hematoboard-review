@@ -91,6 +91,13 @@ without a reliable clinical date. The graph exposes typed fact-to-hypothesis
 relations without compressing them into an opaque probability. Together they
 provide three readings of the same hash-pinned material.
 
+The current reference release contains 58 source-linked observations, 11
+admitted external evidence records, nine explicit gaps and a 3:14 Ukrainian
+audio briefing for pre-consilium review. It is pinned to reasoning revision
+`RR-CASE006-3d72544bd826`; the candidate remains pending clinician review. The
+exact bundle, reasoning, projection and dashboard-build hashes are recorded in
+the [public artifact manifest](./diagrams/manifest.json).
+
 ## Clinical reasoning as a provenance problem
 
 A difficult hematology case often spans several institutions, laboratories,
@@ -120,6 +127,15 @@ fact, alter a source receipt or record a clinician decision. A separate
 clinician review surface opens proposed changes together with their supporting
 records. Accepted changes create a new hash-pinned ledger revision and preserve
 the earlier state.
+
+Every visible patient-record address uses one case-agnostic navigation
+contract: `case_id + observation_id`. In the public demonstrator it opens the
+corresponding de-identified structured record. In the controlled clinical
+workspace the same action opens an adjacent private viewer at the exact
+hash-verified PDF page and highlights the recorded bounding box. Raw patient
+PDFs never enter the public build. External `E#` and `E-CAND-*` references use
+validated HTTP(S) destinations or remain inside their licensed local evidence
+contour; they are never routed as patient documents.
 
 The resulting architecture is close to the entity–activity–agent logic of W3C
 PROV-O, adapted to a smaller clinical contract. The central objects are source
@@ -233,7 +249,8 @@ source correction, evidence questions and revised accepted states.
    or evidence corpus.
 8. **Run grounding.** Narrow questions guide retrieval from PubMed, DOI records,
    professional societies, classifications and permitted local guideline
-   corpora. Accepted and rejected sources, proposition mappings, applicability
+   corpora. An agent receives only exact-hash corpus entries admitted for model
+   context. Accepted and rejected sources, proposition mappings, applicability
    limits and the stopping condition receive receipts.
 9. **Run reconciliation.** Only after grounding does the system compare the new
    candidate field with the prior revision. Every retained, added, merged,
@@ -247,15 +264,12 @@ source correction, evidence questions and revised accepted states.
     snapshot, pass receipts, manifest and append-only audit chain.
 12. **Verify a detached projection.** Static source-of-truth checks and a real
     browser DOM audit compare the accepted ledger and complete candidate against
-    the rendered Material dashboard. Projection failure does not rewrite the
-    already published candidate.
+    the rendered Material dashboard, including the universal patient-source link
+    contract. Projection failure does not rewrite the already published
+    candidate.
 13. **Record the clinician decision.** The clinician can accept, correct, reject
     or defer proposed changes. Only acceptance or correction under an explicit
     recorded action can create a new accepted ledger revision.
-
-The clinician can accept, correct, reject or defer proposed changes. Acceptance
-creates a new ledger revision. Rejection and deferral preserve the candidate,
-its evidence and the decision rationale as audit history.
 
 ### Router modes
 
@@ -293,6 +307,7 @@ bounded reasoning roles; runtime surfaces identify deterministic controls.
 | Source review | **Terra visual readers** with deterministic consensus | Reads bounded privacy-screened crops and replays exact word IDs into fields | Field consensus or targeted exception |
 | Routing | HematoBoard router and CaseScope | Resolves the one permitted mode and binds every artifact to one case, bundle, revision and operation | CaseScope receipt |
 | Clinical state | Accepted evidence ledger | Stores versioned measurements, findings, dates, interpretations and provenance | Canonical `case_bundle.json` revision |
+| Source navigation | Universal patient-source resolver and private viewer | Resolves `case_id + observation_id`; opens a de-identified public record or an exact local PDF page and bounding box | Auditable source-open action without public PDF access |
 | Breadth pass | Context-shielded synthesis execution | Builds the initial candidate field without prior reasoning or external literature | `passes/01-breadth.json` |
 | Grounding pass | Research execution and source reviewer | Finds narrow external propositions, records rejected sources and proves search saturation | `passes/02-grounding.json` |
 | Reconciliation pass | Controlled synthesis execution | Maps every previous and current hypothesis without identifier reassignment | `passes/03-reconciliation.json` |
@@ -349,6 +364,15 @@ Prepared guideline corpora may use a case-local SQLite full-text index to locate
 terms and passages. Full-text search has a retrieval role. Source interpretation
 and applicability remain separate reviewed activities. Documents with
 restrictive licences stay within the local workspace.
+
+Corpus admission is fail-closed. A source can enter agent context only when its
+exact bytes match the admission manifest and `agent_context_allowed=true`.
+Licensed NCCN documents supplied with institutional permission remain in a
+separate local contour and require an exact-hash operator authorization receipt
+for each agent route. Retrieval from that contour still produces candidate
+evidence with `human_verified=false` and `clinician_review_pending=true`; the
+clinician judges its case applicability together with the complete synthesis
+package.
 
 Guideline quality and reporting can be appraised with instruments such as AGREE
 II (Brouwers et al., 2010). Disease-specific classifications and practice
@@ -428,10 +452,13 @@ for AI in health set out by the World Health Organization (2021).
 HematoBoard is in controlled clinician-in-the-loop testing with prepared,
 de-identified case packages. Current evaluation concerns source reconstruction,
 measurement transfer, evidence traceability, protocol-2.0 method conformance,
-reasoning freshness, detached projection closure and clinician-facing review
-ergonomics. The public Material dashboard currently presents de-identified
-CASE006 as an accepted source ledger plus a separate candidate interpretation;
-the candidate has not been clinically accepted.
+reasoning freshness, exact-hash evidence admission, patient-source navigation,
+detached projection closure and clinician-facing review ergonomics. The public
+Material dashboard currently presents de-identified CASE006 as an accepted
+source ledger plus a separate candidate interpretation. The current release is
+reasoning revision `RR-CASE006-3d72544bd826`, with 58 observations, 11 admitted
+external sources and nine explicit gaps; the candidate has not been clinically
+accepted.
 
 External clinical validation, prospective effectiveness evaluation, regulatory
 qualification and deployment performance remain future stages. Planned studies
@@ -449,11 +476,14 @@ of the treating team after review of the complete primary record.
 
 ## Public interface and controlled runtime
 
-This repository publishes the research article, current Material screenshots and
-the version-pinned architecture figure. The de-identified read-only demonstrator
-is available at <https://esannikov.github.io/hematoboard/?case=case006>.
-Clinical case packages, private dashboard inputs, source-review tools and
-clinician-acceptance state remain within the controlled development environment.
+This repository publishes the research article, current Material screenshots,
+the version-pinned architecture figure and a manifest bound to the current
+CASE006 reasoning and projection receipts. The de-identified read-only
+demonstrator is available at
+<https://esannikov.github.io/hematoboard/?case=case006>. Clinical case packages,
+private dashboard inputs, licensed guideline files, the adjacent PDF source
+viewer and clinician-acceptance state remain within the controlled development
+environment.
 
 Reusable schemas, validators and a sanitized reference pipeline are planned for
 a later code release after the interfaces and privacy boundary stabilize.

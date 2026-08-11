@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="2100" viewBox="0 0 1440 2100" role="img" aria-labelledby="title desc">
   <title id="title">HematoBoard controlled synthesis protocol 2.0 architecture</title>
-  <desc id="desc">One HematoBoard router resolves a CaseScope and one explicit mode: view, intake, data revision, source review, evidence review, controlled synthesis, projection, clinician review or audit. Private intake and source review produce an accepted evidence ledger. Four separately recorded passes—breadth, grounding, reconciliation and independent critique—feed a deterministic method-conformance gate. A complete immutable candidate is published before a detached projection check. The Material dashboard remains read-only. Only a recorded clinician decision can promote a new accepted revision.</desc>
+  <desc id="desc">One HematoBoard router resolves a CaseScope and one explicit mode: view, intake, data revision, source review, evidence review, controlled synthesis, projection, clinician review or audit. Private intake and source review produce an accepted evidence ledger. Exact-hash admission controls the external evidence available to an agent. Four separately recorded passes—breadth, grounding, reconciliation and independent critique—feed a deterministic method-conformance gate. A complete immutable candidate is published before a detached projection check. Patient-source links resolve by case and observation to an exact PDF page and highlighted region inside the private clinician viewer. The Material dashboard remains read-only. Only a recorded clinician decision can promote a new accepted revision.</desc>
 
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto">
@@ -95,12 +95,13 @@
   <text x="260" y="542" class="nodeTitle">OCR + STRUCTURE</text>
   <text x="260" y="570" class="nodeCopy">Text, geometry and typed rows retain exact source addresses.</text>
 
-  <rect x="70" y="635" width="380" height="130" rx="12" class="node hybridNode"/>
+  <rect x="70" y="635" width="380" height="140" rx="12" class="node hybridNode"/>
   <rect x="88" y="651" width="72" height="22" rx="11" class="hybridBadge"/>
   <text x="124" y="667" class="badgeText">HYBRID</text>
-  <text x="260" y="704" class="nodeTitle">DE-IDENTIFY + SOURCE REVIEW</text>
-  <text x="260" y="732" class="nodeCopy">Privacy, field consensus and targeted human exceptions.</text>
-  <text x="260" y="753" class="nodeCopySmall">Raw PDFs, identifiers and licensed text remain private.</text>
+  <text x="260" y="700" class="nodeTitle">DE-IDENTIFY + SOURCE REVIEW</text>
+  <text x="260" y="728" class="nodeCopy">Privacy, field consensus and targeted human exceptions.</text>
+  <text x="260" y="751" class="nodeCopySmall">Source links resolve through case_id + observation_id.</text>
+  <text x="260" y="770" class="nodeCopySmall">Raw PDFs, identifiers and licensed text remain private.</text>
 
   <!-- Accepted state and controlled input. -->
   <rect x="530" y="315" width="370" height="150" rx="12" class="node stateNode"/>
@@ -135,11 +136,12 @@
   <text x="1175" y="581" class="nodeCopy">Validates router, protocol, schemas, tools and CaseScope.</text>
   <text x="1175" y="603" class="nodeCopySmall">A failed check blocks synthesis before an agent pass starts.</text>
 
-  <rect x="980" y="655" width="390" height="110" rx="12" class="node sourceNode"/>
-  <rect x="998" y="671" width="72" height="22" rx="11" class="sourceBadge"/>
-  <text x="1034" y="687" class="badgeText">SOURCES</text>
-  <text x="1175" y="720" class="nodeTitle">REVIEWED EVIDENCE CORPUS</text>
-  <text x="1175" y="747" class="nodeCopy">Stable E-CAND IDs, scope, licence and proposition receipts.</text>
+  <rect x="980" y="645" width="390" height="130" rx="12" class="node sourceNode"/>
+  <rect x="998" y="661" width="72" height="22" rx="11" class="sourceBadge"/>
+  <text x="1034" y="677" class="badgeText">SOURCES</text>
+  <text x="1175" y="708" class="nodeTitle">ADMITTED EVIDENCE CORPUS</text>
+  <text x="1175" y="735" class="nodeCopy">Exact hashes · agent_context_allowed · stable E-CAND IDs.</text>
+  <text x="1175" y="758" class="nodeCopySmall">Licensed NCCN requires an operator authorization receipt.</text>
 
   <!-- Explicit four-pass synthesis. -->
   <rect x="45" y="835" width="1350" height="285" rx="22" class="region reasonRegion"/>
@@ -216,8 +218,8 @@
   <rect x="548" y="1656" width="76" height="22" rx="11" class="surfaceBadge"/>
   <text x="586" y="1672" class="badgeText">REVIEW</text>
   <text x="720" y="1707" class="nodeTitle">CLINICIAN REVIEW APP</text>
-  <text x="720" y="1737" class="nodeCopy">Opens candidate changes with sources and limits.</text>
-  <text x="720" y="1761" class="nodeCopySmall">No automatic clinical action.</text>
+  <text x="720" y="1737" class="nodeCopy">Opens candidate changes with exact sources and limits.</text>
+  <text x="720" y="1761" class="nodeCopySmall">case_id + observation_id → PDF page + highlighted bbox.</text>
 
   <rect x="990" y="1640" width="380" height="145" rx="18" class="node humanNode"/>
   <rect x="1008" y="1656" width="72" height="22" rx="11" class="humanBadge"/>
@@ -240,19 +242,20 @@
   <path d="M450 700 H490 V390 H525" class="flow"/>
   <path d="M715 465 V510" class="flow"/>
   <path d="M1175 445 V480" class="flow"/>
-  <path d="M715 665 V805 H215 V920" class="flowPurple"/>
-  <path d="M1175 615 V805 H550 V920" class="flowPurple"/>
+  <path d="M530 590 H490 V805 H215 V920" class="flowPurple"/>
+  <path d="M980 550 H940 V815 H720 V830" class="flowPurple"/>
+  <path d="M1175 775 V825 H550 V920" class="flowPurple"/>
   <path d="M360 1002 H400" class="flowPurple"/>
   <path d="M695 1002 H735" class="flowPurple"/>
   <path d="M1030 1002 H1070" class="flowPurple"/>
   <path d="M720 1120 V1160" class="flow"/>
   <path d="M720 1300 V1325 H370 V1345" class="flow"/>
   <path d="M670 1425 H765" class="flow"/>
-  <path d="M1070 1500 V1525 H260 V1635" class="flow"/>
-  <path d="M1070 1500 V1530 H720 V1635" class="flow"/>
+  <path d="M1070 1500 V1525 H475 V1712 H455" class="flow"/>
+  <path d="M1070 1500 V1530 H950 V1712 H915" class="flow"/>
   <path d="M910 1712 H985" class="flowGreen"/>
-  <path d="M1115 1785 C1000 1788 700 1802 490 1820" class="flowGreen"/>
-  <path d="M1245 1785 C1200 1790 1050 1805 950 1820" class="flow"/>
+  <path d="M1115 1785 V1805 H490 V1820" class="flowGreen"/>
+  <path d="M1245 1785 V1805 H950 V1820" class="flow"/>
   <path d="M285 1870 H20 V131 H45" class="loop"/>
   <text x="34" y="1120" class="flowLabel" fill="#087c73" transform="rotate(-90 34 1120)">new hash-pinned cycle</text>
 
