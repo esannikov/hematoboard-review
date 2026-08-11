@@ -1,0 +1,48 @@
+{
+  "schema_version": "hematoboard.public-architecture-figure/1.0.0",
+  "updated": "2026-08-11",
+  "protocol": {
+    "schema_version": "hematoboard.synthesis-protocol/2.0.0",
+    "method_id": "HB-CONTROLLED-SYNTHESIS",
+    "method_version": "2.0.0",
+    "sha256": "26b8dcc9aea238155af99fa1f8e3848b6ba8377957394cc7d28713c230d7b28a",
+    "canonical_source": "methodology/synthesis_protocol.json"
+  },
+  "figure": {
+    "source": "hematoboard-trace-system.svg",
+    "source_sha256": "6c3c6cefd1fa1c129a6a590669f6dad4d69a0e41549ef68db7c8f04e27fa1fe7",
+    "raster": "hematoboard-trace-system.png",
+    "raster_sha256": "46f48cf3785421d200015df15ba63b9c8fcd9de94c4d33aa14518cbb7cffcaf6",
+    "width": 1440,
+    "height": 2100
+  },
+  "public_surface": {
+    "url": "https://esannikov.github.io/hematoboard/?case=case006",
+    "case_id": "CASE006",
+    "reasoning_revision_id": "RR-CASE006-98ceb4f1d324",
+    "reasoning_revision_sha256": "2db39622dbc5669ecb8389a22018d0a0e96ff29a8ef1a1f39912cd4fdef54b64",
+    "projection_receipt_sha256": "a5a5d37e56f8555680c4cc32ee8efc04fe7992a92686ea5624e7765269d13c55",
+    "dashboard_build_sha256": "b76da67b2b2bf483962c05f78e8a75756586c8c208d8632ac34368889c808d43",
+    "design_system": "Material",
+    "state": "read_only_candidate_projection",
+    "clinician_accepted": false,
+    "screenshots": [
+      {
+        "view": "overview",
+        "path": "../assets/research-preview/hematoboard-overview.png",
+        "sha256": "f62d0b7b0eea423c733c1d1b8a0935d384907a572f39c4b1c298aef642de8a55"
+      },
+      {
+        "view": "timeline",
+        "path": "../assets/research-preview/hematoboard-timeline.png",
+        "sha256": "ce37b4d25b44b11fff87326890ea670f609311be2f941a3cd69b3b88428b3485"
+      },
+      {
+        "view": "graph",
+        "path": "../assets/research-preview/hematoboard-graph.png",
+        "sha256": "66679ffb85a5292f61307a7f81229a21a13d85c6647d3f3a83ccc8a1b38cbaac"
+      }
+    ]
+  },
+  "verification_note": "This manifest identifies the exact protocol and public artifacts represented by the article. It does not establish clinician acceptance of CASE006."
+}
