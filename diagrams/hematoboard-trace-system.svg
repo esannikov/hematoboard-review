@@ -34,6 +34,8 @@
       .flowGreen { fill: none; stroke: #1f7a45; stroke-width: 2.6; marker-end: url(#arrowGreen); }
       .loop { fill: none; stroke: #087c73; stroke-width: 2.5; stroke-dasharray: 8 7; marker-end: url(#arrowTeal); }
       .flowLabel { font-size: 12px; font-weight: 650; }
+      .entryGate { fill: #ffffff; stroke: #6750a4; stroke-width: 2; }
+      .entryGateText { font-size: 11.5px; font-weight: 760; letter-spacing: 0.45px; text-anchor: middle; fill: #6750a4; }
       .router { fill: #f2ecff; stroke: #6750a4; }
       .privateRegion { fill: #f8fbff; stroke: #9fc3e5; }
       .stateRegion { fill: #f6fbfa; stroke: #8cc7c1; }
@@ -145,6 +147,8 @@
 
   <!-- Explicit four-pass synthesis. -->
   <rect x="45" y="835" width="1350" height="285" rx="22" class="region reasonRegion"/>
+  <rect x="535" y="817" width="370" height="36" rx="18" class="entryGate"/>
+  <text x="720" y="840" class="entryGateText">FRESH INPUT + METHOD PASS + ADMITTED EVIDENCE</text>
   <text x="720" y="872" class="regionTitle" fill="#6750a4">FOUR SEPARATELY RECORDED REASONING PASSES</text>
   <text x="720" y="895" class="regionCopy">Each receipt records input/output hashes, execution identity, prompt hash, tools, budget and events</text>
 
@@ -242,9 +246,6 @@
   <path d="M450 700 H490 V390 H525" class="flow"/>
   <path d="M715 465 V510" class="flow"/>
   <path d="M1175 445 V480" class="flow"/>
-  <path d="M530 590 H490 V805 H215 V920" class="flowPurple"/>
-  <path d="M980 550 H940 V815 H720 V830" class="flowPurple"/>
-  <path d="M1175 775 V825 H550 V920" class="flowPurple"/>
   <path d="M360 1002 H400" class="flowPurple"/>
   <path d="M695 1002 H735" class="flowPurple"/>
   <path d="M1030 1002 H1070" class="flowPurple"/>
