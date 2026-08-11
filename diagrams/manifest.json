@@ -10,9 +10,9 @@
   },
   "figure": {
     "source": "hematoboard-trace-system.svg",
-    "source_sha256": "bd4ee62a23dc8f0cf59399031b199758af18f3107bce228110619713b5a944db",
+    "source_sha256": "e82e549b0c3df5f34597964b89c2b87169564b6dc0f9bc9e3fa781e70bbb8cbb",
     "raster": "hematoboard-trace-system.png",
-    "raster_sha256": "3038368889ae7b3921089822d31accb2fc1c44935c21cb2ddf1ef3ab2279e557",
+    "raster_sha256": "9d7c7a7a290e10ab0d8251975b0ce07048b1a12b2efe89056442f67bb1935fbf",
     "width": 1440,
     "height": 2100
   },
