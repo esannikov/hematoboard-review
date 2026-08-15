@@ -4,7 +4,7 @@
 
 ## Agentic AI for Traceable Hematology Review
 
-**Live Material dashboard · controlled synthesis protocol 2.0 · clinician-in-the-loop testing**
+**Live Material dashboard · controlled synthesis protocol 2.5.0 · clinician-in-the-loop testing**
 
 [Open the de-identified CASE006 dashboard](https://esannikov.github.io/hematoboard/?case=case006)
 · [inspect the architecture map](./diagrams/hematoboard-trace-system.svg)
@@ -27,7 +27,8 @@ allowed it to enter the accepted record?**
 HematoBoard approaches this question through one case-scoped router and a
 versioned receipt state machine. Local document recognition and source review
 produce a structured accepted evidence ledger. Controlled synthesis protocol
-2.0 then runs four separately recorded passes—breadth, grounding,
+2.5.0 then runs four separately recorded passes—wide differential search
+(`breadth`), grounding,
 reconciliation and independent critique—before a deterministic method check can
 publish an immutable candidate. A detached projection check prepares the
 read-only dashboard and clinician-review surface. Only a recorded clinician
@@ -43,7 +44,7 @@ clinical revision.
     <img src="diagrams/hematoboard-trace-system.png" width="900" alt="HematoBoard workflow: private document checks, one accepted case record, four recorded analysis passes, dashboard verification and clinician-only approval">
   </a>
   <br>
-  <sub><strong>Figure 1.</strong> HematoBoard controlled architecture under synthesis protocol 2.0. One router resolves the CaseScope and allowed mode. Four separately hashed reasoning passes precede a fail-closed method check and immutable candidate. Projection is verified in a detached step; the Material dashboard remains read-only, and only a recorded clinician decision can create a new accepted revision.</sub>
+  <sub><strong>Figure 1.</strong> Version-pinned architecture map from synthesis protocol 2.0. Its four-pass, immutable-candidate and clinician-only promotion boundaries remain active in 2.5.0; the newer controller materialization, abstention and reusable-source contracts are described below. The artifact manifest intentionally continues to identify the exact historical figure rather than relabeling it.</sub>
 </p>
 
 <p align="center"><a href="https://raw.githubusercontent.com/esannikov/hematoboard-review/main/diagrams/hematoboard-trace-system.png">Open full-size PNG</a> · <a href="https://raw.githubusercontent.com/esannikov/hematoboard-review/main/diagrams/hematoboard-trace-system.svg">Open scalable SVG</a> · <a href="diagrams/manifest.json">Verify protocol and artifact hashes</a></p>
@@ -196,15 +197,18 @@ the CaseScope, protocol version, run schema and required tools. A method-verifie
 run must then contain four pass receipts in the declared order:
 `breadth → grounding → reconciliation → critic`. Every receipt records input and
 output hashes, execution identity, model-version status, prompt hash, tool
-profile, budget and tool events. Grounding must include accepted and rejected
+profile, budget and tool events. In protocol 2.5.0 the controller owns this
+technical envelope: the agent returns the typed clinical result and actual tool
+events. This removes format-repair loops without removing a clinical pass.
+Grounding must include accepted and rejected
 sources plus a saturation receipt. Reconciliation must account for every old
 and new hypothesis without silently reassigning identifiers. The critic must
 run under a distinct execution identity and leave no unresolved critical issue.
 
 A missing receipt, broken hash, reordered pass, unsaturated search or
 non-independent critic blocks candidate publication. Earlier hash-valid runs
-remain readable, but protocol 2.0 labels them `legacy_unverified`; it does not
-retroactively claim that the four-pass method was executed.
+remain readable through exact historical bindings; an older run is never
+silently represented as protocol 2.5.0.
 
 ### Promotion boundary and typed relations
 
@@ -374,6 +378,25 @@ evidence with `human_verified=false` and `clinician_review_pending=true`; the
 clinician judges its case applicability together with the complete synthesis
 package.
 
+This exact-source boundary addresses a known limitation of simple vector RAG.
+In a 2025 molecular-tumor-board study, 17.1% of the references produced by a
+PubMed-grounded RAG pipeline were hallucinated despite an explicit request for
+citations (Berman et al., 2025). HematoBoard therefore does not treat a title,
+PMID or DOI as proof. Admission requires the unchanged document hash, version,
+page or section locator, the proposition actually supported there, its
+case-specific applicability and a source-review receipt. An orphan source or an
+unsupported clinical action blocks the candidate before independent critique.
+
+Protocol 2.5.0 can materialize a reviewed, case-independent proposition as a
+versioned source assertion. Its authoritative JSON stores bibliographic
+identity, exact PDF hash, locator, proposition, rights snapshot and provenance
+hashes. A local SQLite full-text index is rebuilt from those records to find the
+same page efficiently in later work. Patient facts, case applicability,
+diagnosis, treatment direction and clinician acceptance are deliberately not
+reused. This layer is not a graph: it is a library of keyed source records with
+no patient, hypothesis or action edges. A case-specific evidence graph is
+derived later only after applicability is assessed again.
+
 Guideline quality and reporting can be appraised with instruments such as AGREE
 II (Brouwers et al., 2010). Disease-specific classifications and practice
 guidelines retain their edition and date because diagnostic categories,
@@ -390,6 +413,15 @@ and different immutable receipts: breadth generates alternatives; grounding
 tests them against reviewed external propositions; reconciliation compares the
 grounded result with history without reusing identifiers silently; an
 independent critic challenges the candidate and can block publication.
+
+The candidate also records decision readiness. The system may return a working
+candidate, or explicitly abstain because evidence is insufficient, sources
+conflict or the case is outside a validated domain. The independent critic
+checks whether that choice is calibrated. A conditional `guideline`,
+`advanced/longitudinal` or `molecular` route is currently recorded only in
+shadow mode: it cannot skip a production pass until retrospective and
+prospective-silent evaluation demonstrates non-inferior safety and evidence
+coverage.
 
 The deterministic self-check verifies the protocol and run schemas, exact pass
 order, hashes, execution and prompt identity, tool events, search saturation and
@@ -441,9 +473,10 @@ for AI in health set out by the World Health Organization (2021).
 | Layer | Source families | Recorded control |
 | --- | --- | --- |
 | Patient record | Laboratory, pathology, imaging, procedures and clinical narrative | Document, page or crop, field structure, date, verification and privacy status |
-| Literature | PubMed, DOI records and peer-reviewed articles | Citation, evidence type, exact proposition, applicability and retrieval receipt |
-| Guidelines | Official societies, classifications, institutional or licensed local PDFs | Edition, date, page or node, licence, model-use permission and review status |
-| Controlled synthesis | Breadth, grounding, reconciliation and independent critic | Separate pass inputs and outputs, execution identity, prompt hash, tool events, saturation and critical findings |
+| Literature | PubMed, DOI records and peer-reviewed articles | Citation, exact document hash, locator, proposition, applicability and retrieval receipt |
+| Guidelines | Official societies, classifications, institutional or licensed local PDFs | Edition, date, exact hash, page or node, licence, model-use permission and review status |
+| Reusable source assertions | Case-independent reviewed locators and propositions | Immutable JSON authority; rebuildable SQLite search; no patient facts or prior clinical conclusion |
+| Controlled synthesis | Wide differential search, grounding, reconciliation and independent critic | Separate pass inputs and outputs, controller-owned envelope, execution identity, prompt hash, tool events, saturation, decision readiness and critical findings |
 | Provenance | Versioned JSON, SHA-256, immutable revisions and typed graph relations | Input/output identity, lineage, responsible agent and projection closure |
 | Human authority | Source review and final clinician decision | Append-only acceptance, correction, rejection or deferral |
 
@@ -451,7 +484,7 @@ for AI in health set out by the World Health Organization (2021).
 
 HematoBoard is in controlled clinician-in-the-loop testing with prepared,
 de-identified case packages. Current evaluation concerns source reconstruction,
-measurement transfer, evidence traceability, protocol-2.0 method conformance,
+measurement transfer, evidence traceability, protocol-2.5.0 method conformance,
 reasoning freshness, exact-hash evidence admission, patient-source navigation,
 detached projection closure and clinician-facing review ergonomics. The public
 Material dashboard currently presents de-identified CASE006 as an accepted
@@ -459,6 +492,14 @@ source ledger plus a separate candidate interpretation. The current release is
 reasoning revision `RR-CASE006-3d72544bd826`, with 58 observations, 11 admitted
 external sources and nine explicit gaps; the candidate has not been clinically
 accepted.
+
+The current optimization release changes engineering contracts, not clinical
+authority. It adds controller-owned pass materialization, explicit abstention,
+versioned source assertions, honest phase timing and a shadow-only conditional
+router. An external evaluation protocol specifies retrospective blinded review
+followed by prospective silent testing. These controls have technical test
+evidence; they are not yet evidence of clinical benefit or faster end-to-end
+performance.
 
 External clinical validation, prospective effectiveness evaluation, regulatory
 qualification and deployment performance remain future stages. Planned studies
@@ -511,6 +552,11 @@ Lymphoid neoplasms. *Leukemia, 36*(7), 1720–1748.
 Apple. (n.d.). *Recognizing text in images*. Apple Developer Documentation.
 Retrieved August 8, 2026, from
 <https://developer.apple.com/documentation/vision/recognizing-text-in-images>
+
+Berman, E., Sundberg Malek, H., Bitzer, M., Malek, N., & Eickhoff, C. (2025).
+Retrieval augmented therapy suggestion for molecular tumor boards: Algorithmic
+development and validation study. *Journal of Medical Internet Research, 27*,
+e64364. <https://doi.org/10.2196/64364>
 
 Brouwers, M. C., Kho, M. E., Browman, G. P., Burgers, J. S., Cluzeau, F.,
 Feder, G., Fervers, B., Graham, I. D., Grimshaw, J., Hanna, S. E., Littlejohns,
