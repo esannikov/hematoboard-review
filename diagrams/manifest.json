@@ -1,75 +1,95 @@
 {
-  "schema_version": "hematoboard.public-architecture-figure/1.1.0",
-  "updated": "2026-08-11",
+  "schema_version": "hematoboard.public-architecture-figure/1.2.0",
+  "updated": "2026-08-26",
   "protocol": {
     "schema_version": "hematoboard.synthesis-protocol/2.0.0",
     "method_id": "HB-CONTROLLED-SYNTHESIS",
-    "method_version": "2.0.0",
-    "sha256": "26b8dcc9aea238155af99fa1f8e3848b6ba8377957394cc7d28713c230d7b28a",
+    "method_version": "2.5.3",
+    "sha256": "b91943c7032fdc39d7a8090239dc6c8dfef285d7456a1218fda32eb56c438a1c",
     "canonical_source": "methodology/synthesis_protocol.json"
   },
   "figure": {
     "source": "hematoboard-trace-system.svg",
-    "source_sha256": "2ec6cd6ab83b69e5c09552a4742a56b5733cfbe1ea829293082014383f12ba58",
+    "source_sha256": "2b0c48fea243295431b61186bb6f3fc93285cc98e5616ca4fd5cb946c43185ed",
     "raster": "hematoboard-trace-system.png",
-    "raster_sha256": "eb30464c5619698a32acc6a8d6a4a89e7a68c3c01e9d554e622891cbb197f164",
+    "raster_sha256": "3a517aca3a534f57b62569e9cc5b41116f1bc45c2b5064a05b1ffbf58ad55e28",
     "width": 1440,
     "height": 2100
   },
-  "public_surface": {
-    "url": "https://esannikov.github.io/hematoboard/?case=case006",
-    "case_id": "CASE006",
-    "bundle_revision": "CASE006@6ec73b7e806a",
-    "bundle_sha256": "2032ad12fead1e2a365a07b6b20cca3e4c1726d78c438dd4b0ad678a9adf2930",
-    "reasoning_revision_id": "RR-CASE006-3d72544bd826",
-    "reasoning_revision_sha256": "eee2b9836653914ea8974f240edf3862ffc34417e8ab5339dddc66bdb435836f",
-    "projection_receipt_sha256": "bbbacf30be8164d9fcc80e72a340df05cb4449d4bddd4592146a206328d13a14",
-    "dashboard_build_sha256": "31aa177c6f7b753565371243cdaef7abc07190e3243569f2406d40fd65320283",
-    "release_generated_at": "2026-08-11T17:51:15.634Z",
-    "design_system": "Material",
-    "state": "read_only_candidate_projection",
+  "current_public_release": {
+    "url": "https://esannikov.github.io/hematoboard/?case=case011-v2",
+    "indexed_candidate_count": 15,
+    "reference_case_id": "CASE011-V2",
+    "protocol_replay_of_case_id": "CASE011",
+    "publication_authorized_by_user": true,
+    "reasoning_run_id": "SYN-20260826T071551663629Z-CASE011-V2-EFBA7E2E",
+    "source_document_sha256": "765301272bc6f8e68aa278f50316f88109d360ee207447d712750bf99538e852",
+    "clinical_input_sha256": "efba7e2e129e8645c6e55d9a41d79b0ad7e9989307776a0d7d9b26e60020433a",
+    "candidate_sha256": "2ba28f6903af6de8aecaa5a201f5c8751aeac2dc40c1078fb96a708f1580fc2b",
+    "critic_sha256": "97ed5024892ee3365b501d4168969e7cbfa8a0146318d8c3898fda3921958d4e",
+    "public_package_sha256": "206d25e2d5c215a7a170b6420bea9339566256023cd942804d917a5a88cb81d9",
+    "public_qa_sha256": "9503ade200cb2c85bb65861e2ceaab09c66f6d799b8ed11e1e9ed91a5274d535",
+    "ui_source_sha256": "55eac69ff7b686d9492c65df42ecdafd5741f4bff6ce4a9f1ac3e56ee6807216",
+    "state": "published_candidate",
+    "critic_pass": true,
+    "projection_verified": true,
     "clinician_accepted": false,
     "content_counts": {
-      "observations": 58,
-      "admitted_external_sources": 11,
-      "explicit_gaps": 9
-    },
-    "audio_briefing": {
-      "id": "AB-CASE006-20260811-04",
-      "duration_seconds": 194.926,
-      "sha256": "db28280b330a029147be536adc37038ab26aa1f297d3a473ea2a37c8070ec3a7"
-    },
+      "source_records": 61,
+      "clinical_facts": 183,
+      "measurement_series": 4,
+      "clinical_entities": 6,
+      "diagnostic_hypotheses": 4,
+      "external_evidence": 6,
+      "workup_actions": 5,
+      "critical_gaps": 4
+    }
+  },
+  "english_screenshot_surface": {
+    "url": "https://esannikov.github.io/hematoboard-en/?case=case001",
+    "case_id": "CASE001",
+    "candidate_sha256": "90bcb7b9b54ef40bff8c123c14e0d0b384ee870cdfb0527764496ead08ed20fb",
+    "clinical_input_sha256": "7fd2ae7ef0321380a3af3419dbbe7a2dda14fefff84ea2816f55358853333a47",
+    "english_package_sha256": "909e62be43e538b76fed10277e2411a1d4d4896d615972810d5e227ddc4a9eb3",
+    "translation_manifest_sha256": "6b6099d22fb54328edea05132d0fcb33a67c640e87096b56d71f8ca38445b962",
+    "translation_changes_clinical_claims": false,
+    "clinician_accepted": false,
     "screenshots": [
       {
         "view": "overview",
         "path": "../assets/research-preview/hematoboard-overview.png",
-        "sha256": "5c751e0b15bd48c0f91b55ba65a96a3d67323d300aba93660e289553a15abacd"
+        "sha256": "36a812681e1f21dd9b3528f95cd06bb03f8a3110b9e7dcbdf2288fae026dea0b"
       },
       {
         "view": "timeline",
         "path": "../assets/research-preview/hematoboard-timeline.png",
-        "sha256": "5acd299932d621d818876bdac1e4f24e2fce8a187e71d8de7ad90a5d870c9d38"
+        "sha256": "5c24258c43df403ff25313c2429e976b8a719c83dabee9431a8f91119820a74d"
       },
       {
         "view": "graph",
         "path": "../assets/research-preview/hematoboard-graph.png",
-        "sha256": "4317a710851ec9d2c7c35b704bd876a792c3b5268479c98c8ce5cf01971855da"
+        "sha256": "a93b388e2913c2b9b008a90f3ab93804c815099bbebb86c45b3b347c51efa71d"
       }
     ]
   },
   "architecture_contracts": {
-    "patient_source_navigation": {
-      "key": "case_id + observation_id",
-      "public_target": "deidentified_structured_record",
-      "private_target": "exact_hash_verified_pdf_page_and_bbox",
-      "public_pdf_access": false
+    "private_source_boundary": {
+      "raw_pdf_public": false,
+      "raw_ocr_public": false,
+      "deidentification_mode": "exact_span_on_derived_json_and_markdown",
+      "raw_pdf_mutation": false
     },
-    "evidence_admission": {
-      "exact_hash_required": true,
-      "agent_context_allowed_required": true,
-      "licensed_nccn_requires_operator_authorization_receipt": true,
-      "agent_review_preserves_human_verified_false": true
+    "active_v2_route": {
+      "operator_entrypoint": "hematoboard-v2",
+      "planner": "workflow-status",
+      "mutations": ["advance", "resume"],
+      "implicit_model_calls": false
+    },
+    "clinical_authority": {
+      "technical_candidate_is_clinician_acceptance": false,
+      "clinician_write_surface_wired": false,
+      "all_current_public_cases_clinician_accepted": false
     }
   },
-  "verification_note": "This manifest identifies the exact protocol and public artifacts represented by the article. It does not establish clinician acceptance of CASE006."
+  "verification_note": "The manifest binds the article to method 2.5.3, the current CASE011-V2 public candidate package, and a presentation-only English CASE001 screenshot surface. Technical and projection PASS do not establish clinician acceptance or completed clinical validation."
 }

@@ -4,56 +4,62 @@
 
 ## Agentic AI for Traceable Hematology Review
 
-**Live Material dashboard · controlled synthesis protocol 2.0 · clinician-in-the-loop testing**
+**Live clinical dashboard · controlled synthesis method 2.5.3 · clinical-condition testing**
 
-[Open the de-identified CASE006 dashboard](https://esannikov.github.io/hematoboard/?case=case006)
+[Open the English CASE001 projection](https://esannikov.github.io/hematoboard-en/?case=case001)
+· [open the current Ukrainian case set](https://esannikov.github.io/hematoboard/?case=case011-v2)
 · [inspect the architecture map](./diagrams/hematoboard-trace-system.svg)
 
 HematoBoard is an experimental clinical evidence environment for studying how
 agentic AI can assist the review of long, heterogeneous hematology records while
 preserving provenance and clinician authority. It reconstructs scanned reports,
 laboratory tables, pathology, imaging and clinical narrative as a versioned case
-state, responding to established concerns about completeness, conformance and
+projection, responding to established concerns about completeness, conformance and
 plausibility when clinical data are reused across sources (Kahn et al., 2016;
 Weiskopf & Weng, 2013). Candidate hypotheses appear beside the observations and
 external sources that support, challenge or contextualize them. Missing
 verification remains visible throughout the review.
 
+The system is being tested in clinical conditions as a research workflow. This
+is not completed clinical validation, regulatory qualification or evidence of
+improved patient outcomes. Every public case remains a de-identified candidate
+projection; no public case currently carries a recorded clinician acceptance.
+
 The research asks whether an agentic system can make complex clinical reasoning
 more inspectable: **can every material statement retain a path to its source,
-its interpretive status, its unresolved alternatives and the decision that
-allowed it to enter the accepted record?**
+its interpretive status, its unresolved alternatives and the review action that
+allowed it to enter a candidate record?**
 
-HematoBoard approaches this question through one case-scoped router and a
-versioned receipt state machine. Local document recognition and source review
-produce a structured accepted evidence ledger. Controlled synthesis protocol
-2.0 then runs four separately recorded passes—breadth, grounding,
-reconciliation and independent critique—before a deterministic method check can
-publish an immutable candidate. A detached projection check prepares the
-read-only dashboard and clinician-review surface. Only a recorded clinician
-decision can promote a new accepted revision. This separation preserves the
-difference between a recorded observation, a source author's conclusion,
-external evidence, a case interpretation, a working hypothesis and an accepted
-clinical revision.
+HematoBoard now has two explicit operational layers. A private human-operated
+workbench owns PDF/photo intake, local OCR, source review and exact-span
+de-identification. The V2 runtime receives only the approved source layer and
+routes it through one CaseScope-aware executable. Controlled synthesis method
+2.5.3 records breadth, grounding, reconciliation and independent critique as
+separate method receipts. In the normal route these receipts are produced by
+two primary model turns followed by a separate critic turn; the controller
+adds hashes, identities and state transitions without inventing clinical
+claims. The result is an immutable candidate for review, not an accepted
+diagnosis. The active V2 clinician write surface is not yet wired, so
+`clinician_accepted` remains false until a future recorded clinician action.
 
 ## System map
 
 <p align="center">
   <a href="diagrams/hematoboard-trace-system.svg">
-    <img src="diagrams/hematoboard-trace-system.png" width="900" alt="HematoBoard workflow: private document checks, one accepted case record, four recorded analysis passes, dashboard verification and clinician-only approval">
+    <img src="diagrams/hematoboard-trace-system.png" width="900" alt="HematoBoard workflow: private source review, G2-approved clinical facts, controlled synthesis receipts, independent critique, dashboard QA and a separate future clinician gate">
   </a>
   <br>
-  <sub><strong>Figure 1.</strong> HematoBoard controlled architecture under synthesis protocol 2.0. One router resolves the CaseScope and allowed mode. Four separately hashed reasoning passes precede a fail-closed method check and immutable candidate. Projection is verified in a detached step; the Material dashboard remains read-only, and only a recorded clinician decision can create a new accepted revision.</sub>
+  <sub><strong>Figure 1.</strong> Current HematoBoard architecture under method 2.5.3. The private workbench prepares a G2-approved source layer; one V2 operator entrypoint advances exact StepSpec transitions. Breadth, grounding, reconciliation and critique remain separately inspectable even when grounding, reconciliation and the draft share one primary model turn. Projection QA is detached, the dashboard is read-only, and clinician acceptance remains a separate future gate.</sub>
 </p>
 
 <p align="center"><a href="https://raw.githubusercontent.com/esannikov/hematoboard-review/main/diagrams/hematoboard-trace-system.png">Open full-size PNG</a> · <a href="https://raw.githubusercontent.com/esannikov/hematoboard-review/main/diagrams/hematoboard-trace-system.svg">Open scalable SVG</a> · <a href="diagrams/manifest.json">Verify protocol and artifact hashes</a></p>
 
-The map permits bounded feedback without creating a second source of truth.
-Source review can reopen one crop; grounding can formulate a new evidence
-question; an accepted revision starts a new hash-pinned cycle and makes the
-earlier candidate stale. The append-only receipt plane records input and output
-hashes, protocol and prompt identity, model and tool events, privacy checks and
-phase time across these paths.
+The map permits bounded repair without creating a second clinical authority.
+Source review can reopen one crop; a named evidence gap can trigger one targeted
+retrieval or second-breadth action; an independent critic can block finalization.
+Runtime transitions are journaled, case-scoped and serialized by an operating-
+system lease. Older artifacts remain readable, while a new clinical input must
+start a new hash-pinned dependent cycle.
 
 The architecture draws on four established bodies of work: hematologic
 classification as a versioned integration of morphology, phenotype, clinical
@@ -71,11 +77,11 @@ clinician.
   <tr>
     <td width="33.33%" valign="top">
       <a href="assets/research-preview/hematoboard-overview.png"><img src="assets/research-preview/hematoboard-overview.png" alt="HematoBoard patient overview"></a><br>
-      <sub><strong>Figure 2. Case overview.</strong> Accepted patient state, a separate reasoning candidate, its principal limitation and the verification steps that could change the interpretation.</sub>
+      <sub><strong>Figure 2. Case overview.</strong> G2-approved patient facts, a separately labelled reasoning candidate, its limitations and the verification steps that could change the interpretation.</sub>
     </td>
     <td width="33.33%" valign="top">
       <a href="assets/research-preview/hematoboard-timeline.png"><img src="assets/research-preview/hematoboard-timeline.png" alt="HematoBoard clinical timeline"></a><br>
-      <sub><strong>Figure 3. Clinical timeline.</strong> Canonical dates and source records remain connected; undated findings retain their uncertainty outside the dated sequence.</sub>
+      <sub><strong>Figure 3. Clinical timeline.</strong> Source-record dates remain connected to the case history; records without a confirmed clinical date stay outside the dated sequence.</sub>
     </td>
     <td width="33.33%" valign="top">
       <a href="assets/research-preview/hematoboard-graph.png"><img src="assets/research-preview/hematoboard-graph.png" alt="HematoBoard typed evidence graph"></a><br>
@@ -84,19 +90,21 @@ clinician.
   </tr>
 </table>
 
-These surfaces show the current de-identified CASE006 Material demonstrator in
-Ukrainian. The overview presents the accepted case state and a visibly separate
-candidate interpretation. The timeline keeps dated events separate from records
-without a reliable clinical date. The graph exposes typed fact-to-hypothesis
-relations without compressing them into an opaque probability. Together they
-provide three readings of the same hash-pinned material.
+These screenshots show the presentation-only English CASE001 projection. The
+English copy preserves case identity, candidate hash, ranking, relations,
+workup, gaps, sources and clinician status from its Ukrainian package; only
+visible interface and clinical prose are translated. It demonstrates the same
+shared dashboard shell used by the public Ukrainian case set. CASE001 is a
+historical candidate used here only to document the English presentation; it
+is not the method-2.5.3 reference case.
 
-The current reference release contains 58 source-linked observations, 11
-admitted external evidence records, nine explicit gaps and a 3:14 Ukrainian
-audio briefing for pre-consilium review. It is pinned to reasoning revision
-`RR-CASE006-3d72544bd826`; the candidate remains pending clinician review. The
-exact bundle, reasoning, projection and dashboard-build hashes are recorded in
-the [public artifact manifest](./diagrams/manifest.json).
+The current Ukrainian release indexes 15 de-identified candidate dashboards.
+The featured current reference package, CASE011-V2, is an explicitly authorized
+protocol replay of CASE011. It contains 61 source records, 183 normalized facts,
+six external sources, six clinical entities, five workup actions and four
+critical gaps. Its independent critic and projection QA passed; the candidate
+remains unaccepted by a clinician. Exact method, candidate, package, QA, UI and
+screenshot hashes are recorded in the [public artifact manifest](./diagrams/manifest.json).
 
 ## Clinical reasoning as a provenance problem
 
@@ -112,35 +120,35 @@ and diagnostic criteria (Alaggio et al., 2022; Campo et al.,
 2022). Missing tissue, staging or molecular data can therefore remain
 clinically decisive even when the record already contains hundreds of pages.
 
-HematoBoard treats the accepted case as a ledger of addressable observations.
-Every observation has a stable identifier and may carry a document identity,
-page or crop, source text, normalized value, unit, comparator, local reference
-interval, effective date, verification state and privacy status. Interpretive
-objects refer to those identifiers. External evidence uses its own receipts.
-Candidate reasoning is stored in a separate immutable revision with a hash of
-the clinical projection it received.
+HematoBoard treats the approved source layer as a collection of addressable
+source records, clinical facts and measurement series. Each object retains the
+available document identity, source order or page, literal text, normalized
+value, unit, comparator, reference-range text, date status and privacy lineage.
+Interpretive objects refer to those identifiers. External evidence uses its own
+retrieval and source-identity receipts. Candidate reasoning is stored in a
+separate immutable revision with a hash of the exact clinical projection it
+received.
 
 This separation gives the dashboard a precise role. The interface is the
 primary presentation output of the system and a read-only projection of
-accepted data and candidate reasoning. It has no authority to create a clinical
-fact, alter a source receipt or record a clinician decision. A separate
-clinician review surface opens proposed changes together with their supporting
-records. Accepted changes create a new hash-pinned ledger revision and preserve
-the earlier state.
+G2-approved facts and candidate reasoning. It has no authority to create a
+clinical fact, alter a source receipt or record a clinician decision. The active
+V2 runtime can materialize a derived versioned object read model, but that
+store is not a second clinical authority. A clinician decision schema exists;
+the active write surface and promotion transaction are not yet wired.
 
-Every visible patient-record address uses one case-agnostic navigation
-contract: `case_id + observation_id`. In the public demonstrator it opens the
-corresponding de-identified structured record. In the controlled clinical
-workspace the same action opens an adjacent private viewer at the exact
-hash-verified PDF page and highlights the recorded bounding box. Raw patient
-PDFs never enter the public build. External `E#` and `E-CAND-*` references use
-validated HTTP(S) destinations or remain inside their licensed local evidence
-contour; they are never routed as patient documents.
+Every visible patient-record action is resolved within one CaseScope. In the
+public demonstrator it opens the corresponding de-identified structured source
+record. In the private workbench, source review remains bound to the source PDF,
+page image, OCR layer, geometry and exact hashes. Raw patient PDFs never enter
+the public build. External `E-CAND-*` references use validated HTTP(S)
+destinations or remain inside their licensed local evidence contour; they are
+never routed as patient documents.
 
 The resulting architecture is close to the entity–activity–agent logic of W3C
 PROV-O, adapted to a smaller clinical contract. The central objects are source
 records, structured observations, external propositions, reasoning revisions,
-review actions and accepted states. Their lineage remains inspectable across
+review actions and candidate states. Their lineage remains inspectable across
 document processing, synthesis and presentation (World Wide Web Consortium,
 2013).
 
@@ -152,7 +160,7 @@ All three are technical controls; none carries a diagnostic or prognostic score.
 
 ### Field-level projection closure
 
-Let $O_L$ be the observation identifiers in the accepted ledger and $O_D$ the
+Let $O_L$ be the identifiers in the G2-approved clinical layer and $O_D$ the
 identifiers found in the rendered document object model. The projection test
 first requires identical sets:
 
@@ -160,7 +168,7 @@ $$
 O_D = O_L
 $$
 
-For every accepted observation $o$ and every audited field $f$, the rendered
+For every approved fact $o$ and every audited field $f$, the rendered
 value $D(o,f)$ must equal the ledger value $L(o,f)$:
 
 $$
@@ -174,13 +182,14 @@ case-specific clinical literals embedded in page code.
 
 ### Reasoning freshness
 
-The clinical input is a canonical projection $\pi_c(B)$ of accepted bundle
-$B$. Let $H$ denote SHA-256 over the canonical JSON bytes of that projection.
-The reasoning revision records the following value, using the standardized
+The clinical input is a canonical minimum-necessary snapshot $C$ of the
+approved source records, normalized facts and signals. Let $H$ denote SHA-256
+over its canonical JSON bytes. The reasoning revision records the following
+value, using the standardized
 SHA-256 hash function (National Institute of Standards and Technology, 2015):
 
 $$
-h_R = H(\pi_c(B))
+h_R = H(C)
 $$
 
 A candidate is current when its recorded $h_R$ equals the hash recalculated
@@ -192,29 +201,28 @@ body remain bound by the immutable reasoning-revision hash.
 ### Method conformance
 
 Before synthesis begins, the method self-check validates one canonical router,
-the CaseScope, protocol version, run schema and required tools. A method-verified
-run must then contain four pass receipts in the declared order:
-`breadth → grounding → reconciliation → critic`. Every receipt records input and
-output hashes, execution identity, model-version status, prompt hash, tool
-profile, budget and tool events. Grounding must include accepted and rejected
-sources plus a saturation receipt. Reconciliation must account for every old
-and new hypothesis without silently reassigning identifiers. The critic must
-run under a distinct execution identity and leave no unresolved critical issue.
+CaseScope, method version, schema set and active tools. Method 2.5.3 separates
+four inspectable stages: breadth, grounding, reconciliation and independent
+critique. They are not four routine model sessions. The normal route uses one
+primary turn for blind breadth, one primary turn for evidence grounding,
+reconciliation and the exact candidate draft, then one independent critic
+turn. The controller materializes separate receipts and verifies exact hashes.
 
-A missing receipt, broken hash, reordered pass, unsaturated search or
-non-independent critic blocks candidate publication. Earlier hash-valid runs
-remain readable, but protocol 2.0 labels them `legacy_unverified`; it does not
-retroactively claim that the four-pass method was executed.
+Every breadth candidate must belong to at least one of seven coverage sectors
+and must reach an executed evidence query before grounding closes. Each ranked
+diagnostic hypothesis needs patient-specific support or a neutral relation and
+an evidence-backed workup or critical-gap trace. The critic uses a distinct
+execution identity and leaves zero unresolved critical or high findings. A
+missing receipt, broken hash, uncovered branch or non-independent critic blocks
+finalization.
 
-### Promotion boundary and typed relations
+### Candidate boundary and typed relations
 
-Promotion is described as a transaction because the runtime evaluates concrete
-preconditions rather than a numerical function. The requested parent revision
-must still be current, eligible changes must carry a recorded clinician action,
-and the source bundle hash must remain pinned. The transaction materializes and
-hashes a new revision manifest, updates the current-revision pointer through an
-optimistic concurrency check and preserves the parent revision. A failed
-precondition leaves the reasoning revision in candidate state.
+The active production boundary ends at a technically verified candidate. The
+candidate is immutable, hash-bound to its clinical input and independent critic,
+and explicitly marked `clinician_accepted=false`. A future clinician decision
+surface may accept, correct, reject or defer a proposal, but that write path is
+not active in V2 today.
 
 Typed clinical relations are represented directly as records. Each edge stores
 a hypothesis identifier, an evidence identifier, a relation type and a
@@ -225,51 +233,50 @@ does not calculate a graph-derived probability or diagnostic score.
 
 Each case cycle is recorded as a traceable episode. The sequence establishes
 the dependency of one artifact on another while allowing targeted loops for
-source correction, evidence questions and revised accepted states.
+source correction, evidence questions and revised candidate states.
 
-1. **Resolve one route and CaseScope.** The HematoBoard router selects the
-   permitted mode and binds the case key, case identifier, bundle hash, revision
-   and operation ID. Artifacts from another case fail closed.
+1. **Resolve one route and CaseScope.** `workflow-status` selects the registered
+   StepSpec and binds the case identifier, clinical-input hash, reasoning run
+   and next allowed action. Artifacts from another case fail closed.
 2. **Register the source set.** An operator places the minimum-necessary
    documents in a private case workspace. File identity, page inventory,
    hashes, document type, dates and phase time enter the action protocol.
-3. **Extract atomic observations.** Local recognition separates measurements,
-   findings, source conclusions, recommendations and events while retaining
-   page and word coordinates.
+3. **Extract atomic observations.** Native DOCX text or local Apple Vision OCR
+   separates measurements, findings, source conclusions, recommendations and
+   events while preserving available page and word coordinates.
 4. **Normalize measurements.** Structured JSON binds each result to its unit,
    comparator, local reference interval, source row, date and original literal.
-5. **Establish the accepted ledger.** Verified observations become concise,
-   source-addressed facts with explicit evidence classes and stable IDs.
+5. **Close G2 source review.** Approved records become source-addressed facts
+   and signals. Human or explicitly delegated technical privacy/retention
+   receipts remain separate from clinical reasoning.
 6. **Pin the reasoning input.** A canonical minimum-necessary clinical
-   projection receives a SHA-256 freshness hash. A second breadth projection
-   removes prior hypotheses, rankings, relations, work-up, interpretations and
-   external literature.
-7. **Run breadth.** The first isolated pass develops a broad candidate field,
-   dangerous alternatives and unresolved questions without the prior synthesis
-   or evidence corpus.
+   snapshot receives a SHA-256 freshness hash. Blind breadth input excludes
+   prior hypotheses, rankings, relations, work-up and external literature.
+7. **Run breadth.** The first isolated primary turn develops a broad candidate
+   field and closes seven coverage sectors, including dangerous alternatives,
+   reversible conditions, second processes and data artifacts.
 8. **Run grounding.** Narrow questions guide retrieval from PubMed, DOI records,
    professional societies, classifications and permitted local guideline
-   corpora. An agent receives only exact-hash corpus entries admitted for model
-   context. Accepted and rejected sources, proposition mappings, applicability
-   limits and the stopping condition receive receipts.
-9. **Run reconciliation.** Only after grounding does the system compare the new
-   candidate field with the prior revision. Every retained, added, merged,
-   reranked or deactivated hypothesis is mapped explicitly.
+   corpora. Fast deterministic triage selects up to three diagnostic-priority
+   results per question; exact source hashes, page metadata, rights and visual-
+   review requirements stay attached.
+9. **Run reconciliation and draft.** In the same second primary turn, the model
+   reconciles every breadth candidate, maps sources to workup or gaps and
+   returns one exact candidate draft. The controller adds only deterministic
+   identities, hashes and timing.
 10. **Run independent critique.** A distinct execution examines anchoring,
     premature closure, neglected alternatives, weak evidence, source limits,
     unsupported relations and over-strong language.
-11. **Verify the method and publish the candidate.** The deterministic runner
-    checks pass order, hashes, search saturation, critic independence and the
-    complete artifact set, then writes an immutable candidate with its input
-    snapshot, pass receipts, manifest and append-only audit chain.
-12. **Verify a detached projection.** Static source-of-truth checks and a real
-    browser DOM audit compare the accepted ledger and complete candidate against
-    the rendered Material dashboard, including the universal patient-source link
-    contract. Projection failure does not rewrite the already published
-    candidate.
-13. **Record the clinician decision.** The clinician can accept, correct, reject
-    or defer proposed changes. Only acceptance or correction under an explicit
-    recorded action can create a new accepted ledger revision.
+11. **Finalize the candidate.** The deterministic controller checks registered
+    state, exact hashes, retrieval coverage, relation closure, critic
+    independence and the complete artifact set, then writes an immutable
+    candidate and append-only runtime journal.
+12. **Verify a detached projection.** Static source-of-truth checks and real-
+    browser QA bind the rendered dashboard to the exact candidate, shared UI
+    fingerprint and CaseScope. Projection failure cannot rewrite the candidate.
+13. **Stop at the human gate.** The public and active V2 outputs remain
+    candidates. Clinician accept/correct/reject/defer semantics are specified,
+    but the active write surface is not yet wired.
 
 ### Router modes
 
@@ -278,19 +285,20 @@ CaseScope and cannot silently perform the authority-bearing work of another:
 
 | Mode | Permitted work |
 | --- | --- |
-| `view` | Read the current accepted state and any separately published candidate. |
+| `view` | Read approved source facts and any separately published candidate. |
 | `intake` | Register a new case or source set and create the initial private inventory. |
 | `data_revision` | Propose source-addressed corrections to structured case data. |
 | `source_review` | Verify extracted fields against the primary record and record exceptions. |
 | `evidence_review` | Review external propositions, applicability, licences and source receipts. |
-| `controlled_synthesis` | Execute the four-pass protocol and publish an immutable candidate after method verification. |
+| `controlled_synthesis` | Execute method 2.5.3 and finalize an immutable candidate after independent critique. |
 | `projection` | Build and verify the detached read-only dashboard projection. |
-| `clinician_review` | Present proposed changes and record accept, correct, reject or defer decisions. |
+| `clinician_review` | Present the future human decision gate; active V2 decision writing is not yet wired. |
 | `audit` | Inspect receipts, hashes, state transitions and failures without changing clinical state. |
 
-The declared mode is included in the routed operation. A `projection` operation,
-for example, cannot promote accepted state; a `controlled_synthesis` operation
-cannot record a clinician decision.
+The intent is resolved before an operation begins. Active V2 mutations then use
+`advance/resume` and the exact StepSpec returned by `workflow-status`. A
+`projection` action cannot create clinical authority; synthesis cannot record a
+clinician decision.
 
 ### Current modules
 
@@ -300,24 +308,22 @@ bounded reasoning roles; runtime surfaces identify deterministic controls.
 
 | Stage | Agent or runtime surface | Responsibility | Recorded result |
 | --- | --- | --- | --- |
-| Private intake | Case-scoped intake and inventory | Isolates source files, inventories pages, records hashes and phase time | Private source manifest and action receipt |
-| Local recognition | **Apple Vision OCR** | Reads text, confidence, line geometry and word coordinates on-device | Immutable page text and coordinate map |
-| Structure | Structured JSON projection | Reconstructs table rows as analyte, result, unit, comparator and reference with word receipts | Hash-pinned structured source candidate |
-| Privacy | De-identification and semantic privacy audit | Removes unnecessary identifiers while preserving row IDs and source geometry | De-identified structured layer and privacy receipt |
-| Source review | **Terra visual readers** with deterministic consensus | Reads bounded privacy-screened crops and replays exact word IDs into fields | Field consensus or targeted exception |
-| Routing | HematoBoard router and CaseScope | Resolves the one permitted mode and binds every artifact to one case, bundle, revision and operation | CaseScope receipt |
-| Clinical state | Accepted evidence ledger | Stores versioned measurements, findings, dates, interpretations and provenance | Canonical `case_bundle.json` revision |
-| Source navigation | Universal patient-source resolver and private viewer | Resolves `case_id + observation_id`; opens a de-identified public record or an exact local PDF page and bounding box | Auditable source-open action without public PDF access |
-| Breadth pass | Context-shielded synthesis execution | Builds the initial candidate field without prior reasoning or external literature | `passes/01-breadth.json` |
-| Grounding pass | Research execution and source reviewer | Finds narrow external propositions, records rejected sources and proves search saturation | `passes/02-grounding.json` |
-| Reconciliation pass | Controlled synthesis execution | Maps every previous and current hypothesis without identifier reassignment | `passes/03-reconciliation.json` |
-| Critic pass | Independent execution | Tests alternatives, contradictions, evidence limits and language strength | `passes/04-critic.json` |
-| Method gate | Deterministic protocol self-check | Verifies protocol/schema identity, pass order, hashes, saturation, independence and required files | Method-verification receipt |
-| Candidate publication | Deterministic write-once publisher | Copies the complete controlled run into an immutable reasoning revision | Candidate manifest and hash-chained audit |
-| Projection | Detached source and DOM closure | Builds the Material view and checks every rendered field against its source artifact | Projection receipt pinned to candidate and build hashes |
-| Presentation | **HematoBoard Material Dashboard** | Displays accepted state and a separate candidate across overview, timeline, graph, data and gaps | Read-only case projection |
-| Clinical review | Clinician review application | Opens source-linked proposed changes and records the responsible clinician's action | Accept, correct, reject or defer decision |
-| Promotion | Controlled state transaction | Validates unchanged inputs and materializes an approved revision atomically | New accepted state with parent hash |
+| Private intake | Human-operated workbench | Isolates PDF/photo sources and writes case-scoped G1/G2/G4 action receipts | Private source inventory and review packs |
+| Local recognition | Native DOCX text or **Apple Vision OCR** | Preserves literal text, page order and available geometry on-device | Approved OCR/native-text layer |
+| Structure | V2 deterministic clinical core | Produces SourceRecords, ClinicalFacts, measurement series and source-preserving unit resolution | Exact clinical snapshot and SHA-256 |
+| Privacy | Operator exact-span overlay and residual scan | Removes direct identifiers only from derived Markdown/JSON without altering the raw PDF | Versioned de-identification and retention receipts |
+| Routing | `workflow-status → advance/resume` | Resolves one CaseScope and one registered StepSpec; never calls a model implicitly | Typed workflow response and command key |
+| Run safety | Journal, case lease and immutable command receipts | Serializes mutations, supports exact replay and separates crash recovery from clinical work | Hash-chained events and request/completion receipts |
+| Blind breadth | Primary Sol turn 1 | Builds alternatives across seven coverage sectors without prior ranking or literature | Initial breadth result or one named repeat gap |
+| Targeted breadth | Conditional primary Sol turn | Runs only for a named uncovered sector; a routine third breadth pass is forbidden | Immutable second-breadth receipt |
+| Grounding and draft | Primary Sol turn 2 | Executes exact evidence queries, reconciles every breadth candidate and returns the candidate draft | Grounding/reconciliation traces and candidate hash |
+| Critic | Independent Sol execution | Tests closure, dangerous alternatives, evidence strength, workup necessity and clinical language | Critic receipt with zero unresolved critical/high findings |
+| Candidate finalization | Deterministic V2 controller | Validates relations, evidence identity, coverage and critic binding | Immutable candidate synthesis |
+| Projection | Candidate projection builder | Builds graph, timeline, data, gaps and source traces without changing source facts | Immutable candidate dashboard projection |
+| Browser QA | Full or data-only QA profile | Binds case, candidate, projection, shared UI and screenshots; checks console and overflow | Detached QA receipt |
+| Presentation | Shared V1 clinical shell | Displays candidate-only overview, timeline, graph, data, gaps and reasoning | Public de-identified read-only package |
+| Derived objects | Versioned batch read model | Materializes reusable object versions after G2, candidate and QA checks | Derived `current.json`; no clinician authority |
+| Clinician gate | Specified but not wired | Reserves accept/correct/reject/defer for a recorded human action | `clinician_accepted=false` in all current public cases |
 
 ## Reading difficult clinical documents
 
@@ -329,21 +335,21 @@ coordinate transforms provide bounded working surfaces for verification.
 
 Spatial structure is resolved before de-identification. A laboratory row binds
 the analyte, result, unit, comparator and reference interval to one row identity.
-Repeated triplet layouts and paired echocardiography grids retain their own
-column logic. Strict JSON carries field bounding boxes, word IDs, page hashes
-and row/column invariants. Markdown serves as a human-readable projection of
-that JSON.
+Strict JSON carries field bounding boxes, word IDs, page hashes and row/column
+invariants. The raw PDF and OCR stay immutable in private quarantine. Direct
+identifiers are removed by exact page-scoped span operations in derived JSON
+and Markdown; deleting an entire mixed clinical line is forbidden.
 
 Recognition output remains immutable. A correction such as Cyrillic `ч` in a
 sex-specific reference interval receives an append-only overlay linked to the
 exact word ID, bounding box, crop, page hash, reader and timestamp. Derived
 tables replay the overlay while preserving the raw recognition artifact.
 
-Ambiguous fields can be submitted as minimum-necessary, privacy-screened crops
-to two or more independent multimodal readers. Deterministic consensus checks
-crop hashes, geometry manifests and exact word assignment. Agreement produces a
-machine-verification receipt. Disagreement, low confidence or an incomplete
-required field produces one targeted exception for review.
+Selected table, figure or scan-layout pages receive an explicit visual-semantic
+review inside the primary grounding turn. A secondary visual reader is allowed
+only after the primary reviewer names a concrete ambiguity in a cell, arrow,
+caption or footnote. Disagreement, low confidence or incomplete source coverage
+opens one targeted exception rather than restarting the whole intake.
 
 ## From PubMed and guidelines to case evidence
 
@@ -384,23 +390,21 @@ Campo et al., 2022; d’Amore et al., 2025).
 
 The canonical HematoBoard router resolves one CaseScope before an agent receives
 data. Raw PDFs, direct identifiers, interface state, prior ranking, prior
-relations, external literature and clinician decisions remain outside the
-initial breadth projection. The four protocol passes then have different jobs
-and different immutable receipts: breadth generates alternatives; grounding
-tests them against reviewed external propositions; reconciliation compares the
-grounded result with history without reusing identifiers silently; an
-independent critic challenges the candidate and can block publication.
+relations, external literature and clinician decisions remain outside blind
+breadth. Breadth, grounding, reconciliation and critique have different jobs
+and separate receipts, but the normal route uses three model turns rather than
+four: blind breadth; combined grounding/reconciliation/draft; independent
+critique. A second breadth or repair turn is allowed only for a named finding.
 
-The deterministic self-check verifies the protocol and run schemas, exact pass
-order, hashes, execution and prompt identity, tool events, search saturation and
-critic independence. Publication copies the complete run into an immutable
-candidate revision. A separate projection receipt then binds the dashboard DOM
-to candidate and build hashes. Neither technical receipt changes the accepted
-ledger. The clinician review surface presents the candidate together with the
-evidence needed to accept, correct, reject or defer it.
+The deterministic controller verifies the method and run schemas, registered
+state, exact hashes, execution identity, retrieval coverage, candidate
+relations and critic independence. Finalization copies the draft into an
+immutable candidate. A separate QA receipt binds projection, candidate, shared
+UI and screenshots. Neither technical receipt creates an accepted diagnosis.
+The future clinician gate remains a separate human-authority layer.
 
 Research on human susceptibility to erroneous AI advice motivates this visible
-separation of accepted state, AI Agent interpretation and clinician authority
+separation of source facts, AI Agent interpretation and clinician authority
 (Cabitza et al., 2017; Gaube et al., 2021). The design supports disagreement,
 abstention and revision as first-class outcomes of the workflow, consistent
 with calls for clinically grounded, safety-aware evaluation throughout the
@@ -415,17 +419,17 @@ minimization, purpose limitation and traceable disclosure (European Parliament
 - Raw PDFs, page renders, direct identifiers and re-identification mappings stay
   in private case quarantine.
 - Apple Vision performs recognition locally.
-- De-identification is applied to the structured layer after table and coordinate
-  relationships have been preserved.
+- De-identification removes exact identifier spans only from derived structured
+  JSON and Markdown after table and coordinate relationships are preserved.
 - A cloud AI Agent receives an approved de-identified clinical projection or a
   tightly bounded crop cleared for its specific operation.
-- Provider adapters remain closed until isolation and data-boundary checks pass.
+- Only the minimum-necessary G2-approved layer can enter synthesis or critique.
 - Licensed guideline text stays local when its terms restrict external model
   processing.
 - Material transformations retain version, hash, operation and responsible
   human or agent identity.
-- AI Agent results enter candidate state and acquire clinical authority only
-  through an explicit clinician decision and controlled promotion transaction.
+- AI Agent results remain candidates. Clinical authority would require a
+  separate recorded clinician decision; that active V2 write path is not wired.
 
 De-identification reduces disclosure risk while institutional, legal, security
 and ethics governance remains necessary. Clinical-text de-identification is a
@@ -443,22 +447,26 @@ for AI in health set out by the World Health Organization (2021).
 | Patient record | Laboratory, pathology, imaging, procedures and clinical narrative | Document, page or crop, field structure, date, verification and privacy status |
 | Literature | PubMed, DOI records and peer-reviewed articles | Citation, evidence type, exact proposition, applicability and retrieval receipt |
 | Guidelines | Official societies, classifications, institutional or licensed local PDFs | Edition, date, page or node, licence, model-use permission and review status |
-| Controlled synthesis | Breadth, grounding, reconciliation and independent critic | Separate pass inputs and outputs, execution identity, prompt hash, tool events, saturation and critical findings |
+| Controlled synthesis | Breadth, grounding, reconciliation and independent critic | Separate method receipts, execution identity, exact queries, retrieval coverage, candidate hash and critical findings |
 | Provenance | Versioned JSON, SHA-256, immutable revisions and typed graph relations | Input/output identity, lineage, responsible agent and projection closure |
-| Human authority | Source review and final clinician decision | Append-only acceptance, correction, rejection or deferral |
+| Human authority | Source review and future final clinician decision | Recorded G1/G2/G4 receipts today; clinician acceptance remains unwired |
 
 ## Research status
 
-HematoBoard is in controlled clinician-in-the-loop testing with prepared,
+HematoBoard is being evaluated in clinical conditions with prepared,
 de-identified case packages. Current evaluation concerns source reconstruction,
-measurement transfer, evidence traceability, protocol-2.0 method conformance,
-reasoning freshness, exact-hash evidence admission, patient-source navigation,
-detached projection closure and clinician-facing review ergonomics. The public
-Material dashboard currently presents de-identified CASE006 as an accepted
-source ledger plus a separate candidate interpretation. The current release is
-reasoning revision `RR-CASE006-3d72544bd826`, with 58 observations, 11 admitted
-external sources and nine explicit gaps; the candidate has not been clinically
-accepted.
+measurement transfer, evidence traceability, method-2.5.3 conformance, reasoning
+freshness, exact-hash evidence admission, patient-source navigation, projection
+closure and clinician-facing review ergonomics.
+
+The public Ukrainian release currently indexes 15 de-identified candidate
+dashboards. Their packages, schemas, hashes and release manifests pass the
+current public release validator; all retain `clinician_accepted=false`.
+Historical cases preserve the receipts and parser behavior under which they
+were produced and are not silently presented as retrovalidated under every new
+rule. The current CASE011-V2 reference package is a user-authorized protocol
+replay with an independent critic PASS and detached browser QA, not a confirmed
+diagnosis.
 
 External clinical validation, prospective effectiveness evaluation, regulatory
 qualification and deployment performance remain future stages. Planned studies
@@ -469,21 +477,23 @@ early live clinical evaluation from later comparative clinical trials (Liu et
 al., 2020; Vasey et al., 2022). Each outcome retains its own interpretation and
 limitation.
 
-The screenshots document a de-identified research demonstrator. Case packages,
-runtime data and clinician decisions remain inside the controlled workspace.
+The screenshots document a de-identified, presentation-only English projection
+of CASE001. Raw source packages, private runtime data and clinician decisions
+remain inside the controlled workspace.
 Diagnosis, staging, treatment and clinical promotion remain the responsibility
 of the treating team after review of the complete primary record.
 
 ## Public interface and controlled runtime
 
-This repository publishes the research article, current Material screenshots,
-the version-pinned architecture figure and a manifest bound to the current
-CASE006 reasoning and projection receipts. The de-identified read-only
-demonstrator is available at
-<https://esannikov.github.io/hematoboard/?case=case006>. Clinical case packages,
-private dashboard inputs, licensed guideline files, the adjacent PDF source
-viewer and clinician-acceptance state remain within the controlled development
-environment.
+This repository publishes the research article, English dashboard screenshots,
+the version-pinned architecture figure and a manifest bound to method 2.5.3,
+the current CASE011-V2 public package and the exact screenshot assets. The
+English presentation-only demonstrator is available at
+<https://esannikov.github.io/hematoboard-en/?case=case001>; the current
+Ukrainian case set is available at
+<https://esannikov.github.io/hematoboard/?case=case011-v2>. Private clinical
+source packages, raw source files, licensed guideline files and any future
+clinician-acceptance state remain within the controlled development environment.
 
 Reusable schemas, validators and a sanitized reference pipeline are planned for
 a later code release after the interfaces and privacy boundary stabilize.
