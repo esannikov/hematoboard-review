@@ -256,7 +256,7 @@
 
   <rect x="745" y="1825" width="410" height="90" rx="16" class="node sourceNode"/>
   <text x="950" y="1861" class="nodeTitle">PUBLIC CANDIDATE STATUS</text>
-  <text x="950" y="1888" class="nodeCopySmall">Published cases remain unaccepted by clinicians.</text>
+  <text x="950" y="1888" class="nodeCopySmall">No clinician acceptance recorded in this release.</text>
 
   <!-- Primary dependencies. -->
   <path d="M260 435 V470" class="flow"/>

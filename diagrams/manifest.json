@@ -394,13 +394,13 @@
   "architecture_figure": {
     "source": {
       "path": "diagrams/hematoboard-trace-system.svg",
-      "sha256": "8deb3e060d89d4d7bf21b199f60f6d6e0a5975a26041bcdffc6d530ccc7b442a",
-      "bytes": 19907
+      "sha256": "875cea2c4b1875541d516c99805d3e9bde01fb4cbe1ecaf95f2239dba90a662c",
+      "bytes": 19908
     },
     "raster": {
       "path": "diagrams/hematoboard-trace-system.png",
-      "sha256": "c4785dd48b52fc355d978bb2f77125323cbd0658e760e16c4073960f9115329e",
-      "bytes": 586594,
+      "sha256": "4ddfca015a5cf7e1d2024f0b0ed49c61dc28cd06782cab476ea286f2d562f640",
+      "bytes": 585994,
       "width": 2160,
       "height": 3150
     },
