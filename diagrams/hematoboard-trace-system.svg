@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="2100" viewBox="0 0 1440 2100" role="img" aria-labelledby="title desc">
-  <title id="title">HematoBoard controlled synthesis method 2.5.3 architecture</title>
-  <desc id="desc">HematoBoard keeps patient documents in a private human-operated workbench while approved source facts enter one case-scoped V2 controller. Blind breadth, evidence grounding, reconciliation and independent critique remain separately recorded even though the normal route uses two primary model turns and one critic turn. The output is a read-only candidate dashboard. Clinician acceptance is a separate future write gate and is not active in V2.</desc>
+  <title id="title">HematoBoard current architecture, 6 November 2026</title>
+  <desc id="desc">HematoBoard reads format-native source records and builds a reviewed patient graph. Blind breadth, targeted source review, candidate synthesis and independent critique have distinct records. The standard route has two primary turns and one separate critic execution, with bounded extensions and repair. Code owns identities, hashes and execution accounting. Public display is read-only; a separate local clinician decision interface is implemented. Configured protocol 2.5.5 is not a retrospective version claim for historical cases.</desc>
 
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto">
@@ -60,7 +60,7 @@
   </defs>
 
   <rect width="1440" height="2100" fill="#ffffff"/>
-  <text x="36" y="42" class="figureLabel">HEMATOBOARD · controlled synthesis method 2.5.3 · 2026-08-26</text>
+  <text x="36" y="42" class="figureLabel">HEMATOBOARD · current architecture · 2026-11-06</text>
 
   <!-- One operational entry point and one case identity. -->
   <rect x="50" y="68" width="1340" height="150" rx="24" class="node router"/>
@@ -68,7 +68,7 @@
   <text x="116" y="102" class="badgeText">ONE ENTRY</text>
   <text x="720" y="130" class="nodeTitle">ONE V2 OPERATOR ENTRYPOINT</text>
   <text x="720" y="158" class="nodeCopy">workflow-status resolves the exact CaseScope and registered next action.</text>
-  <text x="720" y="183" class="nodeCopySmall">advance/resume bind immutable receipts, hashes and one case lease.</text>
+  <text x="720" y="183" class="nodeCopySmall">Code binds identities, hashes and receipts; a batch controller budgets model attempts.</text>
   <text x="720" y="204" class="nodeCopySmall">The controller never approves a clinical conclusion or calls a model implicitly.</text>
 
   <!-- Three authority regions. -->
@@ -78,8 +78,8 @@
   <text x="260" y="301" class="regionCopy">and source locations are checked</text>
 
   <rect x="505" y="230" width="420" height="565" rx="22" class="region stateRegion"/>
-  <text x="715" y="264" class="regionTitle" fill="#087c73">G2-APPROVED CLINICAL LAYER</text>
-  <text x="715" y="287" class="regionCopy">Approved source records, facts and signals enter candidate reasoning</text>
+  <text x="715" y="264" class="regionTitle" fill="#087c73">REVIEWED PATIENT STATE</text>
+  <text x="715" y="287" class="regionCopy">One versioned Patient Graph supplies patient data</text>
 
   <rect x="955" y="230" width="440" height="565" rx="22" class="region protocolRegion"/>
   <text x="1175" y="264" class="regionTitle" fill="#6750a4">METHOD AND MEDICAL SOURCES</text>
@@ -98,44 +98,44 @@
   <rect x="88" y="491" width="104" height="22" rx="11" class="controlBadge"/>
   <text x="140" y="507" class="badgeText">LOCAL</text>
   <text x="260" y="542" class="nodeTitle">READ TEXT AND TABLES</text>
-  <text x="260" y="567" class="nodeCopy">Reads each page while keeping the exact</text>
-  <text x="260" y="588" class="nodeCopySmall">position of every word, value and table cell.</text>
+  <text x="260" y="567" class="nodeCopy">PDF / photo regions, DOCX paragraphs and cells,</text>
+  <text x="260" y="588" class="nodeCopySmall">or structured record fields retain their source addresses.</text>
 
   <rect x="70" y="635" width="380" height="140" rx="12" class="node hybridNode"/>
   <rect x="88" y="651" width="72" height="22" rx="11" class="hybridBadge"/>
   <text x="124" y="667" class="badgeText">CHECKED</text>
-  <text x="260" y="700" class="nodeTitle">EXACT-SPAN DE-ID + G1/G2/G4</text>
-  <text x="260" y="726" class="nodeCopy">Removes identifiers only from derived JSON/Markdown</text>
-  <text x="260" y="748" class="nodeCopySmall">and checks retention against the approved source layer.</text>
+  <text x="260" y="700" class="nodeTitle">SOURCE + PRIVACY REVIEW</text>
+  <text x="260" y="726" class="nodeCopy">Preserves clinical content; checks fields and completeness.</text>
+  <text x="260" y="748" class="nodeCopySmall">Authorized DOCX technical review is labelled as agent review.</text>
   <text x="260" y="770" class="nodeCopySmall">The raw PDF and OCR remain unchanged in private quarantine.</text>
 
   <!-- Accepted state and controlled input. -->
   <rect x="530" y="315" width="370" height="150" rx="12" class="node stateNode"/>
   <rect x="548" y="331" width="66" height="22" rx="11" class="stateBadge"/>
-  <text x="581" y="347" class="badgeText">G2 PASS</text>
-  <text x="715" y="382" class="nodeTitle">CLINICAL SNAPSHOT</text>
-  <text x="715" y="410" class="nodeCopy">Stores the exact source records, normalized facts</text>
-  <text x="715" y="433" class="nodeCopySmall">and signals approved for candidate reasoning.</text>
+  <text x="581" y="347" class="badgeText" style="font-size:9px">REVIEWED</text>
+  <text x="715" y="382" class="nodeTitle">PATIENT GRAPH</text>
+  <text x="715" y="410" class="nodeCopy">Patient · events · specimens · results · findings · time</text>
+  <text x="715" y="433" class="nodeCopySmall">Object versions, source addresses and semantic state hash.</text>
 
   <rect x="530" y="515" width="370" height="150" rx="12" class="node controlNode"/>
   <rect x="548" y="531" width="104" height="22" rx="11" class="controlBadge"/>
   <text x="600" y="547" class="badgeText">RULE-BASED</text>
   <text x="715" y="582" class="nodeTitle">PREPARE A FRESH ANALYSIS</text>
-  <text x="715" y="610" class="nodeCopy">Creates a clean copy of the current case.</text>
-  <text x="715" y="634" class="nodeCopySmall">Earlier hypotheses and conclusions are hidden.</text>
-  <text x="715" y="654" class="nodeCopySmall">They cannot bias the new analysis.</text>
+  <text x="715" y="610" class="nodeCopy">Supplies the current graph for blind breadth.</text>
+  <text x="715" y="634" class="nodeCopySmall">Earlier system hypotheses and literature are withheld.</text>
+  <text x="715" y="654" class="nodeCopySmall">Prior reasoning enters later, for explicit comparison.</text>
 
   <rect x="530" y="705" width="370" height="60" rx="12" class="node stateNode"/>
-  <text x="715" y="731" class="nodeCopy">If the approved clinical snapshot changes,</text>
-  <text x="715" y="753" class="nodeCopySmall">the existing analysis is marked out of date.</text>
+  <text x="715" y="731" class="nodeCopy">Changed clinical input requires a new revision.</text>
+  <text x="715" y="753" class="nodeCopySmall">A display refresh does not refresh the clinical synthesis.</text>
 
   <!-- Protocol and evidence controls. -->
   <rect x="980" y="315" width="390" height="130" rx="12" class="node agentNode"/>
   <rect x="998" y="331" width="82" height="22" rx="11" class="agentBadge"/>
   <text x="1039" y="347" class="badgeText">METHOD</text>
-  <text x="1175" y="382" class="nodeTitle">METHOD 2.5.3</text>
-  <text x="1175" y="409" class="nodeCopy">Defines seven-sector breadth, exact evidence queries,</text>
-  <text x="1175" y="432" class="nodeCopySmall">candidate closure and independent critic checks.</text>
+  <text x="1175" y="382" class="nodeTitle">CONFIGURED METHOD 2.5.5</text>
+  <text x="1175" y="409" class="nodeCopy">Seven coverage questions, evidence matrix and continuity,</text>
+  <text x="1175" y="432" class="nodeCopySmall">separate confirmation and priority; contract-specific critique.</text>
 
   <rect x="980" y="485" width="390" height="130" rx="12" class="node controlNode"/>
   <rect x="998" y="501" width="104" height="22" rx="11" class="controlBadge"/>
@@ -155,18 +155,18 @@
   <!-- Separately inspectable method stages across three routine model turns. -->
   <rect x="45" y="835" width="1350" height="285" rx="22" class="region reasonRegion"/>
   <rect x="420" y="817" width="600" height="36" rx="18" class="entryGate"/>
-  <text x="720" y="840" class="entryGateText">ANALYSIS STARTS ONLY WHEN THE CASE, METHOD AND SOURCES ARE READY</text>
-  <text x="720" y="872" class="regionTitle" fill="#6750a4">TWO PRIMARY TURNS + ONE INDEPENDENT CRITIC</text>
-  <text x="720" y="895" class="regionCopy">Four method stages remain separately inspectable through immutable receipts</text>
+  <text x="720" y="840" class="entryGateText">SOURCE ADMISSION, MODEL PROFILE AND EXACT CASE INPUT ARE CHECKED BEFORE DISPATCH</text>
+  <text x="720" y="872" class="regionTitle" fill="#6750a4">STANDARD ROUTE: TWO PRIMARY TURNS + ONE INDEPENDENT CRITIC</text>
+  <text x="720" y="895" class="regionCopy">Named source gaps or blocking criticism may add a bounded continuation or repair</text>
 
   <rect x="70" y="925" width="290" height="175" rx="14" class="node agentNode"/>
   <rect x="88" y="941" width="82" height="22" rx="11" class="agentBadge"/>
   <text x="129" y="957" class="badgeText">PASS 1</text>
   <text x="215" y="995" class="nodeTitle">BLIND BREADTH · TURN 1</text>
-  <text x="215" y="1024" class="nodeCopy">Builds alternatives across seven</text>
-  <text x="215" y="1047" class="nodeCopy">coverage sectors and open questions.</text>
-  <text x="215" y="1068" class="nodeCopySmall">Prior ranking and external literature</text>
-  <text x="215" y="1088" class="nodeCopySmall">remain outside this input.</text>
+  <text x="215" y="1024" class="nodeCopy">Uses graph data and learned knowledge</text>
+  <text x="215" y="1047" class="nodeCopy">to propose alternatives and questions.</text>
+  <text x="215" y="1068" class="nodeCopySmall">Seven coverage prompts are not</text>
+  <text x="215" y="1088" class="nodeCopySmall">a requirement for seven diagnoses.</text>
 
   <rect x="405" y="925" width="290" height="175" rx="14" class="node agentNode"/>
   <rect x="423" y="941" width="82" height="22" rx="11" class="agentBadge"/>
@@ -174,8 +174,8 @@
   <text x="550" y="995" class="nodeTitle">GROUNDING · TURN 2</text>
   <text x="550" y="1024" class="nodeCopy">Executes exact breadth queries against</text>
   <text x="550" y="1047" class="nodeCopy">allowed sources and binds result identity.</text>
-  <text x="550" y="1068" class="nodeCopySmall">Fast triage keeps diagnostic-priority</text>
-  <text x="550" y="1088" class="nodeCopySmall">results; named gaps may expand retrieval.</text>
+  <text x="550" y="1068" class="nodeCopySmall">Verifies propositions and applicability;</text>
+  <text x="550" y="1088" class="nodeCopySmall">an empty search is not diagnostic exclusion.</text>
 
   <rect x="740" y="925" width="290" height="175" rx="14" class="node agentNode"/>
   <rect x="758" y="941" width="82" height="22" rx="11" class="agentBadge"/>
@@ -184,10 +184,10 @@
     <tspan x="885" dy="0">RECONCILE + DRAFT</tspan>
     <tspan x="885" dy="21">TURN 2</tspan>
   </text>
-  <text x="885" y="1032" class="nodeCopy">Maps every breadth candidate to a</text>
-  <text x="885" y="1053" class="nodeCopy">hypothesis, workup, gap or deactivation.</text>
-  <text x="885" y="1074" class="nodeCopySmall">Returns one exact candidate draft;</text>
-  <text x="885" y="1094" class="nodeCopySmall">the controller adds deterministic metadata.</text>
+  <text x="885" y="1032" class="nodeCopy">Evidence matrix; confirmation and priority;</text>
+  <text x="885" y="1053" class="nodeCopy">hypothesis continuity and workup outcomes.</text>
+  <text x="885" y="1074" class="nodeCopySmall">Accounts for patient observations;</text>
+  <text x="885" y="1094" class="nodeCopySmall">code compiles exact references and metadata.</text>
 
   <rect x="1075" y="925" width="290" height="175" rx="14" class="node agentNode"/>
   <rect x="1093" y="941" width="82" height="22" rx="11" class="agentBadge"/>
@@ -196,9 +196,9 @@
     <tspan x="1220" dy="0">INDEPENDENT CRITIC</tspan>
     <tspan x="1220" dy="21">TURN 3</tspan>
   </text>
-  <text x="1220" y="1038" class="nodeCopy">A separate agent looks for missed</text>
-  <text x="1220" y="1060" class="nodeCopy">diagnoses, weak evidence and overclaiming.</text>
-  <text x="1220" y="1082" class="nodeCopySmall">A critical problem blocks publication.</text>
+  <text x="1220" y="1038" class="nodeCopy">A fresh execution reviews the candidate,</text>
+  <text x="1220" y="1060" class="nodeCopy">its sources, alternatives and uncertainty.</text>
+  <text x="1220" y="1082" class="nodeCopySmall">Same model; blocking findings stop release.</text>
 
   <!-- Method gate, immutable candidate and detached projection. -->
   <rect x="160" y="1165" width="1120" height="135" rx="18" class="node controlNode"/>
@@ -226,37 +226,37 @@
   <!-- Human-facing destinations and authority. -->
   <rect x="45" y="1545" width="1350" height="390" rx="22" fill="#fbfcfd" stroke="#b7c6d5" stroke-width="1.8"/>
   <text x="720" y="1582" class="regionTitle" fill="#4e779d">DISPLAY AND SEPARATE HUMAN AUTHORITY</text>
-  <text x="720" y="1605" class="regionCopy">The dashboard is active and read-only; the clinician decision write surface remains future work</text>
+  <text x="720" y="1605" class="regionCopy">Public display is read-only; the separate local clinician decision interface is implemented</text>
 
   <rect x="70" y="1640" width="380" height="145" rx="18" class="node dashboardNode"/>
   <rect x="88" y="1656" width="104" height="22" rx="11" class="agentBadge"/>
   <text x="140" y="1672" class="badgeText">READ ONLY</text>
   <text x="260" y="1707" class="nodeTitle">CASE DASHBOARD</text>
-  <text x="260" y="1735" class="nodeCopy">Shows G2-approved facts and clearly labels</text>
+  <text x="260" y="1735" class="nodeCopy">Shows admitted patient data and clearly labels</text>
   <text x="260" y="1758" class="nodeCopySmall">the candidate. It cannot change clinical data.</text>
 
   <rect x="530" y="1640" width="380" height="145" rx="18" class="node surfaceNode"/>
   <rect x="548" y="1656" width="76" height="22" rx="11" class="surfaceBadge"/>
   <text x="586" y="1672" class="badgeText">REVIEW</text>
   <text x="720" y="1707" class="nodeTitle">PRIVATE SOURCE REVIEW</text>
-  <text x="720" y="1735" class="nodeCopy">The workbench binds review to exact PDF/OCR bytes,</text>
-  <text x="720" y="1758" class="nodeCopySmall">page geometry and minimum-necessary derived records.</text>
+  <text x="720" y="1735" class="nodeCopy">Review binds exact source versions and format-native</text>
+  <text x="720" y="1758" class="nodeCopySmall">addresses; source decisions do not accept a diagnosis.</text>
 
   <rect x="990" y="1640" width="380" height="145" rx="18" class="node humanNode"/>
   <rect x="1008" y="1656" width="72" height="22" rx="11" class="humanBadge"/>
   <text x="1044" y="1672" class="badgeText">CLINICIAN</text>
-  <text x="1180" y="1707" class="nodeTitle">FUTURE CLINICIAN GATE</text>
-  <text x="1180" y="1735" class="nodeCopy">Accept/correct/reject/defer semantics are specified,</text>
-  <text x="1180" y="1758" class="nodeCopySmall">but active V2 decision writing is not wired.</text>
+  <text x="1180" y="1707" class="nodeTitle">LOCAL CLINICIAN DECISION</text>
+  <text x="1180" y="1735" class="nodeCopy">A named clinician can accept, correct, reject or defer</text>
+  <text x="1180" y="1758" class="nodeCopySmall">the exact candidate in an authorized local session.</text>
 
   <rect x="285" y="1825" width="410" height="90" rx="16" class="node stateNode"/>
-  <text x="490" y="1858" class="nodeTitle">FUTURE RECORDED REVISION</text>
-  <text x="490" y="1883" class="nodeCopySmall">Would preserve the prior version and mark</text>
-  <text x="490" y="1904" class="nodeCopySmall">dependent reasoning as stale.</text>
+  <text x="490" y="1858" class="nodeTitle">RECORDED REVIEW / REVISION</text>
+  <text x="490" y="1883" class="nodeCopySmall">Preserves earlier artifacts; changed clinical input</text>
+  <text x="490" y="1904" class="nodeCopySmall">requires a separately reviewed source revision and reasoning.</text>
 
   <rect x="745" y="1825" width="410" height="90" rx="16" class="node sourceNode"/>
-  <text x="950" y="1861" class="nodeTitle">CURRENT STOP POINT</text>
-  <text x="950" y="1888" class="nodeCopySmall">Candidate, evidence and limitations stay inspectable; clinician_accepted=false.</text>
+  <text x="950" y="1861" class="nodeTitle">PUBLIC CANDIDATE STATUS</text>
+  <text x="950" y="1888" class="nodeCopySmall">Published cases remain unaccepted by clinicians.</text>
 
   <!-- Primary dependencies. -->
   <path d="M260 435 V470" class="flow"/>
@@ -283,5 +283,5 @@
   <rect x="70" y="1976" width="104" height="22" rx="11" class="controlBadge"/>
   <text x="122" y="1992" class="badgeText">APPEND ONLY</text>
   <text x="720" y="2018" class="nodeTitle">AUDIT LOG</text>
-  <text x="720" y="2047" class="nodeCopy">Records CaseScope, method, hashes, transitions, commands, privacy checks, model executions, QA and time.</text>
+  <text x="720" y="2047" class="nodeCopy">Case identity · source and graph versions · model executions · corrections · QA · human decisions</text>
 </svg>
