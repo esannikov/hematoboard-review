@@ -100,6 +100,8 @@ contract with format-specific addresses. PDF and image sources use page regions;
 DOCX uses document parts, paragraphs or table cells; structured inputs use record
 and field addresses. Apple Vision remains a local OCR component for applicable
 image inputs (Apple, n.d.); native text does not need to be treated as a scan.
+Recognition is a separate transfer problem whose accuracy depends on the document
+and layout (Rasmussen et al., 2012).
 
 Reading preserves literal values, units, comparators, reference intervals,
 specimens, methods and time roles. Repeated source instances are retained while
@@ -165,7 +167,8 @@ An unrecognized retrieval topic, an unselected corpus domain or an empty result
 is recorded as a search limitation; none establishes that relevant literature
 does not exist or that a diagnosis is excluded. A named gap may trigger targeted
 source expansion. General literature cannot supply a missing patient result.
-Source edition and permissions remain part of its identity (d’Amore et al., 2025). Guideline quality
+Guideline editions and dates remain explicit (d’Amore et al., 2025); permissions
+are tracked separately. Guideline quality
 can also be appraised using established instruments such as AGREE II
 (Brouwers et al., 2010).
 
@@ -479,8 +482,7 @@ Informatics Association, 19*(e1), e90–e95.
 
 Singhal, K., Azizi, S., Tu, T., Mahdavi, S. S., Wei, J., Chung, H. W., Scales,
 N., Tanwani, A., Cole-Lewis, H., Pfohl, S., Payne, P., Seneviratne, M., Gamble,
-P., Kelly, C., Babiker, A., Schärli, N., Chowdhery, A., Mansfield, P., Demner-
-Fushman, D., … Natarajan, V. (2023). Large language models encode clinical
+P., Kelly, C., Babiker, A., Schärli, N., Chowdhery, A., Mansfield, P., Demner-Fushman, D., … Natarajan, V. (2023). Large language models encode clinical
 knowledge. *Nature, 620*(7972), 172–180.
 <https://doi.org/10.1038/s41586-023-06291-2>
 

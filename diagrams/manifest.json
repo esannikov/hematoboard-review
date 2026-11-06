@@ -3,8 +3,8 @@
   "updated": "2026-11-06",
   "article": {
     "path": "README.md",
-    "sha256": "6ac117bb59e35226463ca6d69c8bc67fda59b14d9ed5c7ed71db441c4a17e88b",
-    "bytes": 32851
+    "sha256": "b85a048d6a72c02fa6da34e5bb0c6853a4c0a618c17bc8160c33281758f783fc",
+    "bytes": 32991
   },
   "configured_protocol": {
     "method_id": "HB-CONTROLLED-SYNTHESIS",
