@@ -1,287 +1,151 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="2100" viewBox="0 0 1440 2100" role="img" aria-labelledby="title desc">
-  <title id="title">HematoBoard current architecture, 6 November 2026</title>
-  <desc id="desc">HematoBoard reads format-native source records and builds a reviewed patient graph. Blind breadth, targeted source review, candidate synthesis and independent critique have distinct records. The standard route has two primary turns and one separate critic execution, with bounded extensions and repair. Code owns identities, hashes and execution accounting. Public display is read-only; a separate local clinician decision interface is implemented. Configured protocol 2.5.5 is not a retrospective version claim for historical cases.</desc>
-
-  <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0 0 10 5 0 10Z" fill="#222222"/>
-    </marker>
-    <marker id="arrowPurple" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0 0 10 5 0 10Z" fill="#6750a4"/>
-    </marker>
-    <marker id="arrowGreen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0 0 10 5 0 10Z" fill="#1f7a45"/>
-    </marker>
-    <marker id="arrowTeal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0 0 10 5 0 10Z" fill="#087c73"/>
-    </marker>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
-      <feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#6750a4" flood-opacity="0.16"/>
-    </filter>
-    <style>
-      text { font-family: "IBM Plex Sans", Arial, sans-serif; fill: #202124; }
-      .figureLabel { font-size: 24px; font-weight: 650; }
-      .region { stroke-width: 1.8; }
-      .regionTitle { font-size: 17px; font-weight: 760; letter-spacing: 0.8px; text-anchor: middle; }
-      .regionCopy { font-size: 12.5px; text-anchor: middle; fill: #5c6370; }
-      .node { stroke-width: 2; }
-      .nodeTitle { font-size: 19px; font-weight: 730; text-anchor: middle; }
-      .nodeCopy { font-size: 13.2px; text-anchor: middle; fill: #343943; }
-      .nodeCopySmall { font-size: 12.2px; text-anchor: middle; fill: #555d68; }
-      .badgeText { font-size: 10px; font-weight: 760; letter-spacing: 0.55px; text-anchor: middle; fill: #ffffff; }
-      .flow { fill: none; stroke: #222222; stroke-width: 2.4; marker-end: url(#arrow); }
-      .flowPurple { fill: none; stroke: #6750a4; stroke-width: 2.6; marker-end: url(#arrowPurple); }
-      .flowGreen { fill: none; stroke: #1f7a45; stroke-width: 2.6; marker-end: url(#arrowGreen); }
-      .loop { fill: none; stroke: #087c73; stroke-width: 2.5; stroke-dasharray: 8 7; marker-end: url(#arrowTeal); }
-      .flowLabel { font-size: 12px; font-weight: 650; }
-      .entryGate { fill: #ffffff; stroke: #6750a4; stroke-width: 2; }
-      .entryGateText { font-size: 11.5px; font-weight: 760; letter-spacing: 0.45px; text-anchor: middle; fill: #6750a4; }
-      .router { fill: #f2ecff; stroke: #6750a4; }
-      .privateRegion { fill: #f8fbff; stroke: #9fc3e5; }
-      .stateRegion { fill: #f6fbfa; stroke: #8cc7c1; }
-      .protocolRegion { fill: #fbf8ff; stroke: #c3addf; }
-      .reasonRegion { fill: #faf8fe; stroke: #bca8da; }
-      .sourceNode { fill: #f3f5f7; stroke: #69727d; }
-      .controlNode { fill: #edf6ff; stroke: #2f78bb; }
-      .stateNode { fill: #edf8f6; stroke: #087c73; }
-      .agentNode { fill: #f3edfb; stroke: #6750a4; }
-      .hybridNode { fill: #fff7e6; stroke: #b36b00; }
-      .humanNode { fill: #eef8eb; stroke: #1f7a45; }
-      .surfaceNode { fill: #eef5fb; stroke: #4e779d; }
-      .dashboardNode { fill: #f5f0ff; stroke: #6750a4; stroke-width: 3.5; filter: url(#shadow); }
-      .routerBadge, .agentBadge { fill: #6750a4; }
-      .controlBadge { fill: #2f78bb; }
-      .stateBadge { fill: #087c73; }
-      .hybridBadge { fill: #b36b00; }
-      .humanBadge { fill: #1f7a45; }
-      .surfaceBadge { fill: #4e779d; }
-      .sourceBadge { fill: #69727d; }
-    </style>
-  </defs>
-
-  <rect width="1440" height="2100" fill="#ffffff"/>
-  <text x="36" y="42" class="figureLabel">HEMATOBOARD · current architecture · 2026-11-06</text>
-
-  <!-- One operational entry point and one case identity. -->
-  <rect x="50" y="68" width="1340" height="150" rx="24" class="node router"/>
-  <rect x="70" y="86" width="92" height="22" rx="11" class="routerBadge"/>
-  <text x="116" y="102" class="badgeText">ONE ENTRY</text>
-  <text x="720" y="130" class="nodeTitle">ONE V2 OPERATOR ENTRYPOINT</text>
-  <text x="720" y="158" class="nodeCopy">workflow-status resolves the exact CaseScope and registered next action.</text>
-  <text x="720" y="183" class="nodeCopySmall">Code binds identities, hashes and receipts; a batch controller budgets model attempts.</text>
-  <text x="720" y="204" class="nodeCopySmall">The controller never approves a clinical conclusion or calls a model implicitly.</text>
-
-  <!-- Three authority regions. -->
-  <rect x="45" y="230" width="430" height="565" rx="22" class="region privateRegion"/>
-  <text x="260" y="264" class="regionTitle" fill="#2f78bb">PRIVATE CASE DOCUMENTS</text>
-  <text x="260" y="282" class="regionCopy">Documents stay local while their text, tables</text>
-  <text x="260" y="301" class="regionCopy">and source locations are checked</text>
-
-  <rect x="505" y="230" width="420" height="565" rx="22" class="region stateRegion"/>
-  <text x="715" y="264" class="regionTitle" fill="#087c73">REVIEWED PATIENT STATE</text>
-  <text x="715" y="287" class="regionCopy">One versioned Patient Graph supplies patient data</text>
-
-  <rect x="955" y="230" width="440" height="565" rx="22" class="region protocolRegion"/>
-  <text x="1175" y="264" class="regionTitle" fill="#6750a4">METHOD AND MEDICAL SOURCES</text>
-  <text x="1175" y="282" class="regionCopy">The method and allowed external sources are checked</text>
-  <text x="1175" y="301" class="regionCopy">before analysis begins</text>
-
-  <!-- Private source path. -->
-  <rect x="70" y="315" width="380" height="120" rx="12" class="node controlNode"/>
-  <rect x="88" y="331" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="140" y="347" class="badgeText">RULE-BASED</text>
-  <text x="260" y="382" class="nodeTitle">REGISTER DOCUMENTS</text>
-  <text x="260" y="407" class="nodeCopy">Registers every file and page and creates a</text>
-  <text x="260" y="428" class="nodeCopySmall">digital fingerprint so later checks use the same material.</text>
-
-  <rect x="70" y="475" width="380" height="120" rx="12" class="node controlNode"/>
-  <rect x="88" y="491" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="140" y="507" class="badgeText">LOCAL</text>
-  <text x="260" y="542" class="nodeTitle">READ TEXT AND TABLES</text>
-  <text x="260" y="567" class="nodeCopy">PDF / photo regions, DOCX paragraphs and cells,</text>
-  <text x="260" y="588" class="nodeCopySmall">or structured record fields retain their source addresses.</text>
-
-  <rect x="70" y="635" width="380" height="140" rx="12" class="node hybridNode"/>
-  <rect x="88" y="651" width="72" height="22" rx="11" class="hybridBadge"/>
-  <text x="124" y="667" class="badgeText">CHECKED</text>
-  <text x="260" y="700" class="nodeTitle">SOURCE + PRIVACY REVIEW</text>
-  <text x="260" y="726" class="nodeCopy">Preserves clinical content; checks fields and completeness.</text>
-  <text x="260" y="748" class="nodeCopySmall">Authorized DOCX technical review is labelled as agent review.</text>
-  <text x="260" y="770" class="nodeCopySmall">The raw PDF and OCR remain unchanged in private quarantine.</text>
-
-  <!-- Accepted state and controlled input. -->
-  <rect x="530" y="315" width="370" height="150" rx="12" class="node stateNode"/>
-  <rect x="548" y="331" width="66" height="22" rx="11" class="stateBadge"/>
-  <text x="581" y="347" class="badgeText" style="font-size:9px">REVIEWED</text>
-  <text x="715" y="382" class="nodeTitle">PATIENT GRAPH</text>
-  <text x="715" y="410" class="nodeCopy">Patient · events · specimens · results · findings · time</text>
-  <text x="715" y="433" class="nodeCopySmall">Object versions, source addresses and semantic state hash.</text>
-
-  <rect x="530" y="515" width="370" height="150" rx="12" class="node controlNode"/>
-  <rect x="548" y="531" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="600" y="547" class="badgeText">RULE-BASED</text>
-  <text x="715" y="582" class="nodeTitle">PREPARE A FRESH ANALYSIS</text>
-  <text x="715" y="610" class="nodeCopy">Pins the graph input and model profile for breadth.</text>
-  <text x="715" y="634" class="nodeCopySmall">Earlier system hypotheses and literature are withheld.</text>
-  <text x="715" y="654" class="nodeCopySmall">Prior reasoning enters later, for explicit comparison.</text>
-
-  <rect x="530" y="705" width="370" height="60" rx="12" class="node stateNode"/>
-  <text x="715" y="731" class="nodeCopy">Changed clinical input requires a new revision.</text>
-  <text x="715" y="753" class="nodeCopySmall">A display refresh does not refresh the clinical synthesis.</text>
-
-  <!-- Protocol and evidence controls. -->
-  <rect x="980" y="315" width="390" height="130" rx="12" class="node agentNode"/>
-  <rect x="998" y="331" width="82" height="22" rx="11" class="agentBadge"/>
-  <text x="1039" y="347" class="badgeText">METHOD</text>
-  <text x="1175" y="382" class="nodeTitle">CONFIGURED METHOD 2.5.5</text>
-  <text x="1175" y="409" class="nodeCopy">Seven coverage questions, evidence matrix and continuity,</text>
-  <text x="1175" y="432" class="nodeCopySmall">separate confirmation and priority; contract-specific critique.</text>
-
-  <rect x="980" y="485" width="390" height="130" rx="12" class="node controlNode"/>
-  <rect x="998" y="501" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="1050" y="517" class="badgeText">PRE-FLIGHT</text>
-  <text x="1175" y="552" class="nodeTitle">CHECK READINESS</text>
-  <text x="1175" y="579" class="nodeCopy">Checks that the case, tools, method and</text>
-  <text x="1175" y="602" class="nodeCopySmall">required files agree. Analysis cannot start if anything is missing.</text>
-
-  <rect x="980" y="645" width="390" height="140" rx="12" class="node sourceNode"/>
-  <rect x="998" y="661" width="72" height="22" rx="11" class="sourceBadge"/>
-  <text x="1034" y="677" class="badgeText">ALLOWED</text>
-  <text x="1175" y="705" class="nodeTitle">MEDICAL EVIDENCE LIBRARY</text>
-  <text x="1175" y="730" class="nodeCopy">Makes only checked, unchanged sources</text>
-  <text x="1175" y="752" class="nodeCopySmall">available to the agent. Licensed guidelines</text>
-  <text x="1175" y="773" class="nodeCopySmall">are used only with recorded permission.</text>
-
-  <!-- Separately inspectable method stages across three routine model turns. -->
-  <rect x="45" y="835" width="1350" height="285" rx="22" class="region reasonRegion"/>
-  <rect x="420" y="817" width="600" height="36" rx="18" class="entryGate"/>
-  <text x="720" y="840" class="entryGateText">SOURCE ADMISSION, MODEL PROFILE AND EXACT CASE INPUT ARE CHECKED BEFORE DISPATCH</text>
-  <text x="720" y="872" class="regionTitle" fill="#6750a4">STANDARD ROUTE: TWO PRIMARY TURNS + ONE INDEPENDENT CRITIC</text>
-  <text x="720" y="895" class="regionCopy">Named source gaps or blocking criticism may add a bounded continuation or repair</text>
-
-  <rect x="70" y="925" width="290" height="175" rx="14" class="node agentNode"/>
-  <rect x="88" y="941" width="82" height="22" rx="11" class="agentBadge"/>
-  <text x="129" y="957" class="badgeText">PASS 1</text>
-  <text x="215" y="995" class="nodeTitle">BLIND BREADTH · TURN 1</text>
-  <text x="215" y="1024" class="nodeCopy">Uses graph data and learned knowledge</text>
-  <text x="215" y="1047" class="nodeCopy">to propose alternatives and questions.</text>
-  <text x="215" y="1068" class="nodeCopySmall">Seven coverage prompts are not</text>
-  <text x="215" y="1088" class="nodeCopySmall">a requirement for seven diagnoses.</text>
-
-  <rect x="405" y="925" width="290" height="175" rx="14" class="node agentNode"/>
-  <rect x="423" y="941" width="82" height="22" rx="11" class="agentBadge"/>
-  <text x="464" y="957" class="badgeText">PASS 2</text>
-  <text x="550" y="995" class="nodeTitle">GROUNDING · TURN 2</text>
-  <text x="550" y="1024" class="nodeCopy">Executes the recorded breadth queries;</text>
-  <text x="550" y="1047" class="nodeCopy">pins source bytes and exact fragment identity.</text>
-  <text x="550" y="1068" class="nodeCopySmall">Verifies propositions and applicability;</text>
-  <text x="550" y="1088" class="nodeCopySmall">an empty search is not diagnostic exclusion.</text>
-
-  <rect x="740" y="925" width="290" height="175" rx="14" class="node agentNode"/>
-  <rect x="758" y="941" width="82" height="22" rx="11" class="agentBadge"/>
-  <text x="799" y="957" class="badgeText">PASS 3</text>
-  <text x="885" y="985" class="nodeTitle">
-    <tspan x="885" dy="0">RECONCILE + DRAFT</tspan>
-    <tspan x="885" dy="21">TURN 2</tspan>
-  </text>
-  <text x="885" y="1032" class="nodeCopy">Evidence matrix; confirmation and priority;</text>
-  <text x="885" y="1053" class="nodeCopy">hypothesis continuity and workup outcomes.</text>
-  <text x="885" y="1074" class="nodeCopySmall">Accounts for patient observations;</text>
-  <text x="885" y="1094" class="nodeCopySmall">code compiles exact references and metadata.</text>
-
-  <rect x="1075" y="925" width="290" height="175" rx="14" class="node agentNode"/>
-  <rect x="1093" y="941" width="82" height="22" rx="11" class="agentBadge"/>
-  <text x="1134" y="957" class="badgeText">PASS 4</text>
-  <text x="1220" y="985" class="nodeTitle">
-    <tspan x="1220" dy="0">INDEPENDENT CRITIC</tspan>
-    <tspan x="1220" dy="21">TURN 3</tspan>
-  </text>
-  <text x="1220" y="1038" class="nodeCopy">Checks the exact candidate hash,</text>
-  <text x="1220" y="1060" class="nodeCopy">its sources, alternatives and uncertainty.</text>
-  <text x="1220" y="1082" class="nodeCopySmall">Same model; blocking findings stop release.</text>
-
-  <!-- Method gate, immutable candidate and detached projection. -->
-  <rect x="160" y="1165" width="1120" height="135" rx="18" class="node controlNode"/>
-  <rect x="180" y="1181" width="118" height="22" rx="11" class="controlBadge"/>
-  <text x="239" y="1197" class="badgeText">FINAL CHECK</text>
-  <text x="720" y="1227" class="nodeTitle">VERIFY CANDIDATE CLOSURE</text>
-  <text x="720" y="1255" class="nodeCopy">Checks registered state, retrieval coverage, typed relations, exact hashes and critic independence.</text>
-  <text x="720" y="1280" class="nodeCopySmall">A PASS label is not enough: immutable receipts must prove the candidate path.</text>
-
-  <rect x="70" y="1350" width="600" height="150" rx="18" class="node stateNode"/>
-  <rect x="90" y="1366" width="66" height="22" rx="11" class="stateBadge"/>
-  <text x="123" y="1382" class="badgeText">CANDIDATE</text>
-  <text x="370" y="1418" class="nodeTitle">SAVE A NEW CANDIDATE</text>
-  <text x="370" y="1446" class="nodeCopy">Pins the complete analysis to a candidate hash;</text>
-  <text x="370" y="1471" class="nodeCopySmall">the admitted patient graph remains unchanged.</text>
-
-  <rect x="770" y="1350" width="600" height="150" rx="18" class="node controlNode"/>
-  <rect x="790" y="1366" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="842" y="1382" class="badgeText">DISPLAY CHECK</text>
-  <text x="1070" y="1418" class="nodeTitle">CHECK THE DASHBOARD</text>
-  <text x="1070" y="1446" class="nodeCopy">Binds the exact projection, candidate and shared UI</text>
-  <text x="1070" y="1468" class="nodeCopySmall">to browser screenshots, console and overflow checks.</text>
-  <text x="1070" y="1488" class="nodeCopySmall">A display failure cannot change the saved candidate.</text>
-
-  <!-- Human-facing destinations and authority. -->
-  <rect x="45" y="1545" width="1350" height="390" rx="22" fill="#fbfcfd" stroke="#b7c6d5" stroke-width="1.8"/>
-  <text x="720" y="1582" class="regionTitle" fill="#4e779d">DISPLAY AND SEPARATE HUMAN AUTHORITY</text>
-  <text x="720" y="1605" class="regionCopy">Public display is read-only; the separate local clinician decision interface is implemented</text>
-
-  <rect x="70" y="1640" width="380" height="145" rx="18" class="node dashboardNode"/>
-  <rect x="88" y="1656" width="104" height="22" rx="11" class="agentBadge"/>
-  <text x="140" y="1672" class="badgeText">READ ONLY</text>
-  <text x="260" y="1707" class="nodeTitle">CASE DASHBOARD</text>
-  <text x="260" y="1735" class="nodeCopy">Shows admitted patient data and clearly labels</text>
-  <text x="260" y="1758" class="nodeCopySmall">the candidate. It cannot change clinical data.</text>
-
-  <rect x="530" y="1640" width="380" height="145" rx="18" class="node surfaceNode"/>
-  <rect x="548" y="1656" width="76" height="22" rx="11" class="surfaceBadge"/>
-  <text x="586" y="1672" class="badgeText">REVIEW</text>
-  <text x="720" y="1707" class="nodeTitle">PRIVATE SOURCE REVIEW</text>
-  <text x="720" y="1735" class="nodeCopy">Review binds exact source versions and format-native</text>
-  <text x="720" y="1758" class="nodeCopySmall">addresses; source decisions do not accept a diagnosis.</text>
-
-  <rect x="990" y="1640" width="380" height="145" rx="18" class="node humanNode"/>
-  <rect x="1008" y="1656" width="72" height="22" rx="11" class="humanBadge"/>
-  <text x="1044" y="1672" class="badgeText">CLINICIAN</text>
-  <text x="1180" y="1707" class="nodeTitle">LOCAL CLINICIAN DECISION</text>
-  <text x="1180" y="1735" class="nodeCopy">A named clinician can accept, correct, reject or defer</text>
-  <text x="1180" y="1758" class="nodeCopySmall">the exact candidate in an authorized local session.</text>
-
-  <rect x="285" y="1825" width="410" height="90" rx="16" class="node stateNode"/>
-  <text x="490" y="1858" class="nodeTitle">RECORDED REVIEW / REVISION</text>
-  <text x="490" y="1883" class="nodeCopySmall">Preserves earlier artifacts; changed clinical input</text>
-  <text x="490" y="1904" class="nodeCopySmall">requires a separately reviewed source revision and reasoning.</text>
-
-  <rect x="745" y="1825" width="410" height="90" rx="16" class="node sourceNode"/>
-  <text x="950" y="1861" class="nodeTitle">PUBLIC CANDIDATE STATUS</text>
-  <text x="950" y="1888" class="nodeCopySmall">No clinician acceptance recorded in this release.</text>
-
-  <!-- Primary dependencies. -->
-  <path d="M260 435 V470" class="flow"/>
-  <path d="M260 595 V630" class="flow"/>
-  <path d="M450 700 H490 V390 H525" class="flow"/>
-  <path d="M715 465 V510" class="flow"/>
-  <path d="M1175 445 V480" class="flow"/>
-  <path d="M360 1002 H400" class="flowPurple"/>
-  <path d="M695 1002 H735" class="flowPurple"/>
-  <path d="M1030 1002 H1070" class="flowPurple"/>
-  <path d="M720 1120 V1160" class="flow"/>
-  <path d="M720 1300 V1325 H370 V1345" class="flow"/>
-  <path d="M670 1425 H765" class="flow"/>
-  <path d="M1070 1500 V1525 H475 V1712 H455" class="flow"/>
-  <path d="M1070 1500 V1530 H950 V1712 H915" class="flow"/>
-  <path d="M910 1712 H985" class="flowGreen"/>
-  <path d="M1115 1785 V1805 H490 V1820" class="flowGreen"/>
-  <path d="M1245 1785 V1805 H950 V1820" class="flow"/>
-  <path d="M285 1870 H20 V131 H45" class="loop"/>
-  <text x="34" y="1120" class="flowLabel" fill="#087c73" transform="rotate(-90 34 1120)">start a new checked cycle</text>
-
-  <!-- Cross-cutting receipt plane. -->
-  <rect x="50" y="1960" width="1340" height="105" rx="18" class="node controlNode"/>
-  <rect x="70" y="1976" width="104" height="22" rx="11" class="controlBadge"/>
-  <text x="122" y="1992" class="badgeText">APPEND ONLY</text>
-  <text x="720" y="2018" class="nodeTitle">AUDIT LOG</text>
-  <text x="720" y="2047" class="nodeCopy">Case identity · source and graph versions · model executions · corrections · QA · human decisions</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1420" viewBox="0 0 1600 1420" role="img" aria-labelledby="title desc" lang="en">
+<title id="title">HematoBoard: modules, responsibilities and data flow</title>
+<desc id="desc">Three numbered rows: prepare a reviewed patient graph; form hypotheses, check medical sources and synthesize a candidate; independently critique, publish a verified read-only projection and record a separate clinician decision. Code, model and human responsibilities are labelled. The graph feeds both breadth and synthesis. A separate medical library feeds source checking. A dashed loop marks bounded repair followed by fresh critique.</desc>
+<defs>
+<marker id="arrow-teal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#007976"/></marker>
+<marker id="arrow-purple" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#7354A3"/></marker>
+<marker id="arrow-amber" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#A76A18"/></marker>
+<marker id="arrow-grey" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#6C8389"/></marker>
+</defs>
+<rect width="1600" height="1420" fill="#FAFAF6"/>
+<text x="60" y="75" font-family="Helvetica, Arial, sans-serif" font-size="54" font-weight="700" fill="#183B47" >HematoBoard</text>
+<text x="60" y="115" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="400" fill="#49676F" >Modules, responsibilities and data flow</text>
+<circle cx="67" cy="158" r="6" fill="#007976"/>
+<text x="84" y="164" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#007976" >Code</text>
+<circle cx="237" cy="158" r="6" fill="#7354A3"/>
+<text x="254" y="164" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#7354A3" >AI model</text>
+<circle cx="442" cy="158" r="6" fill="#A76A18"/>
+<text x="459" y="164" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#A76A18" >Human</text>
+<text x="1540" y="72" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="600" fill="#627D80" text-anchor="end" letter-spacing="1.2">06 NOV 2026</text>
+<text x="1540" y="158" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#627D80" text-anchor="end">Roles are explicit; source review follows its recorded authority.</text>
+<path d="M60 188H1540" stroke="#CFD9D5"/>
+<text x="60" y="231" font-family="Helvetica, Arial, sans-serif" font-size="25" font-weight="700" fill="#007976" >01  /  Patient record</text>
+<g id="module-documents" data-module="documents"><rect x="60" y="260" width="460" height="180" rx="16" fill="#FFFFFF" stroke="#D0DBD6" stroke-width="1.4"/>
+<rect x="82" y="279" width="64" height="23" rx="5" fill="#E8F3EF"/>
+<text x="92" y="295" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#007976" >CODE</text>
+<rect x="154" y="279" width="82" height="23" rx="5" fill="#FAF0DD"/>
+<text x="164" y="295" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#A76A18" >HUMAN</text>
+<text x="82" y="336" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#183B47" >Original documents</text>
+<text x="82" y="368" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >PDF · photos · DOCX · structured input</text>
+<text x="82" y="391" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Originals remain in private storage</text>
+<path d="M82 397H498" fill="none" stroke="#E1E7E3"/>
+<text x="82" y="422" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#007976" >File / page identity</text>
+</g>
+<g id="module-source_reading" data-module="source_reading"><rect x="570" y="260" width="460" height="180" rx="16" fill="#FFFFFF" stroke="#D0DBD6" stroke-width="1.4"/>
+<rect x="592" y="279" width="64" height="23" rx="5" fill="#E8F3EF"/>
+<text x="602" y="295" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#007976" >CODE</text>
+<rect x="664" y="279" width="92" height="23" rx="5" fill="#F0EBF6"/>
+<text x="674" y="295" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#7354A3" >AI MODEL</text>
+<rect x="764" y="279" width="82" height="23" rx="5" fill="#FAF0DD"/>
+<text x="774" y="295" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#A76A18" >HUMAN</text>
+<text x="592" y="336" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#183B47" >Source reading &amp; review</text>
+<text x="592" y="368" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Text, tables, units, specimens and dates</text>
+<text x="592" y="391" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Human or authorized DOCX agent review</text>
+<path d="M592 397H1008" fill="none" stroke="#E1E7E3"/>
+<text x="592" y="422" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#007976" >Source locators · field status</text>
+</g>
+<g id="module-patient_graph" data-module="patient_graph"><rect x="1080" y="260" width="460" height="180" rx="16" fill="#FFFFFF" stroke="#D0DBD6" stroke-width="1.4"/>
+<rect x="1102" y="279" width="64" height="23" rx="5" fill="#E8F3EF"/>
+<text x="1112" y="295" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#007976" >CODE</text>
+<text x="1102" y="336" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#183B47" >Patient graph</text>
+<text x="1102" y="368" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Events · specimens · results · findings</text>
+<text x="1102" y="391" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >One versioned patient state</text>
+<path d="M1102 397H1518" fill="none" stroke="#E1E7E3"/>
+<text x="1102" y="422" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#007976" >Graph hash · object versions</text>
+</g>
+<path d="M520 350H566" fill="none" stroke="#007976" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-teal)" data-source="documents" data-target="source_reading" data-flow="data"/>
+<path d="M1030 350H1076" fill="none" stroke="#007976" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-teal)" data-source="source_reading" data-target="patient_graph" data-flow="reviewed_data"/>
+<path d="M1310 440V470Q1310 480 1300 480H44Q34 480 34 490V732Q34 742 44 742H56" fill="none" stroke="#007976" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-teal)" data-source="patient_graph" data-target="starting_hypotheses" data-flow="data"/>
+<text x="75" y="469" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#007976" >Reviewed graph to the first model pass</text>
+<path d="M1310 480V636" fill="none" stroke="#007976" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-teal)" data-source="patient_graph" data-target="candidate" data-flow="data"/>
+<circle cx="1310" cy="480" r="4" fill="#007976"/>
+<text x="1332" y="552" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#007976" >Same patient graph</text>
+<g id="input-medical_library" data-input="medical_library"><rect x="570" y="500" width="460" height="92" rx="12" fill="#F1F3F1" stroke="#BECFCB" stroke-dasharray="5 5"/>
+<text x="592" y="535" font-family="Helvetica, Arial, sans-serif" font-size="23" font-weight="600" fill="#183B47" >Permitted guidelines &amp; articles</text>
+<text x="592" y="568" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#49676F" >External knowledge, separate from patient data</text>
+</g>
+<path d="M800 592V636" fill="none" stroke="#6C8389" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-grey)" data-source="medical_library" data-target="source_grounding" data-flow="external_evidence"/>
+<text x="60" y="611" font-family="Helvetica, Arial, sans-serif" font-size="25" font-weight="700" fill="#7354A3" >02  /  Hypotheses and evidence</text>
+<g id="module-starting_hypotheses" data-module="starting_hypotheses"><rect x="60" y="640" width="460" height="205" rx="16" fill="#FFFFFF" stroke="#D0DBD6" stroke-width="1.4"/>
+<rect x="82" y="659" width="92" height="23" rx="5" fill="#F0EBF6"/>
+<text x="92" y="675" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#7354A3" >AI MODEL</text>
+<text x="82" y="716" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#183B47" >Starting hypotheses</text>
+<text x="82" y="748" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Patient graph + learned knowledge</text>
+<text x="82" y="771" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Prior answers and retrieved literature</text>
+<text x="82" y="794" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >withheld for this first pass</text>
+<path d="M82 802H498" fill="none" stroke="#E1E7E3"/>
+<text x="82" y="827" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#7354A3" >Coverage questions · missing data</text>
+</g>
+<g id="module-source_grounding" data-module="source_grounding"><rect x="570" y="640" width="460" height="205" rx="16" fill="#FFFFFF" stroke="#D0DBD6" stroke-width="1.4"/>
+<rect x="592" y="659" width="64" height="23" rx="5" fill="#E8F3EF"/>
+<text x="602" y="675" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#007976" >CODE</text>
+<rect x="664" y="659" width="92" height="23" rx="5" fill="#F0EBF6"/>
+<text x="674" y="675" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#7354A3" >AI MODEL</text>
+<text x="592" y="716" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#183B47" >Source search &amp; review</text>
+<text x="592" y="748" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Execute targeted literature questions</text>
+<text x="592" y="771" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Check propositions and applicability</text>
+<text x="592" y="794" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Keep missing coverage explicit</text>
+<path d="M592 802H1008" fill="none" stroke="#E1E7E3"/>
+<text x="592" y="827" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#007976" >Source hash · page / section</text>
+</g>
+<g id="module-candidate" data-module="candidate"><rect x="1080" y="640" width="460" height="205" rx="16" fill="#FFFFFF" stroke="#D0DBD6" stroke-width="1.4"/>
+<rect x="1102" y="659" width="92" height="23" rx="5" fill="#F0EBF6"/>
+<text x="1112" y="675" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#7354A3" >AI MODEL</text>
+<rect x="1202" y="659" width="64" height="23" rx="5" fill="#E8F3EF"/>
+<text x="1212" y="675" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#007976" >CODE</text>
+<text x="1102" y="716" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#183B47" >Candidate &amp; argument graph</text>
+<text x="1102" y="748" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Hypotheses · matrix · next checks</text>
+<text x="1102" y="771" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Confirmation and verification priority</text>
+<text x="1102" y="794" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >are assessed separately</text>
+<path d="M1102 802H1518" fill="none" stroke="#E1E7E3"/>
+<text x="1102" y="827" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#7354A3" >Candidate hash · uncertainty</text>
+</g>
+<path d="M520 742H566" fill="none" stroke="#7354A3" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-purple)" data-source="starting_hypotheses" data-target="source_grounding" data-flow="questions"/>
+<path d="M1030 742H1076" fill="none" stroke="#7354A3" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-purple)" data-source="source_grounding" data-target="candidate" data-flow="reviewed_evidence"/>
+<path d="M1310 845V884Q1310 894 1300 894H44Q34 894 34 904V1077Q34 1087 44 1087H56" fill="none" stroke="#7354A3" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-purple)" data-source="candidate" data-target="critic" data-flow="candidate"/>
+<text x="75" y="883" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#7354A3" >Candidate sent for a separate critique</text>
+<path d="M480 985V940Q480 930 490 930H1558Q1568 930 1568 920V772Q1568 762 1558 762H1544" fill="none" stroke="#A76A18" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-amber)" stroke-dasharray="8 7" data-source="critic" data-target="candidate" data-flow="bounded_repair"/>
+<text x="715" y="918" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#A76A18" >One bounded repair, then fresh independent critique</text>
+<text x="60" y="956" font-family="Helvetica, Arial, sans-serif" font-size="25" font-weight="700" fill="#A76A18" >03  /  Review and delivery</text>
+<g id="module-critic" data-module="critic"><rect x="60" y="985" width="460" height="205" rx="16" fill="#FFFFFF" stroke="#D0DBD6" stroke-width="1.4"/>
+<rect x="82" y="1004" width="92" height="23" rx="5" fill="#F0EBF6"/>
+<text x="92" y="1020" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#7354A3" >AI MODEL</text>
+<text x="82" y="1061" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#183B47" >Independent critic</text>
+<text x="82" y="1093" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Fresh context; same dialogue model</text>
+<text x="82" y="1116" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Checks sources, arguments and omissions</text>
+<text x="82" y="1139" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Blocking defects require repair or stop</text>
+<path d="M82 1147H498" fill="none" stroke="#E1E7E3"/>
+<text x="82" y="1172" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#7354A3" >Exact candidate · recorded findings</text>
+</g>
+<g id="module-projection" data-module="projection"><rect x="570" y="985" width="460" height="205" rx="16" fill="#FFFFFF" stroke="#D0DBD6" stroke-width="1.4"/>
+<rect x="592" y="1004" width="64" height="23" rx="5" fill="#E8F3EF"/>
+<text x="602" y="1020" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#007976" >CODE</text>
+<rect x="664" y="1004" width="82" height="23" rx="5" fill="#FAF0DD"/>
+<text x="674" y="1020" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#A76A18" >HUMAN</text>
+<text x="592" y="1061" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#183B47" >Read-only dashboard</text>
+<text x="592" y="1093" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Overview · history · reasoning · sources</text>
+<text x="592" y="1116" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Projection QA + public-display approval</text>
+<text x="592" y="1139" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Public access remains read-only</text>
+<path d="M592 1147H1008" fill="none" stroke="#E1E7E3"/>
+<text x="592" y="1172" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#007976" >Package + UI + QA binding</text>
+</g>
+<g id="module-clinician_decision" data-module="clinician_decision"><rect x="1080" y="985" width="460" height="205" rx="16" fill="#FFFFFF" stroke="#D0DBD6" stroke-width="1.4"/>
+<rect x="1102" y="1004" width="82" height="23" rx="5" fill="#FAF0DD"/>
+<text x="1112" y="1020" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#A76A18" >HUMAN</text>
+<rect x="1192" y="1004" width="64" height="23" rx="5" fill="#E8F3EF"/>
+<text x="1202" y="1020" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#007976" >CODE</text>
+<text x="1102" y="1061" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#183B47" >Clinician decision</text>
+<text x="1102" y="1093" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Named reviewer in a local session</text>
+<text x="1102" y="1116" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >Accept · correct · reject · defer</text>
+<text x="1102" y="1139" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" fill="#183B47" >No automatic clinical acceptance</text>
+<path d="M1102 1147H1518" fill="none" stroke="#E1E7E3"/>
+<text x="1102" y="1172" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="500" fill="#A76A18" >Decision on the exact candidate</text>
+</g>
+<path d="M520 1087H566" fill="none" stroke="#7354A3" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-purple)" data-source="critic" data-target="projection" data-flow="review"/>
+<path d="M1030 1087H1076" fill="none" stroke="#007976" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-teal)" data-source="projection" data-target="clinician_decision" data-flow="human_review"/>
+<path d="M60 1230H1540" stroke="#CFD9D5"/>
+<g id="module-controller" data-module="controller"><rect x="60" y="1260" width="1480" height="120" rx="16" fill="#E8F3EF" stroke="#A4C8BD"/>
+<text x="84" y="1297" font-family="Helvetica, Arial, sans-serif" font-size="27" font-weight="700" fill="#007976" >Code supervises every handoff</text>
+<text x="84" y="1330" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="400" fill="#183B47" >Case identity · hashes and versions · budget and recovery · append-only audit</text>
+<text x="84" y="1359" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#49676F" >The host dispatches model requests; code records and checks the handoff</text>
+</g></svg>

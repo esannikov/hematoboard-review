@@ -1,5 +1,14 @@
 # Article revisions
 
+## 2026-11-06 — Architecture passport and new diagram
+
+- Added a concise system overview describing the input, patient-state authority, candidate output, code/model responsibilities and human decisions.
+- Replaced the previous architecture layout with a newly composed three-phase diagram. It distinguishes code, AI model and human roles; separate patient and literature inputs; the graph reused by synthesis; independent critique; and the bounded repair loop.
+- Added ten module contracts, deployment locations and eight change/recovery scenarios, preserving the distinction between implementation, per-case availability, technical verification and clinical acceptance.
+- Added a structured architecture passport to the existing manifest. It describes the system without replacing the executable runtime registry.
+- Generate the module table and architecture SVG/PNG from that passport with `scripts/build_architecture.py`; the publication verifier checks their agreement, module/flow identities and evidence references.
+- Preserved the English and Ukrainian patient-graph illustrations and all clinical packages. No clinical synthesis was run.
+
 ## 2026-11-06 — English graph and functional overview
 
 - Added an English presentation of the selected CASE011 graph, preserving the original Ukrainian asset, all node/edge identities, geometry, numeric values and unresolved-unit markers. Visible labels, accessible labels and tooltips are English; full source records remain unchanged.
