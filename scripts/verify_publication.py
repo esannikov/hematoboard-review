@@ -9,8 +9,10 @@ from concurrent.futures import ThreadPoolExecutor
 import argparse
 import collections
 import hashlib
+import importlib.util
 import json
 import re
+import sys
 import urllib.request
 import xml.etree.ElementTree as ET
 
@@ -66,6 +68,41 @@ def main():
             require(path.is_relative_to(ROOT) and path.exists(), f'missing local link: {target}')
     require('case=case011-v2' not in text, 'retired case URL remains in article')
     require('FUTURE CLINICIAN GATE' not in (ROOT / 'diagrams/hematoboard-trace-system.svg').read_text(), 'old clinician gate')
+
+    architecture = m.get('architecture_passport')
+    if architecture:
+        modules = {x['id']: x for x in architecture['modules']}
+        require(len(modules) == len(architecture['modules']), 'duplicate module identity')
+        inputs = {x['id'] for x in architecture['data_inputs']}
+        actors = set(architecture['actors'])
+        component_refs = {x['component'] for x in m['implementation_evidence']['components']}
+        for module in modules.values():
+            require(module['inputs'] and module['outputs'] and module['state_owned'], 'incomplete module contract')
+            require(set(module['actors']) <= actors, 'unknown module actor')
+            require(module['deployment_zone'] in architecture['deployment_zones'], 'unknown deployment zone')
+            require(set(module['evidence_components']) <= component_refs, 'module has unbound implementation reference')
+        for flow in architecture['flows']:
+            require(flow['source'] in set(modules) | inputs and flow['target'] in modules, 'unknown flow endpoint')
+        require(architecture['public_site_can_start_synthesis'] is False, 'public site wrongly described as model runner')
+        require(architecture['public_site_can_write_clinical_decisions'] is False, 'public decision write falsely enabled')
+        require(architecture['configured_method_is_historical_run_attestation'] is False, 'current config relabels historical runs')
+        require('human' in modules['clinician_decision']['actors'], 'human clinical authority missing')
+        diagram = ET.parse(ROOT / 'diagrams/hematoboard-trace-system.svg')
+        require({x.get('data-module') for x in diagram.iter() if x.get('data-module')} == set(modules), 'diagram module inventory mismatch')
+        drawn_flows = {(x.get('data-source'), x.get('data-target'), x.get('data-flow')) for x in diagram.iter() if x.get('data-flow')}
+        recorded_flows = {(x['source'], x['target'], x['kind']) for x in architecture['flows']}
+        require(drawn_flows == recorded_flows, 'diagram flow inventory mismatch')
+        spec = importlib.util.spec_from_file_location('hb_article_architecture', ROOT / 'scripts/build_architecture.py')
+        builder = importlib.util.module_from_spec(spec)
+        previous_bytecode_setting = sys.dont_write_bytecode
+        try:
+            sys.dont_write_bytecode = True
+            spec.loader.exec_module(builder)
+        finally:
+            sys.dont_write_bytecode = previous_bytecode_setting
+        require(builder.make_svg(architecture) == (ROOT / 'diagrams/hematoboard-trace-system.svg').read_text(), 'diagram is stale relative to passport')
+        generated = re.search(r'<!-- BEGIN GENERATED MODULE CONTRACTS -->\n(.*?)\n<!-- END GENERATED MODULE CONTRACTS -->', text, re.S)
+        require(generated is not None and generated.group(1) == builder.make_table(architecture), 'module table differs from passport')
 
     graph = m['patient_graph_illustration']
     tree = ET.parse(ROOT / graph['source']['path'])

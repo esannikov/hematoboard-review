@@ -11,11 +11,26 @@
 · [inspect the architecture](./diagrams/hematoboard-trace-system.svg)
 · [inspect the dated release manifest](./diagrams/manifest.json)
 
-HematoBoard is an experimental clinical evidence environment for reviewing long,
-heterogeneous hematology records. It organizes source material into a versioned
-patient graph, develops candidate explanations, checks the literature needed to
-distinguish them, and exposes supporting evidence, contradictions and unanswered
-questions to the clinician.
+## System at a glance
+
+**HematoBoard prepares complex clinical records for clinician review.** It reads
+documents into a versioned patient graph, proposes possible explanations, checks
+the medical sources needed to distinguish them, and submits a candidate to an
+independent model execution for critique. The clinician receives hypotheses,
+arguments, contradictions, missing information and proposed next checks, with
+navigation to their sources. Deterministic code controls identities, versions,
+permitted transitions and publication checks. A named clinician records the
+decision on the candidate in a separate local review session.
+
+| Architectural fact | Meaning |
+| --- | --- |
+| Input | Authorized PDF, photographs, DOCX or structured patient records. |
+| Patient-state authority | The reviewed Patient Graph in the current graph-backed route. |
+| Output | An immutable candidate and its read-only clinical presentation. |
+| Model work | Source interpretation where required, hypothesis generation, source applicability, synthesis and independent critique. |
+| Code work | Parsing/materialization, references, hashes, validators, execution accounting, recovery and projection. |
+| Human authority | Source/privacy/display decisions as applicable, and a separately recorded clinician decision. |
+| Public access | Published case review; document intake, model dispatch and decision writing belong to controlled local workflows. |
 
 The research question is practical: **can a clinical team inspect what a system
 used, what it inferred, what it failed to explain, and what would change its
@@ -89,10 +104,57 @@ a diagnosis, argument strength or hypothesis rank. The host of the active dialog
 dispatches model work only when the workflow requests it.
 
 <p align="center">
-  <a href="diagrams/hematoboard-trace-system.svg"><img src="diagrams/hematoboard-trace-system.png" width="950" alt="HematoBoard: format-aware source review and patient graph, blind hypothesis generation, targeted source review, candidate synthesis, independent critique, dashboard checks and a separate local clinician decision"></a>
+  <a href="diagrams/hematoboard-trace-system.svg"><img src="diagrams/hematoboard-trace-system.png" width="1100" alt="HematoBoard in three phases: patient record, source-grounded synthesis, and review/delivery. Teal labels identify code, purple labels model work, and amber labels human or authorized source review. A separate medical library feeds source checking; a bounded repair returns the candidate for fresh critique."></a>
   <br>
-  <sub><strong>Figure 2. Current workflow.</strong> The standard synthesis route has two primary model turns and one independent critic turn. Named gaps or blocking criticism may require a bounded continuation or repair. Method stages retain separate records. Public display, source review and clinician acceptance are separate decisions. The local clinician decision interface is implemented; the public dashboard cannot write a decision.</sub>
+  <sub><strong>Figure 2. Modules, responsibilities and data flow.</strong> Read the three numbered rows from left to right. Arrows show the principal handoffs; the module contracts specify the full inputs. Patient data and permitted medical sources enter through different paths. The reviewed graph supplies both blind hypothesis generation and the later synthesis. The dashed return marks one bounded clinical repair followed by fresh independent critique. Code supervises all handoffs. The standard synthesis route has two primary model turns and one critic turn; approved source continuations or repair can add work. The local clinician decision interface is implemented; the public dashboard cannot write a decision.</sub>
 </p>
+
+[Open the full-size architecture PNG](./diagrams/hematoboard-trace-system.png)
+· [open scalable SVG](./diagrams/hematoboard-trace-system.svg)
+
+<details>
+<summary><strong>Module contracts: inputs, outputs and responsibilities</strong></summary>
+
+<!-- BEGIN GENERATED MODULE CONTRACTS -->
+| Module | Main actors | Input → result | Responsibility |
+| --- | --- | --- | --- |
+| **Original documents** | code, human | Authorized PDF, photographs, DOCX or structured records → Registered source files and page inventory | Private original source artifacts |
+| **Source reading & review** | code, AI model, human | Registered documents and format-native locations → Structured source reading, field statuses and review records | Source reading revisions; review authority is explicit |
+| **Patient graph** | code | Admitted source reading and clinical input → Versioned patient objects and structural/temporal relations | Canonical patient state for graph-backed reasoning |
+| **Starting hypotheses** | AI model | Current patient graph; learned model knowledge → Breadth candidates, coverage review and questions | A stage result; no change to patient state |
+| **Source search & review** | code, AI model | Breadth questions and permitted medical sources → Reviewed propositions, applicability and evidence gaps | Case-evidence artifacts; no patient-state mutation |
+| **Candidate & argument graph** | AI model, code | Exact patient graph, breadth, reviewed evidence and permitted post-breadth history → Immutable candidate, typed arguments, evidence matrix and workup | Candidate interpretation; no clinician acceptance |
+| **Independent critic** | AI model | Exact candidate and supporting patient/source bindings → Critic findings and a hash-bound review result | Review record; cannot edit the candidate reviewed |
+| **Read-only dashboard** | code, human | Reviewed candidate, patient projection, QA and public-display permission → Version-bound public package, interface and permitted media | Derived presentation; no clinical-state writes |
+| **Clinician decision** | human, code | Exact candidate/package and an authorized named reviewer → Accept, correct, reject or defer decision record | Recorded clinician decision; separate from technical review |
+| **Workflow controller** | code | CaseScope, registered step, exact bindings and execution records → Allowed next action, request/receipt, validation or explicit stop | Workflow journal and case routing, not clinical conclusions |
+
+Roles describe permitted responsibilities, not a requirement that every role acts in every format. Source reading uses its recorded human or explicitly delegated review route.
+<!-- END GENERATED MODULE CONTRACTS -->
+
+The module descriptions and diagram are generated from the same structured
+architecture block in the [manifest](./diagrams/manifest.json). That block is a
+dated description of the implementation, not an executable workflow or a new
+source of clinical authority. It records inputs, outputs, responsibilities,
+deployment locations, dependencies and evidence references for software readers.
+
+
+</details>
+
+### Where the parts run
+
+| Location | What happens there | What leaves it |
+| --- | --- | --- |
+| Private case workspace | Raw document storage, recognition, source review, graph versions and run records. | Only the specifically authorized, minimum-necessary derived material. |
+| Model execution context | The host supplies the packet for the current stage; author and critic executions have distinct recorded roles. | Typed results returned to the controller for validation. |
+| Medical source library | Permitted source files, source identities and retrieval/render caches. | Allowed fragments and their bindings for a named review task. |
+| Public dashboard | Read-only case packages, sources permitted for public display and prepared media. | Navigation and playback; no clinical-state writes or synthesis dispatch. |
+| Local clinician review session | A named human reviews the exact candidate and records accept, correct, reject or defer. | An explicit, version-bound decision record. |
+
+The workflow can use an external model, but raw patient documents are not thereby
+authorized for external transfer. The actual model and reasoning effort are bound
+to each new execution. A public diagram of a module does not mean that its write
+operations are exposed on the public website.
 
 ### 1. Read and admit the source material
 
@@ -387,6 +449,36 @@ change requires the full published-case matrix. These mechanisms reduce repeated
 work. They do not establish a universal percentage reduction in tokens, time or
 cost. Optional lossless text compaction remains opt-in rather than a clinically
 validated default.
+
+### What happens when something changes
+
+The controller checks dependencies before selecting work. A new representation,
+new clinical evidence and an interrupted execution require different responses:
+
+| Trigger | Required response | What remains preserved |
+| --- | --- | --- |
+| New patient result or corrected clinical value | Review the source revision, build the corresponding graph version and undertake a new clinical reasoning revision through the registered route. | Previous inputs, candidates and their review records. |
+| Newly relevant guideline or paper | Assess the evidence change and its applicability. Use the authorized evidence/revision route where the interpretation needs updating. | Patient facts; a new publication alone cannot establish a patient finding or silently reorder hypotheses. |
+| Presentation-only layout or wording change | Rebuild the affected presentation and perform the required QA/public-display checks. | The clinical candidate, provided its clinical content and meaning are unchanged. |
+| Blocking critic finding | One bounded clinical repair and fresh independent critique; a second blocking failure stops the run. | The reviewed earlier candidate and named reasons for repair. |
+| Exact, reviewed minor correction | Apply only the authorized scoped correction, with explicit coverage of the changed text. | Patient facts, ranks and relation directions outside the permitted correction. |
+| Execution interrupted or outcome unknown | Reconcile the issued attempt before dispatching again; resume an already saved result when the exact bindings match. | Attempt identity and accounting; elapsed time alone is not evidence that nothing ran. |
+| Source/evidence defect discovered after publication | Activate the appropriate review hold and prepare the required source/evidence revision. | Earlier immutable records; a hold does not rewrite the old critic's findings. |
+| Dialogue model/profile changes | Bind new executions to the current profile; use a fresh revision where the recorded run profile is incompatible. | Historical execution profiles; no retrospective relabelling. |
+
+For example, correcting a haemoglobin value changes the clinical input and can
+change the interpretation. Moving the same value to a different screen changes
+its presentation. The second action does not justify spending another clinical
+model pass. In both cases, the corresponding artifact checks still apply.
+
+### Reading implementation status
+
+Three independent questions should be kept visible when describing a capability:
+**does the module exist, does this case contain its required artifacts, and what
+verification is recorded?** The manifest separates the implemented module map
+from the public-case inventory and its package/QA bindings. Clinical effectiveness
+and clinician acceptance are recorded separately. A module's implementation does
+not mean that every historical case has been reprocessed through it.
 
 ## Current release and historical compatibility
 

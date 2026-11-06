@@ -1,10 +1,10 @@
 {
-  "schema_version": "hematoboard.public-architecture-article/2.1.0",
+  "schema_version": "hematoboard.public-architecture-article/2.2.0",
   "updated": "2026-11-06",
   "article": {
     "path": "README.md",
-    "sha256": "58f56dbdf95d7b7e04290c61c4572288a39fa1b8f855a2b1861606db92fda8ab",
-    "bytes": 41299
+    "sha256": "66c2f811643df5d022c99a522c2031b75724acce30f83b50dba340cd4765a82c",
+    "bytes": 50125
   },
   "configured_protocol": {
     "method_id": "HB-CONTROLLED-SYNTHESIS",
@@ -394,17 +394,23 @@
   "architecture_figure": {
     "source": {
       "path": "diagrams/hematoboard-trace-system.svg",
-      "sha256": "875cea2c4b1875541d516c99805d3e9bde01fb4cbe1ecaf95f2239dba90a662c",
-      "bytes": 19908
+      "sha256": "9f7237acc510d4a8950121a9b7e540dc021f1412309d8bc20b3112f32dbed5c6",
+      "bytes": 19341
     },
     "raster": {
       "path": "diagrams/hematoboard-trace-system.png",
-      "sha256": "4ddfca015a5cf7e1d2024f0b0ed49c61dc28cd06782cab476ea286f2d562f640",
-      "bytes": 585994,
-      "width": 2160,
-      "height": 3150
+      "sha256": "b9f7b755ec5f1a9eb5776f7b8907e1ed849bde2f7352054bd5c4422e77e73d1f",
+      "bytes": 347182,
+      "width": 2400,
+      "height": 2130
     },
-    "represents": "current graph-backed route; historical cases retain their own contracts"
+    "represents": "Three phases, role labels, distinct patient/evidence inputs and bounded repair in the current graph-backed route.",
+    "generated_from": "architecture_passport in diagrams/manifest.json",
+    "generator": {
+      "path": "scripts/build_architecture.py",
+      "sha256": "b8078832e1f4741f6a3da5e6c06ac0ce97f295b731d074926037072320a6f149",
+      "bytes": 9028
+    }
   },
   "patient_graph_illustration": {
     "case_id": "CASE011",
@@ -680,6 +686,38 @@
       {
         "component": "hematoboard-v2/src/hematoboard_v2/run_journal.py",
         "sha256": "68e7a518a4873916e9bbd12e0b7b55829fcfd65a51270dfca1e960683fb02c5c"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/source_reading_validation.py",
+        "sha256": "156774e814ce4aaf3d951827041927a93f616dc731ac1e54bdf062591e9a1d9d"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/patient_graph_materializer.py",
+        "sha256": "add7495c617fa6a5ccc56a21a7a47b2efe6c6402a8e45dfd9dd4e0df612175ca"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/patient_graph_validation.py",
+        "sha256": "8092099a02c5d4bc52e4c88a3e400ebc025a57053bdd3a341d956d31a367a353"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/knowledge_questions.py",
+        "sha256": "4398be43d1d4c93f771eb1bf450ffde3aea523a88682fd9e3d2ed7669fc24ce9"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/grounding_extension.py",
+        "sha256": "33f9208f4a96b36bbffc716dd4f2a54f051cb098e4e9f9a9cba00e570a6de88d"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/public_display.py",
+        "sha256": "091f726472b513ea3e4f2ff9e8322c9f41f94f1a43a01c151cbc57a08ac60a22"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/workflow_spec.py",
+        "sha256": "35997b8ae221eddd90d40bad4784c3088f8dc01bad5c0da9f5d50737c6900bca"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/workflow_harness.py",
+        "sha256": "e7096366784524d8774d54242129733ff830caeeb3bde112063a80413800ffd0"
       }
     ]
   },
@@ -696,5 +734,536 @@
     "source_title": "NCCN Clinical Practice Guidelines in Oncology: Soft Tissue Sarcoma, Version 3.2026",
     "source_location": "75",
     "scope": "Explanation of the saved public candidate; no new diagnostic assessment or source-PDF publication."
+  },
+  "architecture_passport": {
+    "schema_version": "hematoboard.architecture-passport/1.0",
+    "as_of": "2026-11-06",
+    "purpose": "Prepare source-grounded candidate interpretations of complex clinical records for clinician review.",
+    "patient_state_authority": "reviewed Patient Graph in the graph-backed route",
+    "interpretation_artifact": "immutable Candidate; argument graph is a derived view",
+    "clinical_authority": "separately recorded human clinician decision",
+    "public_site_can_start_synthesis": false,
+    "public_site_can_write_clinical_decisions": false,
+    "configured_method_is_historical_run_attestation": false,
+    "clinical_effectiveness_established": false,
+    "diagnostic_probability_computed": false,
+    "rank_semantics": "verification priority, not calibrated diagnostic probability",
+    "scope": "Descriptive publication snapshot; executable next actions remain owned by the runtime StepSpec registry.",
+    "actors": {
+      "code": "Deterministic processing, validation, identity and orchestration records",
+      "model": "Clinical interpretation and source applicability in explicit model executions",
+      "human": "Recorded source/privacy/display decisions as applicable and clinician decision"
+    },
+    "modules": [
+      {
+        "id": "documents",
+        "title": "Original documents",
+        "actors": [
+          "code",
+          "human"
+        ],
+        "deployment_zone": "private_case_workspace",
+        "inputs": [
+          "Authorized PDF, photographs, DOCX or structured records"
+        ],
+        "outputs": [
+          "Registered source files and page inventory"
+        ],
+        "state_owned": "Private original source artifacts",
+        "implementation_status": "implemented",
+        "verification_basis": "current_code_inspection",
+        "evidence_components": [
+          "workbench/scripts/hematoboard/pdf_to_markdown.py"
+        ],
+        "diagram_lines": [
+          "PDF · photos · DOCX · structured input",
+          "Originals remain in private storage"
+        ],
+        "diagram_footer": "File / page identity",
+        "model_work_optional": false,
+        "human_role_note": null,
+        "case_availability": "Derived from the saved case contract and artifact inventory; implementation alone does not prove that every historical case has this content.",
+        "public_surface": {
+          "mode": "not_exposed",
+          "actions": []
+        }
+      },
+      {
+        "id": "source_reading",
+        "title": "Source reading & review",
+        "actors": [
+          "code",
+          "model",
+          "human"
+        ],
+        "deployment_zone": "private_case_workspace",
+        "inputs": [
+          "Registered documents and format-native locations"
+        ],
+        "outputs": [
+          "Structured source reading, field statuses and review records"
+        ],
+        "state_owned": "Source reading revisions; review authority is explicit",
+        "implementation_status": "implemented",
+        "verification_basis": "current_code_inspection",
+        "evidence_components": [
+          "hematoboard-v2/src/hematoboard_v2/source_reading_validation.py",
+          "hematoboard-v2/src/hematoboard_v2/source_review_authority.py"
+        ],
+        "diagram_lines": [
+          "Text, tables, units, specimens and dates",
+          "Human or authorized DOCX agent review"
+        ],
+        "diagram_footer": "Source locators · field status",
+        "model_work_optional": true,
+        "human_role_note": "Source review follows format-specific authority; explicitly delegated native DOCX technical review remains agent review.",
+        "case_availability": "Derived from the saved case contract and artifact inventory; implementation alone does not prove that every historical case has this content.",
+        "public_surface": {
+          "mode": "not_exposed",
+          "actions": []
+        }
+      },
+      {
+        "id": "patient_graph",
+        "title": "Patient graph",
+        "actors": [
+          "code"
+        ],
+        "deployment_zone": "private_case_workspace",
+        "inputs": [
+          "Admitted source reading and clinical input"
+        ],
+        "outputs": [
+          "Versioned patient objects and structural/temporal relations"
+        ],
+        "state_owned": "Canonical patient state for graph-backed reasoning",
+        "implementation_status": "implemented",
+        "verification_basis": "current_code_inspection",
+        "evidence_components": [
+          "hematoboard-v2/src/hematoboard_v2/patient_graph_materializer.py",
+          "hematoboard-v2/src/hematoboard_v2/patient_graph_validation.py"
+        ],
+        "diagram_lines": [
+          "Events · specimens · results · findings",
+          "One versioned patient state"
+        ],
+        "diagram_footer": "Graph hash · object versions",
+        "model_work_optional": false,
+        "human_role_note": null,
+        "case_availability": "Derived from the saved case contract and artifact inventory; implementation alone does not prove that every historical case has this content.",
+        "public_surface": {
+          "mode": "not_exposed",
+          "actions": []
+        }
+      },
+      {
+        "id": "starting_hypotheses",
+        "title": "Starting hypotheses",
+        "actors": [
+          "model"
+        ],
+        "deployment_zone": "authorized_model_context",
+        "inputs": [
+          "Current patient graph; learned model knowledge"
+        ],
+        "outputs": [
+          "Breadth candidates, coverage review and questions"
+        ],
+        "state_owned": "A stage result; no change to patient state",
+        "implementation_status": "implemented",
+        "verification_basis": "current_code_inspection",
+        "evidence_components": [
+          "hematoboard-v2/src/hematoboard_v2/reasoning.py"
+        ],
+        "diagram_lines": [
+          "Patient graph + learned knowledge",
+          "Prior answers and retrieved literature",
+          "withheld for this first pass"
+        ],
+        "diagram_footer": "Coverage questions · missing data",
+        "model_work_optional": false,
+        "human_role_note": null,
+        "case_availability": "Derived from the saved case contract and artifact inventory; implementation alone does not prove that every historical case has this content.",
+        "public_surface": {
+          "mode": "not_exposed",
+          "actions": []
+        }
+      },
+      {
+        "id": "source_grounding",
+        "title": "Source search & review",
+        "actors": [
+          "code",
+          "model"
+        ],
+        "deployment_zone": "source_library_and_model_context",
+        "inputs": [
+          "Breadth questions and permitted medical sources"
+        ],
+        "outputs": [
+          "Reviewed propositions, applicability and evidence gaps"
+        ],
+        "state_owned": "Case-evidence artifacts; no patient-state mutation",
+        "implementation_status": "implemented",
+        "verification_basis": "current_code_inspection",
+        "evidence_components": [
+          "hematoboard-v2/src/hematoboard_v2/knowledge_questions.py",
+          "hematoboard-v2/src/hematoboard_v2/grounding_extension.py"
+        ],
+        "diagram_lines": [
+          "Execute targeted literature questions",
+          "Check propositions and applicability",
+          "Keep missing coverage explicit"
+        ],
+        "diagram_footer": "Source hash · page / section",
+        "model_work_optional": false,
+        "human_role_note": null,
+        "case_availability": "Derived from the saved case contract and artifact inventory; implementation alone does not prove that every historical case has this content.",
+        "public_surface": {
+          "mode": "not_exposed",
+          "actions": []
+        }
+      },
+      {
+        "id": "candidate",
+        "title": "Candidate & argument graph",
+        "actors": [
+          "model",
+          "code"
+        ],
+        "deployment_zone": "controlled_reasoning_runtime",
+        "inputs": [
+          "Exact patient graph, breadth, reviewed evidence and permitted post-breadth history"
+        ],
+        "outputs": [
+          "Immutable candidate, typed arguments, evidence matrix and workup"
+        ],
+        "state_owned": "Candidate interpretation; no clinician acceptance",
+        "implementation_status": "implemented",
+        "verification_basis": "current_code_inspection",
+        "evidence_components": [
+          "hematoboard-v2/src/hematoboard_v2/reasoning.py",
+          "hematoboard-v2/src/hematoboard_v2/evidence_assessment.py"
+        ],
+        "diagram_lines": [
+          "Hypotheses · matrix · next checks",
+          "Confirmation and verification priority",
+          "are assessed separately"
+        ],
+        "diagram_footer": "Candidate hash · uncertainty",
+        "model_work_optional": false,
+        "human_role_note": null,
+        "case_availability": "Derived from the saved case contract and artifact inventory; implementation alone does not prove that every historical case has this content.",
+        "public_surface": {
+          "mode": "not_exposed",
+          "actions": []
+        }
+      },
+      {
+        "id": "critic",
+        "title": "Independent critic",
+        "actors": [
+          "model"
+        ],
+        "deployment_zone": "separate_model_execution",
+        "inputs": [
+          "Exact candidate and supporting patient/source bindings"
+        ],
+        "outputs": [
+          "Critic findings and a hash-bound review result"
+        ],
+        "state_owned": "Review record; cannot edit the candidate reviewed",
+        "implementation_status": "implemented",
+        "verification_basis": "current_code_inspection",
+        "evidence_components": [
+          "hematoboard-v2/src/hematoboard_v2/reasoning_review.py",
+          "hematoboard-v2/src/hematoboard_v2/reasoning.py"
+        ],
+        "diagram_lines": [
+          "Fresh context; same dialogue model",
+          "Checks sources, arguments and omissions",
+          "Blocking defects require repair or stop"
+        ],
+        "diagram_footer": "Exact candidate · recorded findings",
+        "model_work_optional": false,
+        "human_role_note": null,
+        "case_availability": "Derived from the saved case contract and artifact inventory; implementation alone does not prove that every historical case has this content.",
+        "public_surface": {
+          "mode": "not_exposed",
+          "actions": []
+        }
+      },
+      {
+        "id": "projection",
+        "title": "Read-only dashboard",
+        "actors": [
+          "code",
+          "human"
+        ],
+        "deployment_zone": "public_dashboard",
+        "inputs": [
+          "Reviewed candidate, patient projection, QA and public-display permission"
+        ],
+        "outputs": [
+          "Version-bound public package, interface and permitted media"
+        ],
+        "state_owned": "Derived presentation; no clinical-state writes",
+        "implementation_status": "implemented",
+        "verification_basis": "current_code_inspection",
+        "evidence_components": [
+          "hematoboard-v2/src/hematoboard_v2/public_dashboard.py",
+          "hematoboard-v2/src/hematoboard_v2/public_display.py"
+        ],
+        "diagram_lines": [
+          "Overview · history · reasoning · sources",
+          "Projection QA + public-display approval",
+          "Public access remains read-only"
+        ],
+        "diagram_footer": "Package + UI + QA binding",
+        "model_work_optional": false,
+        "human_role_note": "Public display requires its separate authorization.",
+        "case_availability": "Derived from the saved case contract and artifact inventory; implementation alone does not prove that every historical case has this content.",
+        "public_surface": {
+          "mode": "read_only",
+          "actions": [
+            "view a published case",
+            "navigate saved evidence",
+            "play available prepared media"
+          ]
+        }
+      },
+      {
+        "id": "clinician_decision",
+        "title": "Clinician decision",
+        "actors": [
+          "human",
+          "code"
+        ],
+        "deployment_zone": "local_clinician_review",
+        "inputs": [
+          "Exact candidate/package and an authorized named reviewer"
+        ],
+        "outputs": [
+          "Accept, correct, reject or defer decision record"
+        ],
+        "state_owned": "Recorded clinician decision; separate from technical review",
+        "implementation_status": "implemented",
+        "verification_basis": "current_code_inspection",
+        "evidence_components": [
+          "hematoboard-v2/src/hematoboard_v2/private_review.py"
+        ],
+        "diagram_lines": [
+          "Named reviewer in a local session",
+          "Accept · correct · reject · defer",
+          "No automatic clinical acceptance"
+        ],
+        "diagram_footer": "Decision on the exact candidate",
+        "model_work_optional": false,
+        "human_role_note": "A named human must explicitly record the decision.",
+        "case_availability": "Derived from the saved case contract and artifact inventory; implementation alone does not prove that every historical case has this content.",
+        "public_surface": {
+          "mode": "not_exposed",
+          "actions": []
+        }
+      },
+      {
+        "id": "controller",
+        "title": "Workflow controller",
+        "actors": [
+          "code"
+        ],
+        "deployment_zone": "controlled_local_runtime",
+        "inputs": [
+          "CaseScope, registered step, exact bindings and execution records"
+        ],
+        "outputs": [
+          "Allowed next action, request/receipt, validation or explicit stop"
+        ],
+        "state_owned": "Workflow journal and case routing, not clinical conclusions",
+        "implementation_status": "implemented",
+        "verification_basis": "current_code_inspection",
+        "evidence_components": [
+          "hematoboard-v2/src/hematoboard_v2/workflow_spec.py",
+          "hematoboard-v2/src/hematoboard_v2/workflow_harness.py",
+          "hematoboard-v2/src/hematoboard_v2/synthesis_batch.py"
+        ],
+        "diagram_lines": [
+          "Case identity · hashes and versions · budget and recovery · append-only audit"
+        ],
+        "diagram_footer": "The host dispatches model requests; code records and checks the handoff",
+        "model_work_optional": false,
+        "human_role_note": null,
+        "case_availability": "Derived from the saved case contract and artifact inventory; implementation alone does not prove that every historical case has this content.",
+        "public_surface": {
+          "mode": "not_exposed",
+          "actions": []
+        }
+      }
+    ],
+    "data_inputs": [
+      {
+        "id": "medical_library",
+        "title": "Permitted guidelines & articles",
+        "description": "External medical knowledge; separate from patient state and checked for permitted use."
+      }
+    ],
+    "flows": [
+      {
+        "source": "documents",
+        "target": "source_reading",
+        "kind": "data",
+        "meaning": "Registered originals"
+      },
+      {
+        "source": "source_reading",
+        "target": "patient_graph",
+        "kind": "reviewed_data",
+        "meaning": "Admitted source reading"
+      },
+      {
+        "source": "patient_graph",
+        "target": "starting_hypotheses",
+        "kind": "data",
+        "meaning": "Graph to blind breadth"
+      },
+      {
+        "source": "starting_hypotheses",
+        "target": "source_grounding",
+        "kind": "questions",
+        "meaning": "Targeted evidence questions"
+      },
+      {
+        "source": "medical_library",
+        "target": "source_grounding",
+        "kind": "external_evidence",
+        "meaning": "Permitted medical sources"
+      },
+      {
+        "source": "source_grounding",
+        "target": "candidate",
+        "kind": "reviewed_evidence",
+        "meaning": "Propositions and applicability"
+      },
+      {
+        "source": "patient_graph",
+        "target": "candidate",
+        "kind": "data",
+        "meaning": "Same exact patient graph"
+      },
+      {
+        "source": "candidate",
+        "target": "critic",
+        "kind": "candidate",
+        "meaning": "Frozen candidate for independent critique"
+      },
+      {
+        "source": "critic",
+        "target": "candidate",
+        "kind": "bounded_repair",
+        "meaning": "One bounded clinical repair; then fresh critique"
+      },
+      {
+        "source": "critic",
+        "target": "projection",
+        "kind": "review",
+        "meaning": "Passing review coverage; publication also requires QA and display permission"
+      },
+      {
+        "source": "projection",
+        "target": "clinician_decision",
+        "kind": "human_review",
+        "meaning": "Exact package presented in a separate local session"
+      }
+    ],
+    "supervision": {
+      "controller": "controller",
+      "modules": [
+        "documents",
+        "source_reading",
+        "patient_graph",
+        "starting_hypotheses",
+        "source_grounding",
+        "candidate",
+        "critic",
+        "projection",
+        "clinician_decision"
+      ],
+      "mechanisms": [
+        "case identity",
+        "dependency hashes",
+        "typed contracts",
+        "attempt budget",
+        "saved-result recovery",
+        "append-only journal"
+      ]
+    },
+    "deployment_zones": {
+      "private_case_workspace": "Raw documents, source readings and graph revisions; minimum-necessary authorized derivatives only leave this workspace.",
+      "authorized_model_context": "An explicit stage packet supplied by the host; not unrestricted access to raw patient records.",
+      "source_library_and_model_context": "Permitted source material, retrieval records and case-specific semantic review.",
+      "controlled_reasoning_runtime": "Frozen inputs, returned model results, compiler and validators.",
+      "separate_model_execution": "Independent critic context; same dialogue model/profile does not mean independent model family.",
+      "public_dashboard": "Read-only published candidate projection and prepared media.",
+      "local_clinician_review": "Named human session for exact-candidate accept/correct/reject/defer; not a public write endpoint.",
+      "controlled_local_runtime": "Case routing, workflow steps, budgets and execution accounting."
+    },
+    "change_behaviour": [
+      {
+        "trigger": "changed_patient_data",
+        "response": "source_review_then_graph_revision_then_new_clinical_reasoning_revision",
+        "automatic_clinician_acceptance": false
+      },
+      {
+        "trigger": "new_medical_source",
+        "response": "assess_relevance_and_authorize_evidence_or_candidate_revision",
+        "automatic_hypothesis_reranking": false
+      },
+      {
+        "trigger": "presentation_only_change",
+        "response": "affected_projection_and_publication_checks",
+        "clinical_resynthesis_required": false,
+        "condition": "clinical content and meaning unchanged"
+      },
+      {
+        "trigger": "blocking_critic_finding",
+        "response": "one_bounded_clinical_repair_and_fresh_critic",
+        "on_second_blocking_failure": "stop_run"
+      },
+      {
+        "trigger": "reviewed_minor_text_correction",
+        "response": "authorized_scoped_correction_with_explicit_review_coverage",
+        "changes_patient_facts_or_ranks": false
+      },
+      {
+        "trigger": "interrupted_or_unknown_execution",
+        "response": "reconcile_issued_attempt_then_resume_exact_saved_result_when_available",
+        "automatic_redispatch": false
+      },
+      {
+        "trigger": "post_publication_source_defect",
+        "response": "review_hold_and_required_source_or_evidence_revision",
+        "rewrites_historical_critic": false
+      },
+      {
+        "trigger": "dialogue_model_profile_change",
+        "response": "bind_new_executions_to_current_profile_and_use_fresh_revision_when_required",
+        "rewrites_historical_profiles": false
+      }
+    ],
+    "evidence_scope": {
+      "implementation": "linked components inspected in current local code",
+      "case_content": "public_release.cases records each published package and contract separately",
+      "publication_checks": "hash-pinned saved QA; no fresh clinical execution for this article",
+      "clinician_acceptance": "read separately from technical verification in each package"
+    },
+    "clinical_domain": "Hematology-oriented multidisciplinary case review",
+    "execution_pattern": {
+      "scope": "clinical synthesis after source admission",
+      "standard_primary_turns": 2,
+      "standard_independent_critic_turns": 1,
+      "modules_are_not_one_call_each": true,
+      "additional_turns": "Only through allowed source-continuation, repair or other registered steps and their budget",
+      "model_profile": "New model executions use the current dialogue model and reasoning effort; historical records retain their actual profile"
+    }
   }
 }
