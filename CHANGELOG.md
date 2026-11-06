@@ -1,5 +1,14 @@
 # Article revisions
 
+## 2026-11-06 — English graph and functional overview
+
+- Added an English presentation of the selected CASE011 graph, preserving the original Ukrainian asset, all node/edge identities, geometry, numeric values and unresolved-unit markers. Visible labels, accessible labels and tooltips are English; full source records remain unchanged.
+- Expanded the overview of clinician tasks: hypothesis comparison, argument navigation, timeline/history, source inspection, reasoning narrative, decision audit, next checks and prepared briefings.
+- Detailed format-aware private OCR/intake capabilities, word/crop provenance, table-field review and known completeness checks without claiming a validated recognition accuracy rate.
+- Added the two patient/literature evidence trails and a concrete, explicitly limited example from the saved CASE011 hypothesis. Source linkage is distinguished from diagnostic confirmation and missing literature is explicit.
+- Explained which artifacts are hash-bound at each handoff and what a hash does and does not establish. Added the corresponding labels to the architecture figure.
+- Added current release-bound comparison and Reasoning captures and translation/topology checks to the publication verifier.
+
 ## 2026-11-06
 
 - Updated the article and architecture figure to the current graph-backed workflow, with the patient graph and argument graph explained separately.

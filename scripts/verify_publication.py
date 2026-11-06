@@ -78,6 +78,30 @@ def main():
     require(canonical_digest(edges) == graph['sorted_edge_records_sha256'], 'edge identity mismatch')
     require(sum(graph['object_counts_by_type'].values()) == len(ids), 'node-type totals mismatch')
 
+    english = graph.get('english_presentation')
+    if english:
+        translated = ET.parse(ROOT / english['source']['path'])
+        en_ids = sorted(x.get('data-node') for x in translated.iter() if x.get('data-node'))
+        en_edges = sorted((x.get('data-edge'), x.get('data-source'), x.get('data-target'), x.get('data-relation')) for x in translated.iter() if x.get('data-edge'))
+        require(ids == en_ids and edges == en_edges, 'translation changed graph topology')
+        def geometry(xml):
+            return [(x.tag, {k:v for k,v in x.attrib.items() if k != 'aria-label'})
+                    for x in xml.iter() if x.tag.rsplit('}', 1)[-1] in {'g','path','circle','rect','line','polygon','polyline','ellipse'}]
+        require(geometry(tree) == geometry(translated), 'translation changed graph geometry')
+        ns = '{http://www.w3.org/2000/svg}'
+        original_labels = [''.join(x.itertext()) for x in tree.iter(ns + 'text')]
+        english_labels = [''.join(x.itertext()) for x in translated.iter(ns + 'text')]
+        mapping = json.loads((ROOT / english['label_mapping']['path']).read_text())['visible_labels']
+        require(original_labels == [x['source'] for x in mapping], 'translation source-label mismatch')
+        require(english_labels == [x['english'] for x in mapping], 'translation output-label mismatch')
+        for before, after in zip(original_labels, english_labels):
+            numeric = lambda s: re.findall(r'\d+(?:[.,]\d+)*', s.replace(',', '.'))
+            require(numeric(before) == numeric(after), f'numeric label changed: {before}')
+            require(before.count('?') == after.count('?'), f'uncertainty marker lost: {before}')
+        for x in translated.iter():
+            content = (x.text or '') + (x.tail or '') + ' '.join(x.attrib.values())
+            require(not re.search('[А-Яа-яІіЇїЄєҐґ]', content), 'untranslated text or accessible label')
+
     release = m['public_release']
     cases = release['cases']
     require(len(cases) == release['indexed_candidate_count'], 'case count mismatch')

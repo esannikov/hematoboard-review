@@ -121,7 +121,7 @@
   <rect x="548" y="531" width="104" height="22" rx="11" class="controlBadge"/>
   <text x="600" y="547" class="badgeText">RULE-BASED</text>
   <text x="715" y="582" class="nodeTitle">PREPARE A FRESH ANALYSIS</text>
-  <text x="715" y="610" class="nodeCopy">Supplies the current graph for blind breadth.</text>
+  <text x="715" y="610" class="nodeCopy">Pins the graph input and model profile for breadth.</text>
   <text x="715" y="634" class="nodeCopySmall">Earlier system hypotheses and literature are withheld.</text>
   <text x="715" y="654" class="nodeCopySmall">Prior reasoning enters later, for explicit comparison.</text>
 
@@ -172,8 +172,8 @@
   <rect x="423" y="941" width="82" height="22" rx="11" class="agentBadge"/>
   <text x="464" y="957" class="badgeText">PASS 2</text>
   <text x="550" y="995" class="nodeTitle">GROUNDING · TURN 2</text>
-  <text x="550" y="1024" class="nodeCopy">Executes exact breadth queries against</text>
-  <text x="550" y="1047" class="nodeCopy">allowed sources and binds result identity.</text>
+  <text x="550" y="1024" class="nodeCopy">Executes the recorded breadth queries;</text>
+  <text x="550" y="1047" class="nodeCopy">pins source bytes and exact fragment identity.</text>
   <text x="550" y="1068" class="nodeCopySmall">Verifies propositions and applicability;</text>
   <text x="550" y="1088" class="nodeCopySmall">an empty search is not diagnostic exclusion.</text>
 
@@ -196,7 +196,7 @@
     <tspan x="1220" dy="0">INDEPENDENT CRITIC</tspan>
     <tspan x="1220" dy="21">TURN 3</tspan>
   </text>
-  <text x="1220" y="1038" class="nodeCopy">A fresh execution reviews the candidate,</text>
+  <text x="1220" y="1038" class="nodeCopy">Checks the exact candidate hash,</text>
   <text x="1220" y="1060" class="nodeCopy">its sources, alternatives and uncertainty.</text>
   <text x="1220" y="1082" class="nodeCopySmall">Same model; blocking findings stop release.</text>
 
@@ -212,8 +212,8 @@
   <rect x="90" y="1366" width="66" height="22" rx="11" class="stateBadge"/>
   <text x="123" y="1382" class="badgeText">CANDIDATE</text>
   <text x="370" y="1418" class="nodeTitle">SAVE A NEW CANDIDATE</text>
-  <text x="370" y="1446" class="nodeCopy">Saves the complete analysis as a read-only</text>
-  <text x="370" y="1471" class="nodeCopySmall">candidate. It never overwrites the approved source layer.</text>
+  <text x="370" y="1446" class="nodeCopy">Pins the complete analysis to a candidate hash;</text>
+  <text x="370" y="1471" class="nodeCopySmall">the admitted patient graph remains unchanged.</text>
 
   <rect x="770" y="1350" width="600" height="150" rx="18" class="node controlNode"/>
   <rect x="790" y="1366" width="104" height="22" rx="11" class="controlBadge"/>

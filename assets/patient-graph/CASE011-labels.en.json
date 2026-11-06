@@ -1,0 +1,340 @@
+{
+  "schema_version": "hematoboard.figure-label-translation/1.0",
+  "source_language": "uk",
+  "target_language": "en",
+  "scope": "Presentation only; values, source uncertainty and graph topology are preserved.",
+  "visible_labels": [
+    {
+      "source": "Аспірат кісткового мозку",
+      "english": "Bone marrow aspirate"
+    },
+    {
+      "source": "Зміни кровотворення",
+      "english": "Haematopoietic changes"
+    },
+    {
+      "source": "Переказ МРТ",
+      "english": "MRI summary in record"
+    },
+    {
+      "source": "Імунофенотип мозку",
+      "english": "Marrow immunophenotype"
+    },
+    {
+      "source": "Каріотип 46,XX[20]",
+      "english": "Karyotype 46,XX[20]"
+    },
+    {
+      "source": "Анамнез із 2019 р.",
+      "english": "History since 2019"
+    },
+    {
+      "source": "Анемія в анамнезі",
+      "english": "Anaemia in history"
+    },
+    {
+      "source": "Черевні лімфовузли",
+      "english": "Abdominal lymph nodes"
+    },
+    {
+      "source": "Молекулярна панель",
+      "english": "Molecular panel"
+    },
+    {
+      "source": "УЗД селезінки",
+      "english": "Spleen ultrasound"
+    },
+    {
+      "source": "Пряма проба Кумбса",
+      "english": "Direct Coombs test"
+    },
+    {
+      "source": "Вузол із кровотоком",
+      "english": "Vascularised lesion"
+    },
+    {
+      "source": "Прості кісти",
+      "english": "Simple cysts"
+    },
+    {
+      "source": "Прохідність вен",
+      "english": "Venous patency"
+    },
+    {
+      "source": "Ріст у порівнянні МРТ",
+      "english": "Growth on serial MRI"
+    },
+    {
+      "source": "Припущення гематолога",
+      "english": "Haematologist’s suspicions"
+    },
+    {
+      "source": "МР-ознаки вузла",
+      "english": "MRI lesion features"
+    },
+    {
+      "source": "Пальпація селезінки",
+      "english": "Spleen palpation"
+    },
+    {
+      "source": "Лейкоцити · одиниці?",
+      "english": "WBC · units?"
+    },
+    {
+      "source": "Мазок крові",
+      "english": "Blood smear"
+    },
+    {
+      "source": "Кістозні ділянки 40 мм",
+      "english": "Cystic areas 40 mm"
+    },
+    {
+      "source": "Тромбоцити · одиниці?",
+      "english": "Platelets · units?"
+    },
+    {
+      "source": "Імуногістохімія",
+      "english": "Immunohistochemistry"
+    },
+    {
+      "source": "Вузол 142 мм",
+      "english": "Lesion 142 mm"
+    },
+    {
+      "source": "Алергія в анамнезі",
+      "english": "Allergy in history"
+    },
+    {
+      "source": "Гіперспленізм у записі",
+      "english": "Hypersplenism in record"
+    },
+    {
+      "source": "Діагностичний код D48.9",
+      "english": "Recorded code D48.9"
+    },
+    {
+      "source": "20 метафаз",
+      "english": "20 metaphases"
+    },
+    {
+      "source": "Фіброз MF-1",
+      "english": "Fibrosis MF-1"
+    },
+    {
+      "source": "Опис пунктату",
+      "english": "Marrow aspirate description"
+    },
+    {
+      "source": "Інфільтрація мозку",
+      "english": "Marrow infiltration"
+    },
+    {
+      "source": "PLT 25 ×10⁹/л",
+      "english": "PLT 25 ×10⁹/L"
+    },
+    {
+      "source": "RDV 13,5 %",
+      "english": "RDV 13.5 %"
+    },
+    {
+      "source": "Гаптоглобін 0,72 г/л",
+      "english": "Haptoglobin 0.72 g/L"
+    },
+    {
+      "source": "RBC 3,59 ×10¹²/л",
+      "english": "RBC 3.59 ×10¹²/L"
+    },
+    {
+      "source": "MCH 26,6 пг.",
+      "english": "MCH 26.6 pg"
+    },
+    {
+      "source": "Ретикулоцити 110,1 Г/л",
+      "english": "Reticulocytes 110.1 G/L"
+    },
+    {
+      "source": "ЗЗЗС 84,4 мкмоль/л",
+      "english": "TIBC 84.4 µmol/L"
+    },
+    {
+      "source": "Моноцити 2 %",
+      "english": "Monocytes 2 %"
+    },
+    {
+      "source": "MCV 66,6 фл",
+      "english": "MCV 66.6 fL"
+    },
+    {
+      "source": "MCH 17 пг",
+      "english": "MCH 17 pg"
+    },
+    {
+      "source": "Hb 92 г/л",
+      "english": "Hb 92 g/L"
+    },
+    {
+      "source": "WBC 4,5 г/л?",
+      "english": "WBC 4.5 g/L?"
+    },
+    {
+      "source": "ЛДГ 156 Од/л",
+      "english": "LDH 156 U/L"
+    },
+    {
+      "source": "Ретикулоцити 2,88 %",
+      "english": "Reticulocytes 2.88 %"
+    },
+    {
+      "source": "WBC 3,37 ×10⁹/л",
+      "english": "WBC 3.37 ×10⁹/L"
+    },
+    {
+      "source": "Феритин 3,27 нг/мл",
+      "english": "Ferritin 3.27 ng/mL"
+    },
+    {
+      "source": "Залізо 3,47 мкмоль/л",
+      "english": "Iron 3.47 µmol/L"
+    },
+    {
+      "source": "MCHC 30,6 г/дл",
+      "english": "MCHC 30.6 g/dL"
+    },
+    {
+      "source": "PLT 27 ×10⁹/л",
+      "english": "PLT 27 ×10⁹/L"
+    },
+    {
+      "source": "RDW-SD 42 фл",
+      "english": "RDW-SD 42 fL"
+    },
+    {
+      "source": "MCV 82,4 фл.",
+      "english": "MCV 82.4 fL"
+    },
+    {
+      "source": "Еозинофіли 2 %",
+      "english": "Eosinophils 2 %"
+    },
+    {
+      "source": "MCHC 324 г/л",
+      "english": "MCHC 324 g/L"
+    },
+    {
+      "source": "Гематокрит 23,9 %",
+      "english": "Haematocrit 23.9 %"
+    },
+    {
+      "source": "PLT 23 ×10⁹/л",
+      "english": "PLT 23 ×10⁹/L"
+    },
+    {
+      "source": "PDW 18,1 %",
+      "english": "PDW 18.1 %"
+    },
+    {
+      "source": "RDW-CV 17,4 %",
+      "english": "RDW-CV 17.4 %"
+    },
+    {
+      "source": "PLT 226 г/л?",
+      "english": "PLT 226 g/L?"
+    },
+    {
+      "source": "Hb 61 г/л",
+      "english": "Hb 61 g/L"
+    },
+    {
+      "source": "MPV 9,7 фл.",
+      "english": "MPV 9.7 fL"
+    },
+    {
+      "source": "WBC 3 г/л?",
+      "english": "WBC 3 g/L?"
+    },
+    {
+      "source": "Hb 60 г/л",
+      "english": "Hb 60 g/L"
+    },
+    {
+      "source": "Hb 76 г/л",
+      "english": "Hb 76 g/L"
+    },
+    {
+      "source": "CASE011",
+      "english": "CASE011"
+    },
+    {
+      "source": "пацієнтка",
+      "english": "patient"
+    },
+    {
+      "source": "CASE011   /   ДО ОПЕРАЦІЇ",
+      "english": "CASE011   /   PRE-OPERATIVE"
+    },
+    {
+      "source": "Граф пацієнтки",
+      "english": "Patient graph"
+    },
+    {
+      "source": "102 вузли  ·  109 зв’язків",
+      "english": "102 nodes  ·  109 edges"
+    },
+    {
+      "source": "Тип клінічної події",
+      "english": "Clinical event type"
+    },
+    {
+      "source": "Аналізи крові",
+      "english": "Blood tests"
+    },
+    {
+      "source": "10",
+      "english": "10"
+    },
+    {
+      "source": "Візуалізація",
+      "english": "Imaging"
+    },
+    {
+      "source": "5",
+      "english": "5"
+    },
+    {
+      "source": "Морфологічні дослідження",
+      "english": "Morphology studies"
+    },
+    {
+      "source": "3",
+      "english": "3"
+    },
+    {
+      "source": "Клінічні записи",
+      "english": "Clinical records"
+    },
+    {
+      "source": "11",
+      "english": "11"
+    },
+    {
+      "source": "Типи вузлів",
+      "english": "Node types"
+    },
+    {
+      "source": "29 подій",
+      "english": "29 events"
+    },
+    {
+      "source": "8 зразків",
+      "english": "8 specimens"
+    },
+    {
+      "source": "33 спостереження",
+      "english": "33 observations"
+    },
+    {
+      "source": "31 знахідка",
+      "english": "31 findings"
+    }
+  ]
+}

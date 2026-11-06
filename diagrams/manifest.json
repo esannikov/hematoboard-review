@@ -1,10 +1,10 @@
 {
-  "schema_version": "hematoboard.public-architecture-article/2.0.0",
+  "schema_version": "hematoboard.public-architecture-article/2.1.0",
   "updated": "2026-11-06",
   "article": {
     "path": "README.md",
-    "sha256": "b85a048d6a72c02fa6da34e5bb0c6853a4c0a618c17bc8160c33281758f783fc",
-    "bytes": 32991
+    "sha256": "58f56dbdf95d7b7e04290c61c4572288a39fa1b8f855a2b1861606db92fda8ab",
+    "bytes": 41299
   },
   "configured_protocol": {
     "method_id": "HB-CONTROLLED-SYNTHESIS",
@@ -394,13 +394,13 @@
   "architecture_figure": {
     "source": {
       "path": "diagrams/hematoboard-trace-system.svg",
-      "sha256": "35ad89d5dbb73763ec58c450698752f1bfce2e2df1ef8899b5df7650449c244a",
-      "bytes": 19912
+      "sha256": "8deb3e060d89d4d7bf21b199f60f6d6e0a5975a26041bcdffc6d530ccc7b442a",
+      "bytes": 19907
     },
     "raster": {
       "path": "diagrams/hematoboard-trace-system.png",
-      "sha256": "846ee6a4e1a46047371e88919bd37376634b3f3d9080df92d7473ff4c3fa812c",
-      "bytes": 588214,
+      "sha256": "c4785dd48b52fc355d978bb2f77125323cbd0658e760e16c4073960f9115329e",
+      "bytes": 586594,
       "width": 2160,
       "height": 3150
     },
@@ -437,7 +437,33 @@
     "exact_edge_records_match_saved_graph": true,
     "sorted_object_ids_sha256": "6ee9e9db396ba13eaf72a7e8e0fe4ce07eebe71d53d81e0363c7309f8d65d279",
     "sorted_edge_records_sha256": "7d05812efef10fe20f8a1672663251b41986d2b58ecca9b2681c4553e10592fa",
-    "layout_note": "Radial layout; not a chronology, causal model or confidence map. Labels are abbreviated; full records remain in the case."
+    "layout_note": "Radial layout; not a chronology, causal model or confidence map. Labels are abbreviated; full records remain in the case.",
+    "article_figure_language": "en",
+    "english_presentation": {
+      "source": {
+        "path": "assets/patient-graph/CASE011-patient-graph.en.svg",
+        "sha256": "7e37cbcacdb898f75c96c8558c7814d11518e76b4621ed6dff0a66a4e3754f19",
+        "bytes": 102930
+      },
+      "raster": {
+        "path": "assets/patient-graph/CASE011-patient-graph.en.png",
+        "sha256": "6a270272a3007b0bcfff1a688122bdebfd11345285d6ec86f93ed23d0a811a53",
+        "bytes": 804813,
+        "width": 3240,
+        "height": 1560
+      },
+      "label_mapping": {
+        "path": "assets/patient-graph/CASE011-labels.en.json",
+        "sha256": "5aa22d21b9cfb29de84cf80385f94e190e93e60c49590888d4404d1c3630e8cb",
+        "bytes": 7838
+      },
+      "derived_from_svg_sha256": "cdf1662443a85606712264774e89907b8ace3d30e676329438e8e94df50c1399",
+      "scope": "English presentation only; no new clinical synthesis or change to source records.",
+      "graph_topology_and_geometry_unchanged": true,
+      "numbers_and_unit_uncertainty_preserved": true,
+      "tooltip_policy": "English summaries of the recorded source findings, with uncertainty and specimen scope retained. Original records remain in the case.",
+      "render_note": "Unicode superscript glyphs use Arial Unicode MS to retain the original powers in units."
+    }
   },
   "interface_screenshots": {
     "release_version": "0.2.9.50",
@@ -471,6 +497,24 @@
         "width": 1440,
         "height": 1722,
         "qa_surface": "desktop-graph",
+        "case_id": "CASE011"
+      },
+      {
+        "path": "assets/current-interface/case011-comparison.png",
+        "sha256": "3747520132d05def771e474dfbda7dce00e224a4abe32bd42c7ba84e0e6f3646",
+        "bytes": 95060,
+        "width": 886,
+        "height": 848,
+        "qa_surface": "desktop-comparison-arguments",
+        "case_id": "CASE011"
+      },
+      {
+        "path": "assets/current-interface/case011-reasoning.png",
+        "sha256": "532f0e9654b6236c6c7833a84535bbdb851309d2cccc846323fc7b01265990db",
+        "bytes": 2921008,
+        "width": 1440,
+        "height": 14210,
+        "qa_surface": "desktop-reasoning-log",
         "case_id": "CASE011"
       }
     ],
@@ -600,8 +644,57 @@
       {
         "component": "hematoboard-v2/docs/RELEASE_EFFICIENCY.md",
         "sha256": "2ad46bb156a9a9682da28af374a5b1568ab21ffb32f93885c2ebd35ff69e4165"
+      },
+      {
+        "component": "workbench/scripts/hematoboard/vision_ocr.swift",
+        "sha256": "61259cd478d5c96d1c6f96aba253b2031246edcbca9f8617fc817fa5e0b2e610"
+      },
+      {
+        "component": "workbench/scripts/hematoboard/pdf_to_markdown.py",
+        "sha256": "c138aa10fbd06480850ee853e4168f3589c480b382d7fd28551c55897180d935"
+      },
+      {
+        "component": "workbench/scripts/hematoboard/source_correction.py",
+        "sha256": "e387c4f8cad422cde681426946fde0e8f2a28184f9566143254e1956d283fe3f"
+      },
+      {
+        "component": "workbench/scripts/hematoboard/structured_document.py",
+        "sha256": "e50c5b932e871880d1c37bc60f1def73afb85019b90d28d24ff17ec6b7129933"
+      },
+      {
+        "component": "workbench/skills/hematoboard/references/case-lifecycle.md",
+        "sha256": "b4598b9ea650766a5575413873d1f76ae87f6e634d51318de7ad7d44e3909df1"
+      },
+      {
+        "component": "hematoboard-v2/ui/src/hypothesis-comparison.tsx",
+        "sha256": "f3b0528a01f88e1e9c54e2703b648ec7b06d0b652fd5b739d5dfe4d441dbd09a"
+      },
+      {
+        "component": "hematoboard-v2/ui/src/evidence-assessment.tsx",
+        "sha256": "1df12d5c91cc351ab31e6a3b9c1df8ff261290e55067903f84c293b52646e0de"
+      },
+      {
+        "component": "hematoboard-v2/ui/src/trend-card.tsx",
+        "sha256": "01afa99a21bf78e9a8f49a9745779f9be5a8f9d94597824d9fe3e095f9684ece"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/run_journal.py",
+        "sha256": "68e7a518a4873916e9bbd12e0b7b55829fcfd65a51270dfca1e960683fb02c5c"
       }
     ]
   },
-  "verification_note": "Asset/package identity and technical review do not establish clinical correctness, clinician acceptance or external clinical validation."
+  "verification_note": "Asset/package identity and technical review do not establish clinical correctness, clinician acceptance or external clinical validation.",
+  "hypothesis_trace_example": {
+    "case_id": "CASE011",
+    "candidate_sha256": "0d853256e47fc059e8ce8bfcbb898b0b67f8a7ab6bb59c2537c49ca7efa78fec",
+    "hypothesis_id": "H1",
+    "matrix_row_id": "M1",
+    "evidence_id": "E-CAND-3",
+    "confirmation": "compatible",
+    "verification_rank": null,
+    "literature_status": "partial",
+    "source_title": "NCCN Clinical Practice Guidelines in Oncology: Soft Tissue Sarcoma, Version 3.2026",
+    "source_location": "75",
+    "scope": "Explanation of the saved public candidate; no new diagnostic assessment or source-PDF publication."
+  }
 }

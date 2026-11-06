@@ -65,13 +65,14 @@ establish that the patient has the required finding. Neither graph produces a
 diagnostic probability from the number of nodes, edges or citations.
 
 <p align="center">
-  <a href="assets/patient-graph/CASE011-patient-graph.svg"><img src="assets/patient-graph/CASE011-patient-graph.png" width="1100" alt="CASE011 patient graph: one patient, 29 clinical events, 8 specimens, 33 observations and 31 findings, connected by 109 structural edges"></a>
+  <a href="assets/patient-graph/CASE011-patient-graph.en.svg"><img src="assets/patient-graph/CASE011-patient-graph.en.png" width="1100" alt="English CASE011 patient graph: one patient, 29 clinical events, 8 specimens, 33 observations and 31 findings, connected by 109 structural edges"></a>
   <br>
-  <sub><strong>Figure 1. The recorded patient graph of CASE011.</strong> The radial projection retains the recorded graph. Its 102 nodes include the central patient: 1 + 29 events + 8 specimens + 33 observations + 31 findings. All 109 structural edges match the saved graph used by this candidate. Colour groups events into blood tests, imaging, morphology and clinical records; shape distinguishes node types. The radial arrangement is a reading layout, not a time axis, causal model or map of diagnostic confidence. Short labels summarize nodes; exact wording and provenance remain in the case. The Ukrainian legend is retained from the clinical presentation.</sub>
+  <sub><strong>Figure 1. The recorded patient graph of CASE011.</strong> The English presentation preserves all 102 nodes: 1 patient + 29 events + 8 specimens + 33 observations + 31 findings, and all 109 structural edges. Colour groups events into blood tests, imaging, morphology and clinical records; shape distinguishes node types. The radial arrangement is a reading layout, not a time axis, causal model or map of diagnostic confidence. Labels and tooltips are translated; original clinical records remain unchanged. Question marks preserve unresolved source units, including implausible units printed in the source.</sub>
 </p>
 
-[Open full-size PNG](./assets/patient-graph/CASE011-patient-graph.png)
-· [open scalable SVG](./assets/patient-graph/CASE011-patient-graph.svg)
+[Open English PNG](./assets/patient-graph/CASE011-patient-graph.en.png)
+· [open English SVG](./assets/patient-graph/CASE011-patient-graph.en.svg)
+· [original Ukrainian illustration](./assets/patient-graph/CASE011-patient-graph.svg)
 
 ## How the system is organized
 
@@ -121,6 +122,22 @@ allows technical review of native DOCX with the actual agent execution recorded:
 external processing, permission for public display and clinician acceptance
 must not be used as synonyms. Historical G1/G2/G4 receipts retain their original
 meaning; they are not universal names for every current intake step.
+
+The private intake offers more than text extraction:
+
+| Reading task | Implemented handling |
+| --- | --- |
+| Scanned pages and ordered photographs | Local Apple Vision in accurate mode, requesting Ukrainian, Russian and English where supported by the installed engine; preserved page order and an explicit failed-page record. |
+| Native documents | Direct DOCX paragraph/table extraction and native PDF text/layout where available. A text document is not needlessly treated as an OCR image. |
+| Laboratory tables | Source geometry helps associate the analyte, result, unit, comparator and reference interval with a row; the assignments remain reviewable. |
+| Inspect a doubtful character | The private review view can place the exact page/crop beside the extracted field, with word coordinates and source hashes. Corrections retain the original reading and a separate correction record. |
+| Preserve context | Specimen, method, date roles, duplicate instances and links between a study and its results remain available to review. Unknown fields are not completed from a textbook. |
+| Detect incomplete transfer | Page inventory, field-review flags and checks for known dangling statements or missing continuations stop unresolved material entering the corresponding reviewed route. |
+
+OCR confidence describes the recognizer's output; it is not a probability that a
+clinical value is correct. This article reports no validated OCR accuracy rate
+and makes no general handwriting-recognition claim. These intake functions run
+in the controlled workbench, not as an upload service on the public dashboard.
 
 ### 2. Form starting hypotheses from the patient graph
 
@@ -219,12 +236,67 @@ a technically successful release does not create a clinician decision.
 
 ## What the clinician sees and decides
 
-The overview presents concise hypothesis names, confirmation status, verification
-priority when justified, and the next useful clarification. Full arguments,
-sources and uncertainty are available in the hypothesis card. The argument graph
-initially focuses on the selected hypothesis; a full view preserves the recorded
-relations, including neutral context. History, quantitative trends, the workup
-plan and the reasoning record provide complementary views of the saved material.
+The shared interface offers several ways to inspect one saved case. Older
+packages show the content recorded under their own contracts; an unavailable
+assessment is not generated merely to fill a panel.
+
+| Clinical reading task | Where to look | What can be inspected |
+| --- | --- | --- |
+| Orient to the case | **Overview** | The clinical picture, conditional urgent concerns, concise hypotheses, confirmation, justified verification priority and the next clarification. |
+| Follow a hypothesis to the record | **Hypothesis card and argument graph** | Supporting, refuting and neutral relations, their rationale and links to the patient records behind them. The default graph focuses on one hypothesis; the full view retains all recorded relations. |
+| Compare two explanations | **Hypothesis comparison** | How the same patient finding bears on either explanation, what remains missing, and which recorded test-outcome scenarios could distinguish them. A missing comparison is explicitly labelled “not assessed”. |
+| Review change over time | **Timeline and history** | Dated studies, quantitative results and available trends with source context. Ordering/report dates do not silently become collection dates. |
+| Check the literature | **Source cards and evidence matrix** | The source title, edition/year, page or section, the proposition actually used, its application to the case and gaps in coverage. Public links are provided where available and permitted. |
+| Follow the investigation | **Reasoning and decision audit** | Starting hypotheses, evidence decisions, alternatives retained or set aside, critic findings and recorded revisions. |
+| Decide what to clarify next | **Plan** | The purpose and necessity of an investigation, the relevant triggers and conditions, missing information, and recorded possible outcomes. |
+| Prepare for discussion | **Briefings, where available** | A source-bound audio/video presentation of the saved candidate; currently prepared for CASE027. |
+
+### Reading the reasoning record
+
+The **Reasoning** view combines a clinician-facing narrative with an expandable
+decision audit. It follows the documented investigation: what was considered
+initially, which questions led to source checking, which evidence was used or
+not used and why, how the candidate developed, and what the critic challenged.
+Entries can open the linked patient records or external-source cards. The audit
+also exposes previous-hypothesis dispositions and recorded corrections where
+the run contains them.
+
+This is an explanation assembled from saved results, queries, source propositions
+and review findings. It is not a verbatim transcript of a model's private internal
+reasoning. Missing stages or source support must remain identifiable; readable
+prose is not a substitute for the underlying records.
+
+### Following a hypothesis to its evidence
+
+Two complementary trails support inspection:
+
+```text
+Patient document → exact patient-object version → support / refute / neutral → hypothesis
+Medical source   → verified source proposition  → case applicability       → matrix / workup
+```
+
+Selecting a patient-data node exposes the relevant record and the stored relation
+rationale. The public source view shows the approved de-identified record; the
+private workbench can show the original page/crop. Selecting an external-source
+reference exposes its identity and the proposition used, subject to its access
+rights. A literature reference is not routed as though it were a patient document.
+
+**Source-linked does not mean confirmed.** A hypothesis may have patient-specific
+support and literature informing its verification while still lacking direct
+evidence for the diagnosis. The matrix distinguishes adequate, partial and missing
+literature coverage. Citation counts and graph connectivity do not determine
+evidence strength.
+
+For example, the saved CASE011 candidate treats focality, blood flow and contrast
+enhancement as compatible with a vascular lesion. Its recorded source proposition
+uses the **National Comprehensive Cancer Network (NCCN) Clinical Practice
+Guidelines in Oncology: Soft Tissue Sarcoma, Version 3.2026, page 75**, for
+classification terminology. That use does not provide spleen-specific MRI
+discrimination or a probability of a benign subtype. The candidate records partial literature coverage and missing
+representative tissue. Its status therefore remains compatible, with no established
+ordering among the diagnostic hypotheses. This example describes the
+[published candidate](https://esannikov.github.io/hematoboard/?case=case011&view=overview&hypothesis=H1),
+not a new clinical assessment.
 
 <details>
 <summary><strong>Current interface examples — CASE011, release 0.2.9.50</strong></summary>
@@ -234,6 +306,11 @@ plan and the reasoning record provide complementary views of the saved material.
 <p><a href="assets/current-interface/case011-history.png"><img src="assets/current-interface/case011-history.png" width="900" alt="Current CASE011 history projection with dated studies and patient-record navigation"></a><br><sub><strong>Figure 4. History.</strong> Clinical events and results keep their source context and date roles.</sub></p>
 
 <p><a href="assets/current-interface/case011-argument-graph.png"><img src="assets/current-interface/case011-argument-graph.png" width="900" alt="Current CASE011 argument graph focused on a selected hypothesis"></a><br><sub><strong>Figure 5. Argument graph.</strong> This is a hypothesis-specific argument view, distinct from the patient graph in Figure 1.</sub></p>
+
+<p><a href="assets/current-interface/case011-comparison.png"><img src="assets/current-interface/case011-comparison.png" width="900" alt="CASE011 comparison of two hypotheses using the same patient findings"></a><br><sub><strong>Figure 6. Hypothesis comparison.</strong> The recorded role of the same finding can be inspected for two competing explanations.</sub></p>
+
+[Open the full Reasoning view capture](./assets/current-interface/case011-reasoning.png)
+to inspect the saved narrative, decision audit and source-library presentation.
 
 These are saved browser-QA captures bound to the published package and shared
 interface. They show the Ukrainian clinical interface. The
@@ -270,6 +347,24 @@ Institute of Standards and Technology, 2015). The graph state has its own semant
 hash; recording timestamps do not by themselves create a new clinical state.
 A changed clinical input requires a new revision. A UI refresh does not refresh
 the clinical interpretation.
+
+The hashes answer concrete identity questions at successive handoffs:
+
+| Handoff | What is pinned | Why it matters |
+| --- | --- | --- |
+| Case → any operation | Case identity and exact artifact bindings | A result from another case cannot be admitted merely because a label or filename matches. |
+| Document → reading | Document/page bytes and applicable OCR/layout/crop artifacts | A field review must refer to the same source and region that the reviewer saw. |
+| Source review → patient graph | Reviewed source version, graph semantic state and object versions | An approved reading must not silently attach to changed patient data. |
+| Graph → model execution | Exact model-facing input and execution profile | A result is associated with the supplied data and recorded model/effort. Historical evidence is not relabelled when the current configuration changes. |
+| Retrieval → source proposition | Source bytes and the proposition/application bindings | A citation must resolve to the material that was actually admitted and reviewed, not merely to a matching title. |
+| Candidate → critic or correction | Exact candidate hash and review/correction coverage | An earlier PASS cannot silently approve a changed candidate. |
+| Candidate → public screen and briefing | Package bytes, shared UI, QA receipt and media bindings | Display and media must correspond to the verified package; stale assets cannot borrow its status. |
+| Candidate → clinician decision | The exact candidate/package shown in the local review session | A decision belongs to the reviewed version and cannot automatically accept a later revision. |
+
+Full digests belong in the manifest and audit records. Clinician-facing text
+uses readable source titles and navigation. Hash equality establishes identity;
+it supplies neither confidentiality nor proof of truth, and is not a digital
+signature authenticating the medical author.
 
 **Projection fidelity.** Validators check values, units, references, date roles,
 source addresses and candidate content against the saved artifacts. Declared
