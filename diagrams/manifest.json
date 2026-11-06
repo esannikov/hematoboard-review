@@ -1,95 +1,607 @@
 {
-  "schema_version": "hematoboard.public-architecture-figure/1.2.0",
-  "updated": "2026-08-26",
-  "protocol": {
-    "schema_version": "hematoboard.synthesis-protocol/2.0.0",
+  "schema_version": "hematoboard.public-architecture-article/2.0.0",
+  "updated": "2026-11-06",
+  "article": {
+    "path": "README.md",
+    "sha256": "6ac117bb59e35226463ca6d69c8bc67fda59b14d9ed5c7ed71db441c4a17e88b",
+    "bytes": 32851
+  },
+  "configured_protocol": {
     "method_id": "HB-CONTROLLED-SYNTHESIS",
-    "method_version": "2.5.3",
-    "sha256": "b91943c7032fdc39d7a8090239dc6c8dfef285d7456a1218fda32eb56c438a1c",
-    "canonical_source": "methodology/synthesis_protocol.json"
+    "method_version": "2.5.5",
+    "sha256": "8f3b9cdf713169d9ede08286567c7212cc01e4ee12b70b4cc742923180b8a15e",
+    "source_component": "workbench/methodology/synthesis_protocol.json",
+    "availability": "inspected_local_runtime_not_distributed_in_this_repository",
+    "scope": "current configuration; not a historical run attestation"
   },
-  "figure": {
-    "source": "hematoboard-trace-system.svg",
-    "source_sha256": "2b0c48fea243295431b61186bb6f3fc93285cc98e5616ca4fd5cb946c43185ed",
-    "raster": "hematoboard-trace-system.png",
-    "raster_sha256": "3a517aca3a534f57b62569e9cc5b41116f1bc45c2b5064a05b1ffbf58ad55e28",
-    "width": 1440,
-    "height": 2100
-  },
-  "current_public_release": {
-    "url": "https://esannikov.github.io/hematoboard/?case=case011-v2",
-    "indexed_candidate_count": 15,
-    "reference_case_id": "CASE011-V2",
-    "protocol_replay_of_case_id": "CASE011",
-    "publication_authorized_by_user": true,
-    "reasoning_run_id": "SYN-20260826T071551663629Z-CASE011-V2-EFBA7E2E",
-    "source_document_sha256": "765301272bc6f8e68aa278f50316f88109d360ee207447d712750bf99538e852",
-    "clinical_input_sha256": "efba7e2e129e8645c6e55d9a41d79b0ad7e9989307776a0d7d9b26e60020433a",
-    "candidate_sha256": "2ba28f6903af6de8aecaa5a201f5c8751aeac2dc40c1078fb96a708f1580fc2b",
-    "critic_sha256": "97ed5024892ee3365b501d4168969e7cbfa8a0146318d8c3898fda3921958d4e",
-    "public_package_sha256": "206d25e2d5c215a7a170b6420bea9339566256023cd942804d917a5a88cb81d9",
-    "public_qa_sha256": "9503ade200cb2c85bb65861e2ceaab09c66f6d799b8ed11e1e9ed91a5274d535",
-    "ui_source_sha256": "55eac69ff7b686d9492c65df42ecdafd5741f4bff6ce4a9f1ac3e56ee6807216",
-    "state": "published_candidate",
-    "critic_pass": true,
-    "projection_verified": true,
-    "clinician_accepted": false,
-    "content_counts": {
-      "source_records": 61,
-      "clinical_facts": 183,
-      "measurement_series": 4,
-      "clinical_entities": 6,
-      "diagnostic_hypotheses": 4,
-      "external_evidence": 6,
-      "workup_actions": 5,
-      "critical_gaps": 4
-    }
-  },
-  "english_screenshot_surface": {
-    "url": "https://esannikov.github.io/hematoboard-en/?case=case001",
-    "case_id": "CASE001",
-    "candidate_sha256": "90bcb7b9b54ef40bff8c123c14e0d0b384ee870cdfb0527764496ead08ed20fb",
-    "clinical_input_sha256": "7fd2ae7ef0321380a3af3419dbbe7a2dda14fefff84ea2816f55358853333a47",
-    "english_package_sha256": "909e62be43e538b76fed10277e2411a1d4d4896d615972810d5e227ddc4a9eb3",
-    "translation_manifest_sha256": "6b6099d22fb54328edea05132d0fcb33a67c640e87096b56d71f8ca38445b962",
-    "translation_changes_clinical_claims": false,
-    "clinician_accepted": false,
-    "screenshots": [
+  "public_release": {
+    "version": "0.2.9.50",
+    "repository": "esannikov/hematoboard",
+    "commit": "bc8b45da6a7dabe61e721f6bea2c7aa8ea05ed48",
+    "url": "https://esannikov.github.io/hematoboard/?case=case011",
+    "case_index_sha256": "a5849321375f2f0c538a1b68ff8fb057dca5353e05fe813347b465b9bb55c80f",
+    "authenticity_manifest_sha256": "c8e570fbac19ce84d58415180e7ed77ada21c04b7d1da3b790934b9ee45bd215",
+    "ui_source_sha256": "4534b2121d38c4f1839ef14bdb4760b5b4a9c102bc5dd6995b807b22a18ef57f",
+    "indexed_candidate_count": 20,
+    "typed_patient_projection_count": 7,
+    "typed_patient_projection_keys": [
+      "case001",
+      "case008",
+      "case011",
+      "case024",
+      "case025",
+      "case026",
+      "case027"
+    ],
+    "candidate_1_4_count": 5,
+    "candidate_1_4_keys": [
+      "case001",
+      "case008",
+      "case011",
+      "case026",
+      "case027"
+    ],
+    "candidate_schema_counts": {
+      "hematoboard.v2.candidate-synthesis/1.4": 5,
+      "hematoboard.v2.candidate-synthesis/1.1": 13,
+      "hematoboard.v2.candidate-synthesis/1.2": 1,
+      "hematoboard.v2.candidate-synthesis/1.3": 1
+    },
+    "all_public_cases_clinician_accepted": false,
+    "cases": [
       {
-        "view": "overview",
-        "path": "../assets/research-preview/hematoboard-overview.png",
-        "sha256": "36a812681e1f21dd9b3528f95cd06bb03f8a3110b9e7dcbdf2288fae026dea0b"
+        "key": "case001",
+        "case_id": "CASE001",
+        "package_path": "case001/public-dashboard.v1.json",
+        "public_package_sha256": "3bd6d332d9ddea13647b171a5aa18c10a3c1ca0c98a4891e6618a55022ec063c",
+        "candidate_sha256": "0621e8526992ccc53bb7fc716f7fb7cc85e007fded5c3d94e007d1045b5ef7e3",
+        "clinical_input_sha256": "efe8682ce370dca0dbf7570a14eedcad45cea51b55812476d211d5aeeec53ec0",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.4",
+        "typed_patient_projection": true,
+        "patient_graph_state_sha256": "5521855637fc826a6080f5a60ac201e88b091c4b661673aa0e64109038f9512d",
+        "evidence_matrix_rows": 14,
+        "clinician_accepted": false,
+        "recorded_method_id": null,
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case001-receipt.json",
+        "public_qa_sha256": "97b39d1a6be780283524431b75e7337d41718954a3ca59794c95a0e3cd1b75ca"
       },
       {
-        "view": "timeline",
-        "path": "../assets/research-preview/hematoboard-timeline.png",
-        "sha256": "5c24258c43df403ff25313c2429e976b8a719c83dabee9431a8f91119820a74d"
+        "key": "case002",
+        "case_id": "CASE002",
+        "package_path": "case002/public-dashboard.v1.json",
+        "public_package_sha256": "86d7b318cb1dff620d6f932bbe4f6ed700d933468592a12ab205c4bb2415f088",
+        "candidate_sha256": "c6af184aef34e29aa09f835ab1424c1555d837632f009233f6a8b7d4d6b2e2bd",
+        "clinical_input_sha256": "214ac62c9d63a8fe1dc7c6e667ccbd9c5307f2b1d4540a01d6c1675c1913fbd6",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": "2.5.2",
+        "public_qa_receipt": "qa/case002-receipt.json",
+        "public_qa_sha256": "ef0ec085eb1d88e5358aaf31b7ab5e6c4e925cc1b615bc1e5a0d93b3e07311b0"
       },
       {
-        "view": "graph",
-        "path": "../assets/research-preview/hematoboard-graph.png",
-        "sha256": "a93b388e2913c2b9b008a90f3ab93804c815099bbebb86c45b3b347c51efa71d"
+        "key": "case003",
+        "case_id": "CASE003",
+        "package_path": "case003/public-dashboard.v1.json",
+        "public_package_sha256": "76c9dadd40e3fb8186601c5a38922f6e138d1ac986caa195714d97729ca5cab0",
+        "candidate_sha256": "ed752c243690387427ef934cacfe5e011692a3b5e95bab82c34bbc8eeae0985c",
+        "clinical_input_sha256": "196e72d9903cf05f799867de83d033adce4dcc1a319071ebb880e6b951f274ed",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": "2.5.1",
+        "public_qa_receipt": "qa/case003-receipt.json",
+        "public_qa_sha256": "50eaa283a3395e2227aaed0e89549f77a6719e90ab7eed79918c346bc1193624"
+      },
+      {
+        "key": "case004",
+        "case_id": "CASE004",
+        "package_path": "case004/public-dashboard.v1.json",
+        "public_package_sha256": "9829b46e97fe80c65e5f495adbb111e06184faf53313a28e2d28b777270d1557",
+        "candidate_sha256": "27fa555d273cd6acd4e3f59cf95971af87a3c66788bf0b9f65149876b7142c5c",
+        "clinical_input_sha256": "c619034696735dd982431cd0f2a46cb1816bf0ee3ef4ad4f163dc39049290725",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case004-receipt.json",
+        "public_qa_sha256": "852e389f960b531903e7401de82b707747aca1f5ff43d14ffb4a8325b8b65fe0"
+      },
+      {
+        "key": "case006",
+        "case_id": "CASE006",
+        "package_path": "case006/public-dashboard.v1.json",
+        "public_package_sha256": "345a64b73b351825bc239585b802c9dc045c7680dd557c200d18424b344c2675",
+        "candidate_sha256": "9d95cc171515af8a325c0288af30be46a8f25c696ada680433510fbb31e8edb7",
+        "clinical_input_sha256": "fe29248f9d3a04099d8ec451cdd45beaa33ff7a63d68caf42d5e4c67dcfa7dc9",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case006-receipt.json",
+        "public_qa_sha256": "3502832e0ca44004bb0cc7e81a6536cf48ef5c1f7f59d9c35671bd1850201322"
+      },
+      {
+        "key": "case007",
+        "case_id": "CASE007",
+        "package_path": "case007/public-dashboard.v1.json",
+        "public_package_sha256": "b186bd4d57b41184d14dcb838be3a94d3a9175a92c9af0fce783f37764b565f7",
+        "candidate_sha256": "2bf4dd6cd715eca3d917abf87581fad093e8bb2b45d7bf2d3b97611c32a097cb",
+        "clinical_input_sha256": "c3cd3d00ca38ba5852733886a38901076397d5f9e4241ab39c4ead23dc88b1e4",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": "2.5.2",
+        "public_qa_receipt": "qa/case007-receipt.json",
+        "public_qa_sha256": "28f6ba7d0ebe483d63025d46501d6b55138a4ab7d135fde497d386d6a299cb5f"
+      },
+      {
+        "key": "case008",
+        "case_id": "CASE008",
+        "package_path": "case008/public-dashboard.v1.json",
+        "public_package_sha256": "ce00085f6a7c99a16cae1257303fd6a636ee8f0ff90d82ba12a678c8845d7444",
+        "candidate_sha256": "4c642633f17505538831df67a91e4980b582eec06d195a75b0bf200e919d5cb2",
+        "clinical_input_sha256": "2f09af594e5ab38d5ca254b91ae2099ed09e0a4f5b669a2cccf0d9c84671dc84",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.4",
+        "typed_patient_projection": true,
+        "patient_graph_state_sha256": "8d30cb4ed1bc61174ef471e6644df61c2b26dbb8b2c9306cfda4c77a3f99b7a0",
+        "evidence_matrix_rows": 6,
+        "clinician_accepted": false,
+        "recorded_method_id": null,
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case008-receipt.json",
+        "public_qa_sha256": "640fb40e09034e1a897b3a00178c7ad8b543b9d2f600e0afc5c444e94ec4cb91"
+      },
+      {
+        "key": "case009",
+        "case_id": "CASE009",
+        "package_path": "case009/public-dashboard.v1.json",
+        "public_package_sha256": "b8819c65ec99e9fcf2311a5ac6ae65b24a0744bb3098128707dc244d3a73ae26",
+        "candidate_sha256": "6de318f5a8d5719c2e5008941660a25ba2826b9acbc12196e4c0a31d941222f2",
+        "clinical_input_sha256": "aaf86a55b684092a87007b165b3d01e02bca73d8069dfbc500c3359f7eed9db1",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case009-receipt.json",
+        "public_qa_sha256": "c4187f4b7efde2e7c856cfad6383a3d24a1483f486791bbbecb92a562b72187e"
+      },
+      {
+        "key": "case010",
+        "case_id": "CASE010",
+        "package_path": "case010/public-dashboard.v1.json",
+        "public_package_sha256": "97ac05b1da1774ecf458e35b1789dda6b163f9e9f620209d1445f8b9bfaff145",
+        "candidate_sha256": "2517b7a228ca3829dbe1ed7a75c1051d54f9787651e7156efaa2e18cd32643c5",
+        "clinical_input_sha256": "42a7832da155442030b8ccfba6911f667e2c7de1168cf21a70833463d8445c88",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case010-receipt.json",
+        "public_qa_sha256": "563111d7a621307ac6f2c0429be9ac306bb462a8d9a95207c8bec91a05d6f3d9"
+      },
+      {
+        "key": "case011",
+        "case_id": "CASE011",
+        "package_path": "case011/public-dashboard.v1.json",
+        "public_package_sha256": "18a015798994f85cdf9bf6fafdaf1f5f03f16d8c5f5a9459a09b957c0dcd2598",
+        "candidate_sha256": "0d853256e47fc059e8ce8bfcbb898b0b67f8a7ab6bb59c2537c49ca7efa78fec",
+        "clinical_input_sha256": "1a5c93966101d60f47db8a5f296393d2f61843d667f70e51e446516aabe51236",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.4",
+        "typed_patient_projection": true,
+        "patient_graph_state_sha256": "4b1844c2ba7cd04eb914333fdce23a151ecd5def23b16057e79bdeb3d4f4c024",
+        "evidence_matrix_rows": 8,
+        "clinician_accepted": false,
+        "recorded_method_id": null,
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case011-receipt.json",
+        "public_qa_sha256": "203fc29ee4e64e5c906c2d3d75213aa7950f2d28244c80b9af10881c75d78cda"
+      },
+      {
+        "key": "case012",
+        "case_id": "CASE012",
+        "package_path": "case012/public-dashboard.v1.json",
+        "public_package_sha256": "052e0669dd8d63237791822fc73b16818bd6369e733688c11d08daea8ac0f47e",
+        "candidate_sha256": "56ec12ed82ad6967d8819250602a7c3da71add18c97c8408949537e61c99ea70",
+        "clinical_input_sha256": "6a80e92e0747fa5cfdad98b23df8882aa46a7ff7f1c8d43f0360c571f8ebb719",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": "2.5.3",
+        "public_qa_receipt": "qa/case012-receipt.json",
+        "public_qa_sha256": "73af75258c603e4b31d8a8172623b47b176d679a5f1444c55b64c55f276dee99"
+      },
+      {
+        "key": "case013",
+        "case_id": "CASE013",
+        "package_path": "case013/public-dashboard.v1.json",
+        "public_package_sha256": "7b3c543402947e13dfb0bb620f6dea502dc7c3c9b5394413e26545dfd288a27e",
+        "candidate_sha256": "70ecc9b036e7ce00d8d7b37e3aef87047e0a5fc3aa1ee4a1eca2af1304c5a4a4",
+        "clinical_input_sha256": "a9257a5ba833084adbef52f51b9d5bb9c22cd08c5b02c22421d572701f65e232",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": "2.5.3",
+        "public_qa_receipt": "qa/case013-receipt.json",
+        "public_qa_sha256": "ce5a9479dcc1efdc88e50bd60e81e137e6b13f1cf67d07e4c4a24c7f22260a56"
+      },
+      {
+        "key": "case014",
+        "case_id": "CASE014",
+        "package_path": "case014/public-dashboard.v1.json",
+        "public_package_sha256": "d61cff81e0c06505c1153e4ec4067e7940cbe2ebedb53533329479fef32fe226",
+        "candidate_sha256": "f3582ffd9475d0036e3b0dd1856d4b7d3854a0930a08c6ade85915530e01c668",
+        "clinical_input_sha256": "f3a0e54332eff7ebc3584f88699d3d7faa20af71cd7f3df27db30ab622021895",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case014-receipt.json",
+        "public_qa_sha256": "12e10de96d16d728ac1b1d29eb09bba24e65e649c1974826035b25cb231b9cc1"
+      },
+      {
+        "key": "case015",
+        "case_id": "CASE015",
+        "package_path": "case015/public-dashboard.v1.json",
+        "public_package_sha256": "55ff6881e62a924129d58167d1f09f1aed79332b3c4bf91cf0d14fb7a2c28528",
+        "candidate_sha256": "9b2466c9628e2d32f4ce8139599999b27db26fb310d08474cce185539a273c11",
+        "clinical_input_sha256": "2f4161a5973c2b2e342e3a742fd73255ea9bfdd7827e7b7e2e88dca2b90d278a",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case015-receipt.json",
+        "public_qa_sha256": "e7de21edcce2fd5f8c4be0aae8f6c507af8496a94eb77bddef1a0095fe1bdc1b"
+      },
+      {
+        "key": "case016",
+        "case_id": "CASE016",
+        "package_path": "case016/public-dashboard.v1.json",
+        "public_package_sha256": "0cc08ac41b27d0ddb5929d83a6c99ca8929db0ab3d1dceb5a786d232e82056fe",
+        "candidate_sha256": "d059ea7217d074b03526bd9fb8d5edd5a33787fb8733b8fec4da07e2a7256153",
+        "clinical_input_sha256": "8aa439b5c5302bd5e51f1840027f76fd91f6fcf4fc14b2b2fbc851efa3e9546a",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case016-receipt.json",
+        "public_qa_sha256": "048a760707fc1ddd0cfc2c4e819410d4c08ded0277cb31064243e953662899f5"
+      },
+      {
+        "key": "case017",
+        "case_id": "CASE017",
+        "package_path": "case017/public-dashboard.v1.json",
+        "public_package_sha256": "154c9b108c6debe013871912daf90c5550977da9d92154d7aad9e5aa9af3a21c",
+        "candidate_sha256": "fb8cc3a043df4534862cacd3101e1ae626cd482570aecd2c07c2091b851d6243",
+        "clinical_input_sha256": "bd52d3356bf4655441eb94fcf3f65be82b0a7dc5151057e5815d7a523f6c50f6",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.1",
+        "typed_patient_projection": false,
+        "patient_graph_state_sha256": null,
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": "HB-CONTROLLED-SYNTHESIS",
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case017-receipt.json",
+        "public_qa_sha256": "02b16b392afc369c3e530da096abc018bccca3cab1423ad0f2993784bfea778d"
+      },
+      {
+        "key": "case024",
+        "case_id": "CASE024",
+        "package_path": "case024/public-dashboard.v1.json",
+        "public_package_sha256": "6de897e6e1b33c35df1b03ccaf15d9b19ff8cce612ded48bb3970b24d6bc7cf1",
+        "candidate_sha256": "fb9c503358dc9633a1d17e37797e2627615b2cf1d2e4935345f5fee48d9003ff",
+        "clinical_input_sha256": "93b5478c19b7a946b30526f2ea36c9e88a87d84b131c51e7d0ac6566c0d46e4d",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.2",
+        "typed_patient_projection": true,
+        "patient_graph_state_sha256": "3ddae04aa9cad86e7bc300893a82a570b739dfe1101c721c66371c9c7fd6a024",
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": null,
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case024-receipt.json",
+        "public_qa_sha256": "012e2080ef3e06cb4cd312564c25d61f79cca69aea92b8d0c52a19979b0b2c7c"
+      },
+      {
+        "key": "case025",
+        "case_id": "CASE025",
+        "package_path": "case025/public-dashboard.v1.json",
+        "public_package_sha256": "baf150461031a65c4e6a58410a8cef828a44246e3885e9fc8b8f3c6d9f18cb8d",
+        "candidate_sha256": "123346da58ca6a97f245e9fc8504e4437ca3030189407a6c6a4b3b13af0228c2",
+        "clinical_input_sha256": "246ca30f2a029ed74272cad242afb6f52e6a475750154ef6c3ddffb31c5d2425",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.3",
+        "typed_patient_projection": true,
+        "patient_graph_state_sha256": "e3fcc2dfe8b04dd3190d4061bd14d96a68bcc5968fd30ff9fc8f6f16897d46ff",
+        "evidence_matrix_rows": 0,
+        "clinician_accepted": false,
+        "recorded_method_id": null,
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case025-receipt.json",
+        "public_qa_sha256": "8dc7989ee49acb27f3b1952a16a3aed035335478aadceec59973459509cbda79"
+      },
+      {
+        "key": "case026",
+        "case_id": "CASE026-V2",
+        "package_path": "case026/public-dashboard.v1.json",
+        "public_package_sha256": "ea67022a3badce5af1352bb89a7d2e29d624ecda3703d5b9c2079e76b7257a13",
+        "candidate_sha256": "9aeacc57275ee2e4d898f9796da049af3aa6a963976fdba8ecb86626833c9654",
+        "clinical_input_sha256": "3c94983f20e3d0890fb6c7775f00bbc49bc1ff1b7ff0b7529a83548d3940bcb0",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.4",
+        "typed_patient_projection": true,
+        "patient_graph_state_sha256": "f455ede5d2788406f1709506be680817b942304fa177af9aadf81e0d9096e17d",
+        "evidence_matrix_rows": 10,
+        "clinician_accepted": false,
+        "recorded_method_id": null,
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case026-receipt.json",
+        "public_qa_sha256": "e16a3169d42a09aecfe70774a432b2ed50ad61cefefcf1664a59070c88c83138"
+      },
+      {
+        "key": "case027",
+        "case_id": "CASE027",
+        "package_path": "case027/public-dashboard.v1.json",
+        "public_package_sha256": "458b624e85fc8f35d8f2f0ef4c3f1156a890bf1910d6615093ecb6ef84fbafe5",
+        "candidate_sha256": "13f8058765f602f11ddc0dc09f8a807117108fd79735da5b8c45ccda420cd361",
+        "clinical_input_sha256": "2db677f9fded21226c39bda391dbe079975192d3c0e92281c61b574c2106d075",
+        "candidate_schema": "hematoboard.v2.candidate-synthesis/1.4",
+        "typed_patient_projection": true,
+        "patient_graph_state_sha256": "6ba26a9002dc05fb66e6f2dff7c11fbf06b343904276c97970c7887682c882ad",
+        "evidence_matrix_rows": 12,
+        "clinician_accepted": false,
+        "recorded_method_id": null,
+        "recorded_method_version": null,
+        "public_qa_receipt": "qa/case027-receipt.json",
+        "public_qa_sha256": "cd90ac6f669f22cf0395bbb6cf6bd3b7d8d0232f10d0ee7ad881275783d644b1"
       }
     ]
   },
-  "architecture_contracts": {
-    "private_source_boundary": {
-      "raw_pdf_public": false,
-      "raw_ocr_public": false,
-      "deidentification_mode": "exact_span_on_derived_json_and_markdown",
-      "raw_pdf_mutation": false
+  "architecture_figure": {
+    "source": {
+      "path": "diagrams/hematoboard-trace-system.svg",
+      "sha256": "35ad89d5dbb73763ec58c450698752f1bfce2e2df1ef8899b5df7650449c244a",
+      "bytes": 19912
     },
-    "active_v2_route": {
-      "operator_entrypoint": "hematoboard-v2",
-      "planner": "workflow-status",
-      "mutations": ["advance", "resume"],
-      "implicit_model_calls": false
+    "raster": {
+      "path": "diagrams/hematoboard-trace-system.png",
+      "sha256": "846ee6a4e1a46047371e88919bd37376634b3f3d9080df92d7473ff4c3fa812c",
+      "bytes": 588214,
+      "width": 2160,
+      "height": 3150
     },
-    "clinical_authority": {
-      "technical_candidate_is_clinician_acceptance": false,
-      "clinician_write_surface_wired": false,
-      "all_current_public_cases_clinician_accepted": false
-    }
+    "represents": "current graph-backed route; historical cases retain their own contracts"
   },
-  "verification_note": "The manifest binds the article to method 2.5.3, the current CASE011-V2 public candidate package, and a presentation-only English CASE001 screenshot surface. Technical and projection PASS do not establish clinician acceptance or completed clinical validation."
+  "patient_graph_illustration": {
+    "case_id": "CASE011",
+    "source": {
+      "path": "assets/patient-graph/CASE011-patient-graph.svg",
+      "sha256": "cdf1662443a85606712264774e89907b8ace3d30e676329438e8e94df50c1399",
+      "bytes": 105828
+    },
+    "raster": {
+      "path": "assets/patient-graph/CASE011-patient-graph.png",
+      "sha256": "5f53a5fbd8c5f46f0c5877e6380bf502ece2df48cd5bf4e589a64bb34587c5d7",
+      "bytes": 696924,
+      "width": 3240,
+      "height": 1560
+    },
+    "source_asset_unchanged": true,
+    "publication_requested_by_user": true,
+    "patient_graph_state_sha256": "4b1844c2ba7cd04eb914333fdce23a151ecd5def23b16057e79bdeb3d4f4c024",
+    "candidate_sha256": "0d853256e47fc059e8ce8bfcbb898b0b67f8a7ab6bb59c2537c49ca7efa78fec",
+    "object_count": 102,
+    "object_counts_by_type": {
+      "clinical_event": 29,
+      "finding": 31,
+      "observation": 33,
+      "patient": 1,
+      "specimen": 8
+    },
+    "structural_edge_count": 109,
+    "exact_node_set_matches_saved_graph": true,
+    "exact_edge_records_match_saved_graph": true,
+    "sorted_object_ids_sha256": "6ee9e9db396ba13eaf72a7e8e0fe4ce07eebe71d53d81e0363c7309f8d65d279",
+    "sorted_edge_records_sha256": "7d05812efef10fe20f8a1672663251b41986d2b58ecca9b2681c4553e10592fa",
+    "layout_note": "Radial layout; not a chronology, causal model or confidence map. Labels are abbreviated; full records remain in the case."
+  },
+  "interface_screenshots": {
+    "release_version": "0.2.9.50",
+    "case_id": "CASE011",
+    "public_qa_receipt": "qa/case011-receipt.json",
+    "public_qa_sha256": "203fc29ee4e64e5c906c2d3d75213aa7950f2d28244c80b9af10881c75d78cda",
+    "ui_source_sha256": "4534b2121d38c4f1839ef14bdb4760b5b4a9c102bc5dd6995b807b22a18ef57f",
+    "captures": [
+      {
+        "path": "assets/current-interface/case011-overview.png",
+        "sha256": "75520f7ff293b83d8c4982f84cc91aa756a90c6e67da8c953873b43eccb7dcaf",
+        "bytes": 264252,
+        "width": 1440,
+        "height": 1918,
+        "qa_surface": "desktop-overview",
+        "case_id": "CASE011"
+      },
+      {
+        "path": "assets/current-interface/case011-history.png",
+        "sha256": "16a67cdd52e19de8e173bd641815c93ca5e45036a5f9e60146e73f0e2a7da12e",
+        "bytes": 211392,
+        "width": 1440,
+        "height": 1367,
+        "qa_surface": "desktop-history",
+        "case_id": "CASE011"
+      },
+      {
+        "path": "assets/current-interface/case011-argument-graph.png",
+        "sha256": "b2ef49115c5a348792edc7ca367e8f107f9e33fef0e3aaa33f1b2da2d3b63a68",
+        "bytes": 240519,
+        "width": 1440,
+        "height": 1722,
+        "qa_surface": "desktop-graph",
+        "case_id": "CASE011"
+      }
+    ],
+    "historical_english_demo": "https://esannikov.github.io/hematoboard-en/?case=case001",
+    "english_demo_is_current_reference": false
+  },
+  "implemented_capabilities": {
+    "local_clinician_decision_write": true,
+    "public_dashboard_writes": false,
+    "final_diagnosis_or_outcome_entry": false,
+    "independent_critic_requires_distinct_model_family": false,
+    "model_and_effort_follow_active_dialogue": true,
+    "automatic_human_acceptance": false,
+    "media_briefing_case_keys": [
+      "case027"
+    ],
+    "media_registry_sha256": "be425644db67f68b540d2663baad3b9d9e3b33500fd469c2855b42f1ec96a993"
+  },
+  "recorded_metadata_gaps": [
+    {
+      "case_id": "CASE011",
+      "candidate_sha256": "0d853256e47fc059e8ce8bfcbb898b0b67f8a7ab6bb59c2537c49ca7efa78fec",
+      "candidate_contract": "hematoboard.v2.candidate-synthesis/1.4",
+      "execution_profile": {
+        "model": "gpt-6-astra",
+        "reasoning_effort": "xhigh"
+      },
+      "synthesis_method_id": null,
+      "synthesis_method_version": null,
+      "status": "not_recoverable_from_inspected_saved_run_json",
+      "policy": "Do not backfill the current configured protocol or substitute a retrieval-policy version."
+    },
+    {
+      "case_id": "CASE027",
+      "candidate_sha256": "13f8058765f602f11ddc0dc09f8a807117108fd79735da5b8c45ccda420cd361",
+      "candidate_contract": "hematoboard.v2.candidate-synthesis/1.4",
+      "execution_profile": {
+        "model": "gpt-6-astra",
+        "reasoning_effort": "xhigh"
+      },
+      "synthesis_method_id": null,
+      "synthesis_method_version": null,
+      "status": "not_recoverable_from_inspected_saved_run_json",
+      "policy": "Do not backfill the current configured protocol or substitute a retrieval-policy version."
+    }
+  ],
+  "implementation_evidence": {
+    "basis": "Inspected current local code and contracts; no new clinical executions or full application test run for this documentation update.",
+    "public_runtime_source_available": false,
+    "components": [
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/reasoning.py",
+        "sha256": "083d992026149221c61e761839abcf883569b05346844f94a916b96296831431"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/evidence_assessment.py",
+        "sha256": "8a74a1f3ce1db6e0743cfaf3d867a993f53730baea4427f3cc6989a52123bea1"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/decision_detail.py",
+        "sha256": "a853a06192b2599ecd96cf7af1bb94f85451b5bab3814ee2c4714bf020e58f34"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/reasoning_review.py",
+        "sha256": "2d7346e3541777c6db99046eb726516f3f58dd0356ee4b41431a6937f4eab850"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/private_review.py",
+        "sha256": "a58a523721f449ef2ca89bea75ee66a61d8e46504c81b0b23c8587197140c4a6"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/source_review_authority.py",
+        "sha256": "c63444fae093c33b43d687c1727c6e667fda38ed021838b44c50e35a6453c107"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/source_completeness.py",
+        "sha256": "77a01d978bc16d82fadbc0182d6a39bd1d4a73b8683bf7efed445c373af2be83"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/model_profile.py",
+        "sha256": "a4279183136007011c476e892e5e9c05c5030c58024280b8e8fa735756298b72"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/authoring_codec.py",
+        "sha256": "b0e811521f6dab6eebaafbf1aa87f08142df7be9ea13297804f83b7c64e2d618"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/synthesis_batch.py",
+        "sha256": "c4458e4b2868057f8f260efe44736bda7c2a009d8ea86ff1c2c2f336d1e6de96"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/public_dashboard.py",
+        "sha256": "3dae94d754993418d78627065d42a78a612d80efdd10cda003093c894e0369fd"
+      },
+      {
+        "component": "hematoboard-v2/src/hematoboard_v2/audio_briefing.py",
+        "sha256": "25283a1eec9a73e2a3e191d010771072f18d9a9db0fbe1249d60e52d1852a71b"
+      },
+      {
+        "component": "hematoboard-v2/schemas/candidate-synthesis.v1.schema.json",
+        "sha256": "6656227c9cd64d56b0f9b3a84024a9e6b69537dd4195bcac232991ad99249565"
+      },
+      {
+        "component": "hematoboard-v2/ui/src/main.tsx",
+        "sha256": "14dc075caee8ea3551699c436c864bef5e237d20d2230701b80c72e3e0cb7cc9"
+      },
+      {
+        "component": "hematoboard-v2/ui/src/case-selection.ts",
+        "sha256": "4075bd70b55d265828724ed774f3859b8913035e3b5745e894ad950ec7e5deef"
+      },
+      {
+        "component": "hematoboard-v2/docs/HOW_HEMATOBOARD_WORKS.md",
+        "sha256": "220948e9e0ace581803cf00fe07d01cf2f30c23f7552340cd105ca93082df87d"
+      },
+      {
+        "component": "hematoboard-v2/docs/CLINICAL_AUTHORING.md",
+        "sha256": "1d184d765b40af6a8a48a7f81844d5fb50e331a22f1bb01095b9e53779192d5d"
+      },
+      {
+        "component": "hematoboard-v2/docs/SYNTHESIS_BATCH.md",
+        "sha256": "0cafc77bbd09524aef6e15f2c6a7d9903460b9d11761a4228e6ed9c8741b33e5"
+      },
+      {
+        "component": "hematoboard-v2/docs/AUDIO_BRIEFINGS.md",
+        "sha256": "d466e7ab40c6b5f7f5547f946c6dd1266a504c056060d9ef062772e39eb58ea7"
+      },
+      {
+        "component": "hematoboard-v2/docs/RELEASE_EFFICIENCY.md",
+        "sha256": "2ad46bb156a9a9682da28af374a5b1568ab21ffb32f93885c2ebd35ff69e4165"
+      }
+    ]
+  },
+  "verification_note": "Asset/package identity and technical review do not establish clinical correctness, clinician acceptance or external clinical validation."
 }
